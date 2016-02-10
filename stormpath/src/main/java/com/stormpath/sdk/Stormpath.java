@@ -1,150 +1,51 @@
 package com.stormpath.sdk;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import java.util.concurrent.Executor;
+
 public class Stormpath {
 
-    private String baseUrl;
+    private static StormpathConfiguration config;
 
-    private String oauthPath;
+    private static Platform platform;
 
-    private String registerPath;
-
-    private String passwordResetPath;
-
-    private String verifyEmailPath;
-
-    private String logoutPath;
-
-    private String userProfilePath;
-
-    Stormpath(Builder builder) {
-        baseUrl = normalizeUrl(builder.baseUrl);
-        oauthPath = normalizePath(builder.oauthPath);
-        registerPath = normalizePath(builder.registerPath);
-        passwordResetPath = normalizePath(builder.passwordResetPath);
-        verifyEmailPath = normalizePath(builder.verifyEmailPath);
-        logoutPath = normalizePath(builder.logoutPath);
-        userProfilePath = normalizePath(builder.userProfilePath);
+    private Stormpath() {
+        // no instantiations
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public static void init(@NonNull Context context, @NonNull StormpathConfiguration config) {
+        if (Stormpath.config != null && Stormpath.platform != null) {
+            throw new IllegalStateException("You may only initialize Stormpath once!");
+        }
+
+        Stormpath.platform = new AndroidPlatform(context);
+        Stormpath.config = config;
     }
 
-    public String getOauthPath() {
-        return oauthPath;
+    /**
+     * Used mainly for tests which need the networking calls to be synchronous. We could also expose this for users.
+     */
+    static void init(@NonNull Context context, @NonNull StormpathConfiguration config, Executor httpExecutor) {
+        platform = new AndroidPlatform(context, httpExecutor);
+        Stormpath.config = config;
     }
 
-    public String getRegisterPath() {
-        return registerPath;
+    public static void login(String username, String password, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        // TODO
     }
 
-    public String getPasswordResetPath() {
-        return passwordResetPath;
+    static void ensureConfigured() {
+        if (config == null || platform == null) {
+            throw new IllegalStateException(
+                    "You need to initialize Stormpath before using it. To do that call Stormpath.init() with a valid configuration.");
+        }
     }
 
-    public String getVerifyEmailPath() {
-        return verifyEmailPath;
-    }
-
-    public String getLogoutPath() {
-        return logoutPath;
-    }
-
-    public String getUserProfilePath() {
-        return userProfilePath;
-    }
-
-    private static String normalizePath(String path) {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-        return path;
-    }
-
-    private static String normalizeUrl(String url) {
-        if (url.endsWith("/")) {
-            url = url.substring(0, url.length() - 1);
-        }
-        return url;
-    }
-
-    public static class Builder {
-
-        String baseUrl;
-
-        String oauthPath = "/auth/token";
-
-        String registerPath = "/register";
-
-        String passwordResetPath = "/forgot";
-
-        String verifyEmailPath = "/verify";
-
-        String logoutPath = "/logout";
-
-        String userProfilePath = "/me";
-
-        public Builder baseUrl(String baseUrl) {
-            this.baseUrl = baseUrl;
-            return this;
-        }
-
-        public Builder oauthPath(String oauthPath) {
-            this.oauthPath = oauthPath;
-            return this;
-        }
-
-        public Builder registerPath(String registerPath) {
-            this.registerPath = registerPath;
-            return this;
-        }
-
-        public Builder passwordResetPath(String passwordResetPath) {
-            this.passwordResetPath = passwordResetPath;
-            return this;
-        }
-
-        public Builder verifyEmailPath(String verifyEmailPath) {
-            this.verifyEmailPath = verifyEmailPath;
-            return this;
-        }
-
-        public Builder logoutPath(String logoutPath) {
-            this.logoutPath = logoutPath;
-            return this;
-        }
-
-        public Builder userProfilePath(String userProfilePath) {
-            this.userProfilePath = userProfilePath;
-            return this;
-        }
-
-        public Stormpath build() {
-            // if incorrectly configured, fail fast!
-
-            if (baseUrl == null) {
-                throw new IllegalStateException("baseUrl == null");
-            }
-            if (oauthPath == null) {
-                throw new IllegalStateException("oauthPath == null");
-            }
-            if (registerPath == null) {
-                throw new IllegalStateException("registerPath == null");
-            }
-            if (passwordResetPath == null) {
-                throw new IllegalStateException("passwordResetPath == null");
-            }
-            if (verifyEmailPath == null) {
-                throw new IllegalStateException("verifyEmailPath == null");
-            }
-            if (logoutPath == null) {
-                throw new IllegalStateException("logoutPath == null");
-            }
-            if (userProfilePath == null) {
-                throw new IllegalStateException("userProfilePath == null");
-            }
-
-            return new Stormpath(this);
-        }
+    static StormpathLogger logger() {
+        ensureConfigured();
+        return platform.logger();
     }
 }

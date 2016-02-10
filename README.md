@@ -2,13 +2,13 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
-**Work in progress. Not useable yet.**
+**Work in progress. Not usable yet.**
 
 https://stormpath.com/
 
 # Requirements
 
-- Android 4.0+ (API level 14)
+- Android 4.0.3+ (API level 15)
 
 # Installation
 
