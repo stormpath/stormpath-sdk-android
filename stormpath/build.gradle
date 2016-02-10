@@ -29,10 +29,15 @@ def siteUrl = 'https://github.com/stormpath/stormpath-sdk-android'      // Homep
 def gitUrl = 'https://github.com/stormpath/stormpath-sdk-android.git'   // Git repository URL
 group = 'com.stormpath.sdk'                                             // Maven Group ID for the artifact
 
+configurations {
+    javadocDeps
+}
+
 dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.1.1'
     compile 'com.squareup.moshi:moshi:1.1.0'
     compile 'com.android.support:support-annotations:23.1.1'
+    javadocDeps 'com.android.support:support-annotations:23.1.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.1.1'
@@ -81,6 +86,7 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.javadocDeps
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
