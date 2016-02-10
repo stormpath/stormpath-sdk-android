@@ -4,17 +4,17 @@ public class Stormpath {
 
     private String baseUrl;
 
-    private String oauthPath = "/auth/token";
+    private String oauthPath;
 
-    private String registerPath = "/register";
+    private String registerPath;
 
-    private String passwordResetPath = "/forgot";
+    private String passwordResetPath;
 
-    private String verifyEmailPath = "/verify";
+    private String verifyEmailPath;
 
-    private String logoutPath = "/logout";
+    private String logoutPath;
 
-    private String userProfilePath = "/me";
+    private String userProfilePath;
 
     Stormpath(Builder builder) {
         baseUrl = normalizeUrl(builder.baseUrl);
