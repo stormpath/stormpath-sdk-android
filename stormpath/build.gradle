@@ -23,6 +23,11 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+    lintOptions {
+        // Fix for lint error:
+        // Invalid package reference in library; not included in Android: java.nio.file. Referenced from okio.Okio.
+        warning 'InvalidPackage'
+    }
 }
 
 def siteUrl = 'https://github.com/stormpath/stormpath-sdk-android'      // Homepage URL of the library
