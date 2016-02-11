@@ -4,5 +4,5 @@ public interface StormpathCallback<T> {
 
     void onSuccess(T t);
 
-    void onFailure(StormpathError error);
+    void onFailure(Throwable t);
 }
