@@ -54,6 +54,31 @@ public class StormpathConfiguration {
         return userProfilePath;
     }
 
+    String oauthUrl() {
+        return baseUrl + oauthPath;
+    }
+
+    String registerUrl() {
+        return baseUrl + registerPath;
+    }
+
+    String passwordResetUrl() {
+        return baseUrl + passwordResetPath;
+    }
+
+    String verifyEmailUrl() {
+        return baseUrl + verifyEmailPath;
+    }
+
+    String logoutUrl() {
+        return baseUrl + logoutPath;
+    }
+
+    String userProfileUrl() {
+        return baseUrl + userProfilePath;
+    }
+
+
     private static String normalizePath(String path) {
         if (!path.startsWith("/")) {
             path = "/" + path;
