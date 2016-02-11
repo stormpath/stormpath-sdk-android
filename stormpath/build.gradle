@@ -10,7 +10,7 @@ android {
     buildToolsVersion '23.0.2'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 23
         versionName version
     }
@@ -39,13 +39,13 @@ configurations {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.1.1'
+    compile 'com.squareup.okhttp3:okhttp:3.1.2'
     compile 'com.squareup.moshi:moshi:1.1.0'
     compile 'com.android.support:support-annotations:23.1.1'
     javadocDeps 'com.android.support:support-annotations:23.1.1'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
-    testCompile 'com.squareup.okhttp3:mockwebserver:3.1.1'
+    testCompile 'com.squareup.okhttp3:mockwebserver:3.1.2'
 }
 
 install {

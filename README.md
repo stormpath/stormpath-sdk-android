@@ -8,7 +8,7 @@ https://stormpath.com/
 
 # Requirements
 
-- Android 4.0.3+ (API level 15)
+- Android 4.0+ (API level 14)
 
 # Installation
 
