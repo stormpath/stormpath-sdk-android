@@ -6,7 +6,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
 public class Stormpath {
 
@@ -21,24 +20,29 @@ public class Stormpath {
     }
 
     public static void init(@NonNull Context context, @NonNull StormpathConfiguration config) {
-        init(context, config, null);
+        init(new AndroidPlatform(context), config);
     }
 
     /**
-     * Used mainly for tests which need the networking calls to be synchronous. We could also expose this for users.
+     * Used for tests.
      */
-    static void init(@NonNull Context context, @NonNull StormpathConfiguration configuration, ExecutorService httpExecutorService) {
-        if (config != null && platform != null && apiManager != null) {
+    static void init(@NonNull Platform platform, @NonNull StormpathConfiguration configuration) {
+        if (config != null && Stormpath.platform != null && apiManager != null) {
             throw new IllegalStateException("You may only initialize Stormpath once!");
         }
 
-        if (httpExecutorService != null) {
-            platform = new AndroidPlatform(context, httpExecutorService);
-        } else {
-            platform = new AndroidPlatform(context);
-        }
+        Stormpath.platform = platform;
         config = configuration;
         apiManager = new ApiManager(config, platform);
+    }
+
+    /**
+     * Used for tests.
+     */
+    static void reset() {
+        Stormpath.platform = null;
+        config = null;
+        apiManager = null;
     }
 
     public static void login(String username, String password, StormpathCallback<String> callback) {

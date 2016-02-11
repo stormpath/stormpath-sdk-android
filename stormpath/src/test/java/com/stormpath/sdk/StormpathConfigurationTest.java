@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StormpathConfigurationTest {
+public class StormpathConfigurationTest extends BaseTest {
 
     @Test(expected = IllegalStateException.class)
     public void exceptionThrownIfBaseUrlNotSet() throws Exception {

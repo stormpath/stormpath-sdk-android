@@ -1,7 +1,5 @@
-package com.stormpath.sdk;
+package com.stormpath.sdk.utils;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import java.util.Collection;
@@ -16,9 +14,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * An ExecutorService which uses the main thread to run commands.
  */
-public class MainThreadExecutorService implements ExecutorService {
-
-    Handler mainHandler = new Handler(Looper.getMainLooper());
+public class SynchronousExecutorService implements ExecutorService {
 
     @Override
     public void shutdown() {
@@ -89,6 +85,6 @@ public class MainThreadExecutorService implements ExecutorService {
 
     @Override
     public void execute(Runnable command) {
-        mainHandler.post(command);
+        command.run();
     }
 }

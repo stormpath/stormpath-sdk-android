@@ -3,8 +3,7 @@ package com.stormpath.sdk;
 import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.models.LoginResponse;
 import com.stormpath.sdk.models.RegistrationParams;
-
-import android.text.TextUtils;
+import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -65,12 +64,12 @@ public class ApiManager {
             protected void onSuccess(Response response, StormpathCallback<String> callback) {
                 try {
                     LoginResponse loginResponse = moshi.adapter(LoginResponse.class).fromJson(response.body().source());
-                    if (TextUtils.isEmpty(loginResponse.getAccessToken())) {
+                    if (StringUtils.isBlank(loginResponse.getAccessToken())) {
                         failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
                         return;
                     }
 
-                    if (TextUtils.isEmpty(loginResponse.getRefreshToken())) {
+                    if (StringUtils.isBlank(loginResponse.getRefreshToken())) {
                         Stormpath.logger().e("There was no refresh_token in the login response!");
                     }
 
