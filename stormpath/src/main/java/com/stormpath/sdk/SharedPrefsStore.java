@@ -32,6 +32,11 @@ public class SharedPrefsStore implements PreferenceStore {
     }
 
     @Override
+    public String getAccessToken() {
+        return sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
+    }
+
+    @Override
     public void clearAccessToken() {
         removeStringPreference(KEY_ACCESS_TOKEN);
     }
@@ -39,6 +44,11 @@ public class SharedPrefsStore implements PreferenceStore {
     @Override
     public void setRefreshToken(String refreshToken) {
         saveStringPreference(KEY_REFRESH_TOKEN, refreshToken);
+    }
+
+    @Override
+    public String getRefreshToken() {
+        return sharedPreferences.getString(KEY_REFRESH_TOKEN, null);
     }
 
     @Override

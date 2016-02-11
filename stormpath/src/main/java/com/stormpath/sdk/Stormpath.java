@@ -71,6 +71,11 @@ public class Stormpath {
         apiManager.logout(callback);
     }
 
+    public static String getAccessToken() {
+        ensureConfigured();
+        return platform.preferenceStore().getAccessToken();
+    }
+
     static void ensureConfigured() {
         if (config == null || platform == null || apiManager == null) {
             throw new IllegalStateException(
