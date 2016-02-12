@@ -4,6 +4,8 @@ import android.support.annotation.IntDef;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public abstract class StormpathLogger {
 
@@ -24,6 +26,7 @@ public abstract class StormpathLogger {
 
     public static final int ASSERT = 7;
 
+    @Retention(RetentionPolicy.SOURCE)
     @IntDef(value = {SILENT, VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT})
     @interface LogLevel {
 

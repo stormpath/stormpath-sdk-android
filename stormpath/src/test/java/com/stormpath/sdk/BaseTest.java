@@ -49,6 +49,10 @@ public class BaseTest {
         Stormpath.init(mockPlatform, config);
     }
 
+    protected void enqueueResponse(MockResponse mockResponse) {
+        mockWebServer.enqueue(mockResponse);
+    }
+
     protected void enqueueStringResponse(String body) {
         MockResponse mockResponse = new MockResponse().setBody(body).setResponseCode(HttpURLConnection.HTTP_OK);
         mockWebServer.enqueue(mockResponse);

@@ -1,6 +1,6 @@
 package com.stormpath.sdk;
 
-import com.stormpath.sdk.models.RegistrationParams;
+import com.stormpath.sdk.models.RegisterParams;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -14,6 +14,9 @@ public class Stormpath {
     private static Platform platform;
 
     private static ApiManager apiManager;
+
+    @StormpathLogger.LogLevel
+    private static int logLevel = StormpathLogger.SILENT;
 
     private Stormpath() {
         // no instantiations
@@ -32,6 +35,7 @@ public class Stormpath {
         }
 
         Stormpath.platform = platform;
+        Stormpath.platform.logger().setLogLevel(logLevel);
         config = configuration;
         apiManager = new ApiManager(config, platform);
     }
@@ -45,14 +49,14 @@ public class Stormpath {
         apiManager = null;
     }
 
-    public static void login(String username, String password, StormpathCallback<String> callback) {
+    public static void login(String username, String password, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.login(username, password, callback);
     }
 
-    public static void register(RegistrationParams registrationParams, StormpathCallback<Map<String, String>> callback) {
+    public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         ensureConfigured();
-        apiManager.register(registrationParams, callback);
+        apiManager.register(registerParams, callback);
     }
 
     public static void refreshAccessToken(StormpathCallback<Void> callback) {
@@ -70,7 +74,7 @@ public class Stormpath {
         apiManager.resetPassword(email, callback);
     }
 
-    public static void logout(StormpathCallback<String> callback) {
+    public static void logout(StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.logout(callback);
     }
@@ -78,6 +82,10 @@ public class Stormpath {
     public static String getAccessToken() {
         ensureConfigured();
         return platform.preferenceStore().getAccessToken();
+    }
+
+    public static void setLogLevel(@StormpathLogger.LogLevel int logLevel) {
+        Stormpath.logLevel = logLevel;
     }
 
     static void ensureConfigured() {

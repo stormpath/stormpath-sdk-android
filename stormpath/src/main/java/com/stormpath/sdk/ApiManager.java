@@ -2,17 +2,21 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.models.LoginResponse;
-import com.stormpath.sdk.models.RegistrationParams;
+import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Dispatcher;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -20,6 +24,10 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public class ApiManager {
+
+    public static final Pattern ACCESS_TOKEN_COOKIE_PATTERN = Pattern.compile("access_token=(.*?);.*");
+
+    public static final Pattern REFRESH_TOKEN_COOKIE_PATTERN = Pattern.compile("refresh_token=(.*?);.*");
 
     private OkHttpClient okHttpClient;
 
@@ -47,7 +55,7 @@ public class ApiManager {
                 .build();
     }
 
-    void login(String username, String password, StormpathCallback<String> callback) {
+    void login(String username, String password, StormpathCallback<Void> callback) {
         RequestBody formBody = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -59,9 +67,9 @@ public class ApiManager {
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<String>(callback) {
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
             @Override
-            protected void onSuccess(Response response, StormpathCallback<String> callback) {
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 try {
                     LoginResponse loginResponse = moshi.adapter(LoginResponse.class).fromJson(response.body().source());
                     if (StringUtils.isBlank(loginResponse.getAccessToken())) {
@@ -75,7 +83,7 @@ public class ApiManager {
 
                     preferenceStore.setAccessToken(loginResponse.getAccessToken());
                     preferenceStore.setRefreshToken(loginResponse.getRefreshToken());
-                    successCallback(loginResponse.getAccessToken());
+                    successCallback(null);
 
                 } catch (Throwable t) {
                     failureCallback(t);
@@ -84,8 +92,53 @@ public class ApiManager {
         });
     }
 
-    public void register(RegistrationParams registrationParams, StormpathCallback<Map<String, String>> callback) {
-        // TODO
+    public void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+        RequestBody body = RequestBody
+                .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
+
+        Request request = new Request.Builder()
+                .url(config.oauthUrl())
+                .post(body)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                try {
+                    List<String> cookies = response.headers("Set-Cookie");
+
+                    String accessToken = null;
+                    String refreshToken = null;
+
+                    for (String cookieHeader : cookies) {
+                        Matcher accessTokenMatcher = ACCESS_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
+                        if (accessTokenMatcher.find()) {
+                            accessToken = accessTokenMatcher.group(1);
+                        }
+
+                        Matcher refreshTokenMatcher = REFRESH_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
+                        if (refreshTokenMatcher.find()) {
+                            refreshToken = refreshTokenMatcher.group(1);
+                        }
+                    }
+
+                    if (StringUtils.isNotBlank(accessToken)) {
+                        preferenceStore.setAccessToken(accessToken);
+
+                        if (StringUtils.isNotBlank(refreshToken)) {
+                            preferenceStore.setRefreshToken(refreshToken);
+                        }
+                    } else {
+                        Stormpath.logger().i("There was no access_token in the register cookies, if you want to skip the login after "
+                                + "registration, enable the autologin in your Express app.");
+                    }
+
+                    successCallback(null);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
     }
 
     public void refreshAccessToken(StormpathCallback<Void> callback) {
@@ -100,7 +153,7 @@ public class ApiManager {
         // TODO
     }
 
-    public void logout(StormpathCallback<String> callback) {
+    public void logout(StormpathCallback<Void> callback) {
         // TODO
     }
 
