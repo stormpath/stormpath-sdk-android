@@ -86,6 +86,9 @@ public class Stormpath {
 
     public static void setLogLevel(@StormpathLogger.LogLevel int logLevel) {
         Stormpath.logLevel = logLevel;
+        if (platform != null) {
+            platform.logger().setLogLevel(Stormpath.logLevel);
+        }
     }
 
     static void ensureConfigured() {
