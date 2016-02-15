@@ -47,6 +47,7 @@ public class BaseTest {
     protected void initWithDefaults() {
         StormpathConfiguration config = new StormpathConfiguration.Builder().baseUrl(mockServerUrl()).build();
         Stormpath.init(mockPlatform, config);
+        Stormpath.setLogLevel(StormpathLogger.VERBOSE);
     }
 
     protected void enqueueResponse(MockResponse mockResponse) {
