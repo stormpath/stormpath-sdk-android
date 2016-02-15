@@ -67,7 +67,7 @@ public abstract class StormpathLogger {
     }
 
     private boolean isLoggable(@LogLevel int level) {
-        return level <= this.logLevel;
+        return level >= this.logLevel;
     }
 
     private String getStackTraceString(Throwable t) {

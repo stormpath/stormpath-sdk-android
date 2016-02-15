@@ -38,6 +38,8 @@ public class Stormpath {
         Stormpath.platform.logger().setLogLevel(logLevel);
         config = configuration;
         apiManager = new ApiManager(config, platform);
+
+        Stormpath.logger().v("Initialized Stormpath SDK with baseUrl: " + config.baseUrl());
     }
 
     /**
