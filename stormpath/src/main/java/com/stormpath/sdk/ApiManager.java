@@ -64,6 +64,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.oauthUrl())
+                .header("Accept", "application/json")
                 .post(formBody)
                 .build();
 
@@ -97,6 +98,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.registerUrl())
+                .header("Accept", "application/json")
                 .post(body)
                 .build();
 
@@ -161,6 +163,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.oauthUrl())
+                .header("Accept", "application/json")
                 .post(formBody)
                 .build();
 
@@ -196,8 +199,36 @@ public class ApiManager {
         // TODO
     }
 
-    public void logout(StormpathCallback<Void> callback) {
-        // TODO
+    public void logout(final StormpathCallback<Void> callback) {
+        String accessToken = preferenceStore.getAccessToken();
+
+        if (StringUtils.isBlank(accessToken)) {
+            callbackExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFailure(
+                            new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details."));
+                }
+            });
+            return;
+        }
+
+        Request request = new Request.Builder()
+                .url(config.logoutUrl())
+                .header("Authorization", "Bearer " + accessToken)
+                .header("Accept", "application/json")
+                .get()
+                .build();
+
+        preferenceStore.clearAccessToken();
+        preferenceStore.clearRefreshToken();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                successCallback(null);
+            }
+        });
     }
 
     private abstract class OkHttpCallback<T> implements Callback {

@@ -32,6 +32,7 @@ public class RegisterTest extends BaseTest {
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/register");
+        assertThat(request.getHeader("Accept")).isEqualTo("application/json");
         assertThat(request.getBody().readUtf8())
                 .isEqualTo("{\"email\":\"john.deere@example.com\",\"givenName\":\"John\",\"password\":\"Test1234&\",\"surname\":\"Deere\"}");
     }

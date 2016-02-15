@@ -35,6 +35,7 @@ public class RefreshTokenTest extends BaseTest {
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/oauth/token");
+        assertThat(request.getHeader("Accept")).isEqualTo("application/json");
         assertThat(request.getBody().readUtf8()).isEqualTo("refresh_token=" + refreshToken + "&grant_type=refresh_token");
     }
 
@@ -68,7 +69,7 @@ public class RefreshTokenTest extends BaseTest {
     }
 
     @Test
-    public void failedLoginCallsFailure() throws Exception {
+    public void failedRefreshCallsFailure() throws Exception {
         stub(mockPlatform().preferenceStore().getRefreshToken()).toReturn("abcdefghijklmnopqrstuwyxz0123456789");
 
         enqueueResponse("stormpath-refresh-token-400.json", HttpURLConnection.HTTP_BAD_REQUEST);
@@ -86,7 +87,7 @@ public class RefreshTokenTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.refreshAccessToken(callback);
 
-        verify(callback).onFailure((Throwable) any());
+        verify(callback).onFailure(any(Throwable.class));
     }
 
     @Test

@@ -31,6 +31,7 @@ public class LoginTest extends BaseTest {
 
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/oauth/token");
+        assertThat(request.getHeader("Accept")).isEqualTo("application/json");
         assertThat(request.getBody().readUtf8()).isEqualTo("username=" + user + "&password=" + "testPass0%26" + "&grant_type=password");
     }
 
@@ -74,7 +75,7 @@ public class LoginTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.login("user", "pass", callback);
 
-        verify(callback).onFailure((Throwable) any());
+        verify(callback).onFailure(any(Throwable.class));
     }
 
     @Test
