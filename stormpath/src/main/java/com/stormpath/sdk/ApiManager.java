@@ -96,7 +96,7 @@ public class ApiManager {
                 .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
 
         Request request = new Request.Builder()
-                .url(config.oauthUrl())
+                .url(config.registerUrl())
                 .post(body)
                 .build();
 

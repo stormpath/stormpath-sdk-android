@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import java.net.HttpURLConnection;
 
+import okhttp3.mockwebserver.RecordedRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -14,6 +17,21 @@ public class LoginTest extends BaseTest {
     public void setUp() throws Exception {
         super.setUp();
         initWithDefaults();
+    }
+
+    @Test
+    public void correctRequest() throws Exception {
+        String user = "testUserName";
+        String pass = "testPass0&";
+
+        enqueueResponse("stormpath-login-response.json");
+        Stormpath.login(user, pass, mock(StormpathCallback.class));
+
+        RecordedRequest request = takeLastRequest();
+
+        assertThat(request.getMethod()).isEqualTo("POST");
+        assertThat(request.getPath()).isEqualTo("/oauth/token");
+        assertThat(request.getBody().readUtf8()).isEqualTo("username=" + user + "&password=" + "testPass0%26" + "&grant_type=password");
     }
 
     @Test
