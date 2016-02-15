@@ -196,7 +196,20 @@ public class ApiManager {
     }
 
     public void resetPassword(String email, StormpathCallback<Void> callback) {
-        // TODO
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"email\":\"" + email + "\"}");
+
+        Request request = new Request.Builder()
+                .url(config.passwordResetUrl())
+                .header("Accept", "application/json")
+                .post(body)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                successCallback(null);
+            }
+        });
     }
 
     public void logout(final StormpathCallback<Void> callback) {
