@@ -1,6 +1,7 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.android.AndroidPlatform;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

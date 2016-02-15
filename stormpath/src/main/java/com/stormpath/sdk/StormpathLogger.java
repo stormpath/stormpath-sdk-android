@@ -28,7 +28,7 @@ public abstract class StormpathLogger {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef(value = {SILENT, VERBOSE, DEBUG, INFO, WARN, ERROR, ASSERT})
-    @interface LogLevel {
+    public @interface LogLevel {
 
     }
 

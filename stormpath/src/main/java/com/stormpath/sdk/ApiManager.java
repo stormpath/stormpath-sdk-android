@@ -84,7 +84,6 @@ public class ApiManager {
                     preferenceStore.setAccessToken(loginResponse.getAccessToken());
                     preferenceStore.setRefreshToken(loginResponse.getRefreshToken());
                     successCallback(null);
-
                 } catch (Throwable t) {
                     failureCallback(t);
                 }
@@ -141,8 +140,52 @@ public class ApiManager {
         });
     }
 
-    public void refreshAccessToken(StormpathCallback<Void> callback) {
-        // TODO
+    public void refreshAccessToken(final StormpathCallback<Void> callback) {
+        String refreshToken = preferenceStore.getRefreshToken();
+
+        if (StringUtils.isBlank(refreshToken)) {
+            callbackExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFailure(
+                            new IllegalStateException("refresh_token was not found, did you forget to login? See debug logs for details."));
+                }
+            });
+            return;
+        }
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("refresh_token", refreshToken)
+                .add("grant_type", "refresh_token")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(config.oauthUrl())
+                .post(formBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                try {
+                    LoginResponse loginResponse = moshi.adapter(LoginResponse.class).fromJson(response.body().source());
+                    if (StringUtils.isBlank(loginResponse.getAccessToken())) {
+                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
+                        return;
+                    }
+
+                    if (StringUtils.isBlank(loginResponse.getRefreshToken())) {
+                        Stormpath.logger().e("There was no refresh_token in the login response!");
+                    }
+
+                    preferenceStore.setAccessToken(loginResponse.getAccessToken());
+                    preferenceStore.setRefreshToken(loginResponse.getRefreshToken());
+                    successCallback(null);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
     }
 
     public void getUserProfile(StormpathCallback<Map<String, String>> callback) {

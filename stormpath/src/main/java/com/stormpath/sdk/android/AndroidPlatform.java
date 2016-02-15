@@ -1,4 +1,8 @@
-package com.stormpath.sdk;
+package com.stormpath.sdk.android;
+
+import com.stormpath.sdk.Platform;
+import com.stormpath.sdk.PreferenceStore;
+import com.stormpath.sdk.StormpathLogger;
 
 import android.content.Context;
 import android.os.Handler;

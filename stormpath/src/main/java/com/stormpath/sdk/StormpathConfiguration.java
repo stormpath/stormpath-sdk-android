@@ -97,7 +97,7 @@ public class StormpathConfiguration {
 
         String baseUrl;
 
-        String oauthPath = "/auth/token";
+        String oauthPath = "/oauth/token";
 
         String registerPath = "/register";
 

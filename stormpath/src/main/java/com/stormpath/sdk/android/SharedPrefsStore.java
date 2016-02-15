@@ -1,4 +1,6 @@
-package com.stormpath.sdk;
+package com.stormpath.sdk.android;
+
+import com.stormpath.sdk.PreferenceStore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -1,7 +1,7 @@
 package com.stormpath.sdk.utils;
 
-import com.stormpath.sdk.AndroidPlatform;
 import com.stormpath.sdk.PreferenceStore;
+import com.stormpath.sdk.android.AndroidPlatform;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;

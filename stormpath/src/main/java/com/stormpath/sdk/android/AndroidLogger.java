@@ -1,4 +1,6 @@
-package com.stormpath.sdk;
+package com.stormpath.sdk.android;
+
+import com.stormpath.sdk.StormpathLogger;
 
 import android.util.Log;
 

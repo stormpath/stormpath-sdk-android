@@ -1,0 +1,10 @@
+{
+  "code": 10017,
+  "developerMessage": "Token is invalid because verifying the signature of a JWT failed.",
+  "error": "invalid_grant",
+  "message": "HTTP 400, Stormpath 10017 (http://docs.stormpath.com/errors/10017): Token is invalid because verifying the signature of a JWT failed.",
+  "moreInfo": "http://docs.stormpath.com/errors/10017",
+  "name": "ResourceError",
+  "status": 400,
+  "userMessage": "Token is invalid"
+}

@@ -75,6 +75,9 @@ public class BaseTest {
         mockWebServer.enqueue(mockResponse);
     }
 
+    /**
+     * @return the last recorded request against the mock web server
+     */
     protected RecordedRequest takeLastRequest() throws InterruptedException {
         int requestCount = mockWebServer.getRequestCount();
         while (requestCount > 1) {
@@ -83,5 +86,12 @@ public class BaseTest {
         }
 
         return mockWebServer.takeRequest(1, TimeUnit.SECONDS);
+    }
+
+    /**
+     * @return the number of requests made towards the mock web server
+     */
+    protected int requestCount() {
+        return mockWebServer.getRequestCount();
     }
 }
