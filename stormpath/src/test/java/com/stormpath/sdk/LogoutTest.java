@@ -37,7 +37,6 @@ public class LogoutTest extends BaseTest {
         assertThat(request.getPath()).isEqualTo("/logout");
         assertThat(request.getHeader("Authorization")).isEqualTo("Bearer " + accessToken);
         assertThat(request.getHeader("Accept")).isEqualTo("application/json");
-        assertThat(request.getBody().readUtf8()).isEqualTo("");
     }
 
     @Test

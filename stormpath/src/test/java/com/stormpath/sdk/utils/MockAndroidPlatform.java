@@ -1,6 +1,7 @@
 package com.stormpath.sdk.utils;
 
 import com.stormpath.sdk.PreferenceStore;
+import com.stormpath.sdk.StormpathLogger;
 import com.stormpath.sdk.android.AndroidPlatform;
 
 import java.util.concurrent.Executor;
@@ -13,6 +14,8 @@ public class MockAndroidPlatform extends AndroidPlatform {
     PreferenceStore preferenceStore = mock(PreferenceStore.class);
 
     ExecutorService synchronousExecutorService = new SynchronousExecutorService();
+
+    StormpathLogger logger = mock(StormpathLogger.class);
 
     public MockAndroidPlatform() {
         super(Mocks.appContext());
@@ -31,5 +34,10 @@ public class MockAndroidPlatform extends AndroidPlatform {
     @Override
     public Executor callbackExecutor() {
         return synchronousExecutorService;
+    }
+
+    @Override
+    public StormpathLogger logger() {
+        return logger;
     }
 }

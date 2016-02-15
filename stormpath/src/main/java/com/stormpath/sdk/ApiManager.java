@@ -3,11 +3,11 @@ package com.stormpath.sdk;
 import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.models.LoginResponse;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -191,8 +191,38 @@ public class ApiManager {
         });
     }
 
-    public void getUserProfile(StormpathCallback<Map<String, String>> callback) {
-        // TODO
+    public void getUserProfile(final StormpathCallback<UserProfile> callback) {
+        String accessToken = preferenceStore.getAccessToken();
+
+        if (StringUtils.isBlank(accessToken)) {
+            callbackExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFailure(
+                            new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details."));
+                }
+            });
+            return;
+        }
+
+        Request request = new Request.Builder()
+                .url(config.userProfileUrl())
+                .header("Authorization", "Bearer " + accessToken)
+                .header("Accept", "application/json")
+                .get()
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<UserProfile>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<UserProfile> callback) {
+                try {
+                    UserProfile userProfile = moshi.adapter(UserProfile.class).fromJson(response.body().source());
+                    successCallback(userProfile);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
     }
 
     public void resetPassword(String email, StormpathCallback<Void> callback) {
