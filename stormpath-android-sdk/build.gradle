@@ -117,7 +117,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = 'maven'
-        name = 'stormpath-sdk-android'
+        name = 'stormpath-android-sdk'
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ['Apache-2.0']
