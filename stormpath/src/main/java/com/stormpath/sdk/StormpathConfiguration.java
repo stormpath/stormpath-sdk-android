@@ -10,8 +10,6 @@ public class StormpathConfiguration {
 
     private String passwordResetPath;
 
-    private String verifyEmailPath;
-
     private String logoutPath;
 
     private String userProfilePath;
@@ -21,7 +19,6 @@ public class StormpathConfiguration {
         oauthPath = normalizePath(builder.oauthPath);
         registerPath = normalizePath(builder.registerPath);
         passwordResetPath = normalizePath(builder.passwordResetPath);
-        verifyEmailPath = normalizePath(builder.verifyEmailPath);
         logoutPath = normalizePath(builder.logoutPath);
         userProfilePath = normalizePath(builder.userProfilePath);
     }
@@ -42,10 +39,6 @@ public class StormpathConfiguration {
         return passwordResetPath;
     }
 
-    String verifyEmailPath() {
-        return verifyEmailPath;
-    }
-
     String logoutPath() {
         return logoutPath;
     }
@@ -64,10 +57,6 @@ public class StormpathConfiguration {
 
     String passwordResetUrl() {
         return baseUrl + passwordResetPath;
-    }
-
-    String verifyEmailUrl() {
-        return baseUrl + verifyEmailPath;
     }
 
     String logoutUrl() {
@@ -103,12 +92,13 @@ public class StormpathConfiguration {
 
         String passwordResetPath = "/forgot";
 
-        String verifyEmailPath = "/verify";
-
         String logoutPath = "/logout";
 
         String userProfilePath = "/me";
 
+        /**
+         * @param baseUrl the base URL of your API, eg. "https://api.stormpath.com".
+         */
         public Builder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
             return this;
@@ -126,11 +116,6 @@ public class StormpathConfiguration {
 
         public Builder passwordResetPath(String passwordResetPath) {
             this.passwordResetPath = passwordResetPath;
-            return this;
-        }
-
-        public Builder verifyEmailPath(String verifyEmailPath) {
-            this.verifyEmailPath = verifyEmailPath;
             return this;
         }
 
@@ -158,9 +143,6 @@ public class StormpathConfiguration {
             }
             if (passwordResetPath == null) {
                 throw new IllegalStateException("passwordResetPath == null");
-            }
-            if (verifyEmailPath == null) {
-                throw new IllegalStateException("verifyEmailPath == null");
             }
             if (logoutPath == null) {
                 throw new IllegalStateException("logoutPath == null");

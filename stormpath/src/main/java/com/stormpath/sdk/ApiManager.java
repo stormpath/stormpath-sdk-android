@@ -49,7 +49,7 @@ public class ApiManager {
                 Stormpath.logger().d(message);
             }
         });
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         this.okHttpClient = new OkHttpClient.Builder()
                 .dispatcher(new Dispatcher(platform.httpExecutorService()))
                 .addNetworkInterceptor(httpLoggingInterceptor)

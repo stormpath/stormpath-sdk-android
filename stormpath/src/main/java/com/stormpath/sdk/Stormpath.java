@@ -6,6 +6,7 @@ import com.stormpath.sdk.models.UserProfile;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class Stormpath {
 
@@ -22,12 +23,15 @@ public class Stormpath {
         // no instantiations
     }
 
+    /**
+     * Initializes the Stormpath SDK with the given configuration. You should call this in your Application onCreate() method.
+     */
     public static void init(@NonNull Context context, @NonNull StormpathConfiguration config) {
         init(new AndroidPlatform(context), config);
     }
 
     /**
-     * Used for tests.
+     * Used for tests, wee need to be able to mock the {@link Platform}.
      */
     static void init(@NonNull Platform platform, @NonNull StormpathConfiguration configuration) {
         if (config != null && Stormpath.platform != null && apiManager != null) {
@@ -43,7 +47,7 @@ public class Stormpath {
     }
 
     /**
-     * Used for tests.
+     * Used only for tests, we need to reset the initialization after each test.
      */
     static void reset() {
         Stormpath.platform = null;
@@ -51,41 +55,72 @@ public class Stormpath {
         apiManager = null;
     }
 
+    /**
+     * Logs in a user and stores the user session tokens for later use. By default it uses path /oauth/token which can be overridden via
+     * {@link StormpathConfiguration}.
+     */
     public static void login(String username, String password, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.login(username, password, callback);
     }
 
+    /**
+     * This method registers a user from the data provided. By default it uses path /register which can be overridden via
+     * {@link StormpathConfiguration}.
+     */
     public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.register(registerParams, callback);
     }
 
+    /**
+     * Refreshes the access token and stores the new value which you can access via {@link Stormpath#accessToken()}. By default it uses
+     * path /oauth/token which can be overridden via {@link StormpathConfiguration}.
+     */
     public static void refreshAccessToken(StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.refreshAccessToken(callback);
     }
 
+    /**
+     * Fetches the user profile data and returns it via the provided callback. By default it uses path /me which can be overridden via
+     * {@link StormpathConfiguration}.
+     */
     public static void getUserProfile(StormpathCallback<UserProfile> callback) {
         ensureConfigured();
         apiManager.getUserProfile(callback);
     }
 
+    /**
+     * Resets the password for the provided email address. By default it uses path /forgot which can be overridden via {@link
+     * StormpathConfiguration}.
+     */
     public static void resetPassword(String email, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.resetPassword(email, callback);
     }
 
+    /**
+     * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
+     * StormpathConfiguration}.
+     */
     public static void logout(StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.logout(callback);
     }
 
+    /**
+     * @return the accessToken if it was saved, null otherwise
+     */
+    @Nullable
     public static String accessToken() {
         ensureConfigured();
         return platform.preferenceStore().getAccessToken();
     }
 
+    /**
+     * Sets the log level for Stormpath, by default nothing is logged.
+     */
     public static void setLogLevel(@StormpathLogger.LogLevel int logLevel) {
         Stormpath.logLevel = logLevel;
         if (platform != null) {
