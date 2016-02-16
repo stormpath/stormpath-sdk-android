@@ -31,7 +31,7 @@ public class Stormpath {
     }
 
     /**
-     * Used for tests, wee need to be able to mock the {@link Platform}.
+     * Used for tests, we need to be able to mock the {@link Platform}.
      */
     static void init(@NonNull Platform platform, @NonNull StormpathConfiguration configuration) {
         if (config != null && Stormpath.platform != null && apiManager != null) {
