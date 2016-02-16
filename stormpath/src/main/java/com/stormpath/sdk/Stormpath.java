@@ -104,9 +104,9 @@ public class Stormpath {
      * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
      * StormpathConfiguration}.
      */
-    public static void logout(StormpathCallback<Void> callback) {
+    public static void logout() {
         ensureConfigured();
-        apiManager.logout(callback);
+        apiManager.logout();
     }
 
     /**

@@ -7,8 +7,6 @@ import java.net.HttpURLConnection;
 import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.stub;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +27,7 @@ public class LogoutTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn(accessToken);
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        Stormpath.logout(mock(StormpathCallback.class));
+        Stormpath.logout();
 
         RecordedRequest request = takeLastRequest();
 
@@ -44,32 +42,18 @@ public class LogoutTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        Stormpath.logout(mock(StormpathCallback.class));
+        Stormpath.logout();
 
         verify(mockPlatform().preferenceStore()).clearAccessToken();
         verify(mockPlatform().preferenceStore()).clearRefreshToken();
     }
 
     @Test
-    public void successfulLogoutCallsSuccess() throws Exception {
-        stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
-
-        enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.logout(callback);
-
-        verify(callback).onSuccess(null);
-    }
-
-    @Test
-    public void failedLogoutCallsFailure() throws Exception {
+    public void failedLogoutDeletesTokens() throws Exception {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_BAD_REQUEST);
-        StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.logout(callback);
-
-        verify(callback).onFailure(any(Throwable.class));
+        Stormpath.logout();
 
         // the access tokens still need to be cleared
         verify(mockPlatform().preferenceStore()).clearAccessToken();
@@ -77,11 +61,9 @@ public class LogoutTest extends BaseTest {
     }
 
     @Test
-    public void missingAccessTokenCallsFailureWithoutCallingApi() throws Exception {
-        StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.logout(callback);
+    public void missingAccessTokenPrintsErrorWithoutCallingApi() throws Exception {
+        Stormpath.logout();
 
-        verify(callback).onFailure(any(Throwable.class));
         assertThat(requestCount()).isZero();
     }
 }

@@ -243,17 +243,11 @@ public class ApiManager {
         });
     }
 
-    public void logout(final StormpathCallback<Void> callback) {
+    public void logout() {
         String accessToken = preferenceStore.getAccessToken();
 
         if (StringUtils.isBlank(accessToken)) {
-            callbackExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    callback.onFailure(
-                            new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details."));
-                }
-            });
+            Stormpath.logger().e("access_token was not found, did you forget to login? See debug logs for details.");
             return;
         }
 
@@ -267,10 +261,15 @@ public class ApiManager {
         preferenceStore.clearAccessToken();
         preferenceStore.clearRefreshToken();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+        okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                successCallback(null);
+            public void onResponse(Call call, Response response) throws IOException {
+                // great - the token was also deleted on the API side
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // this shouldn't happen but if it does we can live with it
             }
         });
     }

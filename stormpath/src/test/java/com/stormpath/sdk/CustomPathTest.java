@@ -55,7 +55,7 @@ public class CustomPathTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        Stormpath.logout(mock(StormpathCallback.class));
+        Stormpath.logout();
 
         RecordedRequest request = takeLastRequest();
         assertThat(request.getPath()).isEqualTo("/my-logout-path");
