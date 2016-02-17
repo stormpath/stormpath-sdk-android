@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Stormpath Android Example</string>
+    <string name="error_unknown_problem">An unknown error occurred. Please try again later.</string>
+    <string name="error_network_problem">There was a problem connecting to the server. Please check your internet connection.</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_confirmation">Password confirmation</string>
+    <string name="fill_in_required_fields">Please fill in all the required fields</string>
+    <string name="passwords_must_match">The passwords you entered do not match, please try again.</string>
+    <string name="login_incorrect_credentials">Login failed, please check your credentials and try again.</string>
+    <string name="log_out">Log out</string>
+    <string name="confirm_logout">Are you sure you want to log out?</string>
+    <string name="first_name">First name</string>
+    <string name="surname">Surname</string>
+</resources>
