@@ -23,7 +23,7 @@ To set up the SDK call `Stormpath.init()` in your Applications `onCreate()` meth
 
 ```java
 StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-        .baseUrl("http://192.168.1.154:3000")
+        .baseUrl("https://api.your-stormpath.com")
         .build();
 Stormpath.init(this, stormpathConfiguration);
 ```
@@ -101,7 +101,25 @@ Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
 });
 ```
 
-## 5. Logout
+## 5. Refresh accessToken
+
+If the accessToken expires, you can try to refresh it:
+
+```java
+Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        // success, your new accessToken has been saved
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        // something went wrong - the user will have to log in again
+    }
+});
+```
+
+## 6. Logout
 
 You can also log the current user out:
 
@@ -119,7 +137,7 @@ Stormpath.logout(new StormpathCallback<Void>() {
 });
 ```
 
-## 6. Reset password
+## 7. Reset password
 
 To reset a password for a user, use their email address to call `Stormpath.resetPassword()`:
 
