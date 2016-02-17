@@ -1,6 +1,7 @@
 # Stormpath Android SDK
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=mvp)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=mvp)
 
 **Work in progress. Not usable yet.**
 
