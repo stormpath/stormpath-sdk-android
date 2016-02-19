@@ -125,6 +125,7 @@ artifacts {
 bintray {
     user = getProperty('bintray.user')
     key = getProperty('bintray.apikey')
+    def gpgKey = getProperty('bintray.gpg.key')
 
     configurations = ['archives']
     pkg {
@@ -134,6 +135,10 @@ bintray {
         vcsUrl = gitUrl
         licenses = ['Apache-2.0']
         publish = true
+        version {
+            gpg.sign = true
+            gpg.passphrase = gpgKey
+        }
     }
 }
 
