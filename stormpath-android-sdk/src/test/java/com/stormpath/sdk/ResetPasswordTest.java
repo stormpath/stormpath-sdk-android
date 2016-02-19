@@ -29,6 +29,7 @@ public class ResetPasswordTest extends BaseTest {
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/forgot");
         assertThat(request.getHeader("Accept")).isEqualTo("application/json");
+        assertThat(request.getHeader("Content-Type")).isEqualTo("application/json; charset=utf-8");
         assertThat(request.getBody().readUtf8()).isEqualTo("{\"email\":\"john.deere@example.com\"}");
     }
 

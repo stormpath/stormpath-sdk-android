@@ -32,6 +32,7 @@ public class LoginTest extends BaseTest {
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/oauth/token");
         assertThat(request.getHeader("Accept")).isEqualTo("application/json");
+        assertThat(request.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(request.getBody().readUtf8()).isEqualTo("username=" + user + "&password=" + "testPass0%26" + "&grant_type=password");
     }
 

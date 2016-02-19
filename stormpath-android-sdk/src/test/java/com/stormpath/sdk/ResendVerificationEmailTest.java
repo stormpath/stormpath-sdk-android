@@ -31,6 +31,7 @@ public class ResendVerificationEmailTest extends BaseTest {
         assertThat(request.getMethod()).isEqualTo("POST");
         assertThat(request.getPath()).isEqualTo("/verify");
         assertThat(request.getHeader("Accept")).isEqualTo("application/json");
+        assertThat(request.getHeader("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(request.getBody().readUtf8()).isEqualTo("login=john.deere%40example.com");
     }
 
