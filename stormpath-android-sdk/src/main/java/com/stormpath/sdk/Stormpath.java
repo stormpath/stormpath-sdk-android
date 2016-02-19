@@ -113,7 +113,7 @@ public class Stormpath {
      */
     public static void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
         ensureConfigured();
-        // TODO
+        apiManager.resendVerificationEmail(email, callback);
     }
 
     /**

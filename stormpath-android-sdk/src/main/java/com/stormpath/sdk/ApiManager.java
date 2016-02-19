@@ -294,6 +294,25 @@ public class ApiManager {
         });
     }
 
+    public void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
+        FormBody body = new FormBody.Builder()
+                .add("login", email)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(config.verifyEmailUrl())
+                .header("Accept", "application/json")
+                .post(body)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                successCallback(null);
+            }
+        });
+    }
+
     private abstract class OkHttpCallback<T> implements Callback {
 
         private StormpathCallback<T> stormpathCallback;
