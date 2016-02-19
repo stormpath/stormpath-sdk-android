@@ -8,6 +8,8 @@ public class StormpathConfiguration {
 
     private String registerPath;
 
+    private String verifyEmailPath;
+
     private String passwordResetPath;
 
     private String logoutPath;
@@ -18,6 +20,7 @@ public class StormpathConfiguration {
         baseUrl = normalizeUrl(builder.baseUrl);
         oauthPath = normalizePath(builder.oauthPath);
         registerPath = normalizePath(builder.registerPath);
+        verifyEmailPath = normalizePath(builder.verifyEmailPath);
         passwordResetPath = normalizePath(builder.passwordResetPath);
         logoutPath = normalizePath(builder.logoutPath);
         userProfilePath = normalizePath(builder.userProfilePath);
@@ -35,6 +38,9 @@ public class StormpathConfiguration {
         return registerPath;
     }
 
+    String verifyEmailPath() {
+        return verifyEmailPath;
+    }
     String passwordResetPath() {
         return passwordResetPath;
     }
@@ -53,6 +59,10 @@ public class StormpathConfiguration {
 
     String registerUrl() {
         return baseUrl + registerPath;
+    }
+
+    String verifyEmailUrl() {
+        return baseUrl + verifyEmailPath;
     }
 
     String passwordResetUrl() {
@@ -90,6 +100,8 @@ public class StormpathConfiguration {
 
         String registerPath = "/register";
 
+        String verifyEmailPath = "/verify";
+
         String passwordResetPath = "/forgot";
 
         String logoutPath = "/logout";
@@ -111,6 +123,11 @@ public class StormpathConfiguration {
 
         public Builder registerPath(String registerPath) {
             this.registerPath = registerPath;
+            return this;
+        }
+
+        public Builder verifyEmailPath(String verifyEmailPath) {
+            this.verifyEmailPath = verifyEmailPath;
             return this;
         }
 
@@ -140,6 +157,9 @@ public class StormpathConfiguration {
             }
             if (registerPath == null) {
                 throw new IllegalStateException("registerPath == null");
+            }
+            if (verifyEmailPath == null) {
+                throw new IllegalStateException("verifyEmailPath == null");
             }
             if (passwordResetPath == null) {
                 throw new IllegalStateException("passwordResetPath == null");

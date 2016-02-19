@@ -101,6 +101,22 @@ public class Stormpath {
     }
 
     /**
+     * Tries to verify an email using the provided sptoken which the user gets in the verification email.
+     */
+    public static void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        apiManager.verifyEmail(sptoken, callback);
+    }
+
+    /**
+     * Re-sends the verification email for the account associated with the provided email address.
+     */
+    public static void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        // TODO
+    }
+
+    /**
      * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
      * StormpathConfiguration}.
      */

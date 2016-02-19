@@ -16,6 +16,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Dispatcher;
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -270,6 +271,25 @@ public class ApiManager {
             @Override
             public void onFailure(Call call, IOException e) {
                 // this shouldn't happen but if it does we can live with it
+            }
+        });
+    }
+
+    public void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
+        HttpUrl url = HttpUrl.parse(config.verifyEmailUrl()).newBuilder()
+                .addQueryParameter("sptoken", sptoken)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Accept", "application/json")
+                .get()
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                successCallback(null);
             }
         });
     }
