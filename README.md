@@ -155,6 +155,42 @@ Stormpath.resetPassword("user@example.com", new StormpathCallback<Void>() {
 });
 ```
 
+## 8. Resend verification email
+
+You can resend a verification email if the email verification flow is enabled:
+
+```java
+Stormpath.resendVerificationEmail("user@example.com", new StormpathCallback<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        // success!
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        // something went wrong
+    }
+});
+```
+
+## 9. Verify email
+
+If you need to verify the user via the API, you can do so using the `sptoken` from the verification email:
+
+```java
+Stormpath.verifyEmail(sptoken, new StormpathCallback<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        // success!
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        // something went wrong
+    }
+});
+```
+
 # License
 
 This project is open source and uses the Apache 2.0 License. See [LICENSE file](LICENSE) for details.

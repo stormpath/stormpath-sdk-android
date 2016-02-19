@@ -41,6 +41,7 @@ public class StormpathConfiguration {
     String verifyEmailPath() {
         return verifyEmailPath;
     }
+
     String passwordResetPath() {
         return passwordResetPath;
     }
@@ -76,7 +77,6 @@ public class StormpathConfiguration {
     String userProfileUrl() {
         return baseUrl + userProfilePath;
     }
-
 
     private static String normalizePath(String path) {
         if (!path.startsWith("/")) {
@@ -116,31 +116,50 @@ public class StormpathConfiguration {
             return this;
         }
 
+        /**
+         * @param oauthPath the path used for logging in and refreshing accessToken
+         */
         public Builder oauthPath(String oauthPath) {
             this.oauthPath = oauthPath;
             return this;
         }
 
+        /**
+         * @param registerPath the path used for registering a new user
+         */
         public Builder registerPath(String registerPath) {
             this.registerPath = registerPath;
             return this;
         }
 
+        /**
+         * @param verifyEmailPath the path used for verifying a user and resending the verification email (if the email verification
+         *                        workflow is enabled)
+         */
         public Builder verifyEmailPath(String verifyEmailPath) {
             this.verifyEmailPath = verifyEmailPath;
             return this;
         }
 
+        /**
+         * @param passwordResetPath the path used for resetting the password
+         */
         public Builder passwordResetPath(String passwordResetPath) {
             this.passwordResetPath = passwordResetPath;
             return this;
         }
 
+        /**
+         * @param logoutPath the path used for logging the user out
+         */
         public Builder logoutPath(String logoutPath) {
             this.logoutPath = logoutPath;
             return this;
         }
 
+        /**
+         * @param userProfilePath the path used for fetching user data
+         */
         public Builder userProfilePath(String userProfilePath) {
             this.userProfilePath = userProfilePath;
             return this;
