@@ -6,8 +6,14 @@ apply plugin: 'com.jfrog.bintray'
 
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 
-// This is the library version used when deploying the artifact
+// library version used when deploying the artifact
 version = '0.4.0'
+
+// Maven Group ID for the artifact
+group = 'com.stormpath.sdk'
+
+// Maven Artifact ID
+def mavenArtifactId = 'stormpath-sdk-android'
 
 android {
     compileSdkVersion 23
@@ -36,7 +42,9 @@ android {
 
 def siteUrl = 'https://github.com/stormpath/stormpath-sdk-android'      // Homepage URL of the library
 def gitUrl = 'https://github.com/stormpath/stormpath-sdk-android.git'   // Git repository URL
-group = 'com.stormpath.sdk'                                             // Maven Group ID for the artifact
+
+// this ensures the archives have the correct name instead of just using the module name
+project.archivesBaseName = mavenArtifactId
 
 configurations {
     javadocDeps
@@ -121,7 +129,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = 'maven'
-        name = 'stormpath-sdk-android' // jcenter artifactId
+        name = mavenArtifactId
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ['Apache-2.0']
