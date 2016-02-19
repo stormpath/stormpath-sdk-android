@@ -15,3 +15,15 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+## okhttp
+
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { ;}
+-dontwarn okio.*
+
+## moshi
+
+-keep class com.squareup.moshi.** { *; }
+-keep interface com.squareup.moshi.** { *; }
+-dontwarn com.squareup.moshi.**
