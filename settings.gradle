@@ -1,1 +1,1 @@
-include ':stormpath-android-sdk', ':exampleapp'
+include ':sdk', ':exampleapp'
