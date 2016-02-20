@@ -1,0 +1,45 @@
+{
+  "accessTokens": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/accessTokens"
+  },
+  "apiKeys": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/apiKeys"
+  },
+  "applications": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/applications"
+  },
+  "createdAt": "2016-02-11T19:14:35.996Z",
+  "customData": {
+    "createdAt": "2016-02-11T19:14:35.996Z",
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/customData",
+    "modifiedAt": "2016-02-11T19:14:35.997Z"
+  },
+  "directory": {
+    "href": "https://api.stormpath.com/v1/directories/2RsorXaHleeMbhhmPZ9IIO"
+  },
+  "email": "john.deere@example.com",
+  "emailVerificationToken": null,
+  "fullName": "John Deere",
+  "givenName": "John",
+  "groupMemberships": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/groupMemberships"
+  },
+  "groups": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/groups"
+  },
+  "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK",
+  "middleName": null,
+  "modifiedAt": "2016-02-11T19:14:35.996Z",
+  "providerData": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/providerData"
+  },
+  "refreshTokens": {
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/refreshTokens"
+  },
+  "status": "ENABLED",
+  "surname": "Deere",
+  "tenant": {
+    "href": "https://api.stormpath.com/v1/tenants/2R7kXgcgDqe5gjAeOTbDwS"
+  },
+  "username": "john.deere@example.com"
+}
