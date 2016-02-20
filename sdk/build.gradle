@@ -89,6 +89,11 @@ install {
                         name 'Dino Kovač'
                         email 'dino.kovac@infinum.co'
                     }
+                    developer {
+                        id 'stormpath'
+                        name 'Stormpath Java Team'
+                        email 'java@stormpath.com'
+                    }
                 }
                 scm {
                     connection gitUrl
