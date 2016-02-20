@@ -135,7 +135,7 @@ bintray {
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ['Apache-2.0']
-        publish = true
+        publish = true // if set to false, you need to click publish on bintray after deploy
         version {
             gpg.sign = true
             gpg.passphrase = gpgKey
