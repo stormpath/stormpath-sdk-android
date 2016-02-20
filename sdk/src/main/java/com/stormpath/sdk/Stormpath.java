@@ -136,6 +136,9 @@ public class Stormpath {
 
     /**
      * Sets the log level for Stormpath, by default nothing is logged.
+     *
+     * @param logLevel one of {@link StormpathLogger#SILENT}, {@link StormpathLogger#VERBOSE}, {@link StormpathLogger#DEBUG}, {@link
+     *                 StormpathLogger#INFO}, {@link StormpathLogger#WARN}, {@link StormpathLogger#ERROR}, {@link StormpathLogger#ASSERT}
      */
     public static void setLogLevel(@StormpathLogger.LogLevel int logLevel) {
         Stormpath.logLevel = logLevel;
