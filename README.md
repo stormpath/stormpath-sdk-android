@@ -23,7 +23,7 @@ To set up the SDK call `Stormpath.init()` in your Applications `onCreate()` meth
 
 ```java
 StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-        .baseUrl("https://api.your-stormpath.com")
+        .baseUrl("https://api.stormpath.com/v1")
         .build();
 Stormpath.init(this, stormpathConfiguration);
 ```
