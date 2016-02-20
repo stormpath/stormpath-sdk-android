@@ -131,6 +131,7 @@ bintray {
     pkg {
         repo = 'maven'
         name = mavenArtifactId
+        userOrg = 'stormpath'
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ['Apache-2.0']
