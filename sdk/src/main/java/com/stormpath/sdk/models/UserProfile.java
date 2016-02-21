@@ -29,7 +29,7 @@ public class UserProfile implements Serializable {
     private String username;
 
     @Json(name = "customData")
-    private Map<String, String> customData;
+    private Map<String, Object> customData;
 
     public String getEmail() {
         return email;
@@ -59,7 +59,7 @@ public class UserProfile implements Serializable {
         return username;
     }
 
-    public Map<String, String> getCustomData() {
+    public Map<String, Object> getCustomData() {
         return customData;
     }
 }
