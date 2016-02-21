@@ -14,7 +14,7 @@ public class StormpathConfigurationTest extends BaseTest {
     @Test
     public void pathsStartWithSlash() throws Exception {
         StormpathConfiguration stormpath = new StormpathConfiguration.Builder()
-                .baseUrl("https://api.stormpath.com/v1")
+                .baseUrl("https://api.example.com")
                 .oauthPath("my-oauth")
                 .registerPath("my-register")
                 .passwordResetPath("my-password-reset")

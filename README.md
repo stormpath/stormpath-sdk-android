@@ -3,9 +3,9 @@
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=mvp)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=mvp)
 
-**Work in progress. Not usable yet.**
+The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
 
-https://stormpath.com/
+Currently it's known only to work against the [Express-Stormpath](https://github.com/stormpath/express-stormpath) integration.
 
 # Requirements
 
@@ -23,7 +23,7 @@ To set up the SDK call `Stormpath.init()` in your Applications `onCreate()` meth
 
 ```java
 StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-        .baseUrl("https://api.stormpath.com/v1")
+        .baseUrl("https://api.example.com")
         .build();
 Stormpath.init(this, stormpathConfiguration);
 ```
