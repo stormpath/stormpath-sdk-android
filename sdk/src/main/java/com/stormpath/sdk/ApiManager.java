@@ -16,6 +16,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Dispatcher;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -66,7 +67,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.oauthUrl())
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
 
@@ -100,7 +101,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.registerUrl())
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .post(body)
                 .build();
 
@@ -165,7 +166,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.oauthUrl())
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
 
@@ -209,8 +210,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.userProfileUrl())
-                .header("Authorization", "Bearer " + accessToken)
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders(accessToken))
                 .get()
                 .build();
 
@@ -232,7 +232,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.passwordResetUrl())
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .post(body)
                 .build();
 
@@ -254,8 +254,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.logoutUrl())
-                .header("Authorization", "Bearer " + accessToken)
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders(accessToken))
                 .get()
                 .build();
 
@@ -282,7 +281,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(url)
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .get()
                 .build();
 
@@ -311,6 +310,19 @@ public class ApiManager {
                 successCallback(null);
             }
         });
+    }
+
+    private Headers buildStandardHeaders() {
+        return buildStandardHeaders(null);
+    }
+
+    private Headers buildStandardHeaders(String accessToken) {
+        Headers.Builder builder = new Headers.Builder();
+        builder.add("Accept", "application/json");
+        if (StringUtils.isNotBlank(accessToken)) {
+            builder.add("Authorization", "Bearer " + accessToken);
+        }
+        return builder.build();
     }
 
     private abstract class OkHttpCallback<T> implements Callback {
