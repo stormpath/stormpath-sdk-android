@@ -10,14 +10,14 @@ import android.support.annotation.Nullable;
 
 public class Stormpath {
 
-    private static StormpathConfiguration config;
+    static StormpathConfiguration config;
 
-    private static Platform platform;
+    static Platform platform;
 
-    private static ApiManager apiManager;
+    static ApiManager apiManager;
 
     @StormpathLogger.LogLevel
-    private static int logLevel = StormpathLogger.SILENT;
+    static int logLevel = StormpathLogger.SILENT;
 
     private Stormpath() {
         // no instantiations
@@ -53,6 +53,7 @@ public class Stormpath {
         Stormpath.platform = null;
         config = null;
         apiManager = null;
+        logLevel = StormpathLogger.SILENT;
     }
 
     /**
