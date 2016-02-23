@@ -131,7 +131,7 @@ artifacts {
 bintray {
     user = getProperty('bintray.user')
     key = getProperty('bintray.apikey')
-    def gpgKey = getProperty('bintray.gpg.key')
+    def gpgPassword = getProperty('bintray.gpg.password')
 
     configurations = ['archives']
     pkg {
@@ -144,7 +144,7 @@ bintray {
         publish = true // if set to false, you need to click publish on bintray after deploy
         version {
             gpg.sign = true
-            gpg.passphrase = gpgKey
+            gpg.passphrase = gpgPassword
         }
     }
 }
