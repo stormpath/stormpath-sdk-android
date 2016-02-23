@@ -1,7 +1,7 @@
 # Stormpath Android SDK
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=mvp)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=mvp)
+[![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=master)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=master)
 
 The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
 
@@ -13,7 +13,9 @@ Currently it's known only to work against the [Express-Stormpath](https://github
 
 # Installation
 
-TODO: upload to jcenter and add compile line for build.gradle.
+```groovy
+compile 'com.stormpath.sdk:stormpath-sdk-android:0.1.0'
+```
 
 # Usage
 
