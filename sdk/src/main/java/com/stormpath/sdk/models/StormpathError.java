@@ -48,6 +48,9 @@ public class StormpathError implements Serializable {
         return status;
     }
 
+    /**
+     * @return an end-user error message
+     */
     public String message() {
         return message;
     }
@@ -64,6 +67,9 @@ public class StormpathError implements Serializable {
         return moreInfo;
     }
 
+    /**
+     * @return the throwable which caused the error, or null if the error was returned by the API
+     */
     @Nullable
     public Throwable throwable() {
         return throwable;
