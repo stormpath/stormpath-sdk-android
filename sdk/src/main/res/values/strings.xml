@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stormpath_unknown_error_message">There was an unexpected error, please try again later.</string>
+    <string name="stormpath_network_error_message">There was a problem with the network connection, please check your settings.</string>
+</resources>

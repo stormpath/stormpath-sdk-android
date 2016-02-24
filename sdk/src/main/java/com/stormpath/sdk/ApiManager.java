@@ -3,10 +3,13 @@ package com.stormpath.sdk;
 import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.models.LoginResponse;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
@@ -31,15 +34,17 @@ public class ApiManager {
 
     public static final Pattern REFRESH_TOKEN_COOKIE_PATTERN = Pattern.compile("refresh_token=(.*?);.*");
 
-    private OkHttpClient okHttpClient;
+    private final Platform platform;
 
-    private Executor callbackExecutor;
+    private final OkHttpClient okHttpClient;
 
-    private StormpathConfiguration config;
+    private final Executor callbackExecutor;
 
-    private PreferenceStore preferenceStore;
+    private final StormpathConfiguration config;
 
-    private Moshi moshi = new Moshi.Builder().build();
+    private final PreferenceStore preferenceStore;
+
+    private final Moshi moshi = new Moshi.Builder().build();
 
     ApiManager(StormpathConfiguration config, Platform platform) {
         this.config = config;
@@ -56,6 +61,7 @@ public class ApiManager {
                 .dispatcher(new Dispatcher(platform.httpExecutorService()))
                 .addNetworkInterceptor(httpLoggingInterceptor)
                 .build();
+        this.platform = platform;
     }
 
     void login(String username, String password, StormpathCallback<Void> callback) {
@@ -152,8 +158,8 @@ public class ApiManager {
             callbackExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onFailure(
-                            new IllegalStateException("refresh_token was not found, did you forget to login? See debug logs for details."));
+                    callback.onFailure(new StormpathError(platform.unknownErrorMessage(), new IllegalStateException(
+                            "refresh_token was not found, did you forget to login? See debug logs for details.")));
                 }
             });
             return;
@@ -201,8 +207,8 @@ public class ApiManager {
             callbackExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    callback.onFailure(
-                            new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details."));
+                    callback.onFailure(new StormpathError(platform.unknownErrorMessage(),
+                            new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details.")));
                 }
             });
             return;
@@ -335,7 +341,11 @@ public class ApiManager {
 
         @Override
         public void onFailure(Call call, IOException e) {
-            failureCallback(e);
+            if (e instanceof UnknownHostException || e instanceof SocketTimeoutException) {
+                failureCallback(new StormpathError(platform.networkErrorMessage(), e));
+            } else {
+                failureCallback(e);
+            }
         }
 
         @Override
@@ -343,9 +353,12 @@ public class ApiManager {
             if (response.isSuccessful()) {
                 onSuccess(response, stormpathCallback);
             } else {
-                failureCallback(new RuntimeException(
-                        String.format("Call to %s failed with http status: %s %s. See debug logs for details.", response.request().url(),
-                                response.code(), response.message())));
+                try {
+                    StormpathError error = moshi.adapter(StormpathError.class).fromJson(response.body().source());
+                    failureCallback(error);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
             }
         }
 
@@ -361,10 +374,14 @@ public class ApiManager {
         }
 
         void failureCallback(final Throwable t) {
+            failureCallback(new StormpathError(platform.unknownErrorMessage(), t));
+        }
+
+        void failureCallback(final StormpathError error) {
             callbackExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    stormpathCallback.onFailure(t);
+                    stormpathCallback.onFailure(error);
                 }
             });
         }

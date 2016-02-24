@@ -22,4 +22,8 @@ public abstract class Platform {
     public abstract StormpathLogger logger();
 
     public abstract PreferenceStore preferenceStore();
+
+    public abstract String unknownErrorMessage();
+
+    public abstract String networkErrorMessage();
 }

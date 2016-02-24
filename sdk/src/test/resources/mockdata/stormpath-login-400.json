@@ -1,10 +1,7 @@
 {
+  "status": 400,
+  "message": "Invalid username or password.",
   "code": 7100,
   "developerMessage": "Login attempt failed because the specified password is incorrect.",
-  "error": "invalid_grant",
-  "message": "HTTP 400, Stormpath 7100 (http://docs.stormpath.com/errors/7100): Login attempt failed because the specified password is incorrect.",
-  "moreInfo": "http://docs.stormpath.com/errors/7100",
-  "name": "ResourceError",
-  "status": 400,
-  "userMessage": "Invalid username or password."
+  "moreInfo": "http://docs.stormpath.com/errors/7100"
 }

@@ -1,5 +1,6 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 
 import org.junit.Test;
@@ -81,7 +82,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -98,7 +99,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
         assertThat(requestCount()).isZero();
     }
 
@@ -111,9 +112,8 @@ public class UserProfileTest extends BaseTest {
         }
 
         @Override
-        public void onFailure(Throwable t) {
+        public void onFailure(StormpathError error) {
             throw new RuntimeException("onFailure was called but it shouldn't have been!");
         }
-    };
-
+    }
 }

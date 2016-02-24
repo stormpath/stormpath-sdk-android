@@ -1,5 +1,8 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.StormpathError;
+import com.stormpath.sdk.utils.StormpathTestCallback;
+
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -64,19 +67,24 @@ public class LoginTest extends BaseTest {
     @Test
     public void failedLoginCallsFailure() throws Exception {
         enqueueResponse("stormpath-login-400.json", HttpURLConnection.HTTP_BAD_REQUEST);
-        StormpathCallback<Void> callback = mock(StormpathCallback.class);
+        StormpathTestCallback<Void> callback = new StormpathTestCallback<>();
         Stormpath.login("user", "pass", callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        assertThat(callback.error.code()).isEqualTo(7100);
+        assertThat(callback.error.status()).isEqualTo(400);
+        assertThat(callback.error.developerMessage()).isEqualTo("Login attempt failed because the specified password is incorrect.");
+        assertThat(callback.error.message()).isEqualTo("Invalid username or password.");
+        assertThat(callback.error.moreInfo()).isEqualTo("http://docs.stormpath.com/errors/7100");
     }
 
     @Test
     public void failedDeserializationCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        StormpathCallback<Void> callback = mock(StormpathCallback.class);
+        StormpathTestCallback<Void> callback = new StormpathTestCallback<>();
         Stormpath.login("user", "pass", callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        assertThat(callback.error.message()).isEqualTo("There was an unexpected error, please try again later.");
+        assertThat(callback.error.throwable()).isNotNull();
     }
 
     @Test
@@ -85,6 +93,6 @@ public class LoginTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.login("user", "pass", callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 }
