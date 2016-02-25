@@ -95,4 +95,13 @@ public class LoginTest extends BaseTest {
 
         verify(callback).onFailure(any(StormpathError.class));
     }
+
+    @Test
+    public void timeoutCallsFailure() {
+        StormpathTestCallback<Void> callback = new StormpathTestCallback<>();
+        Stormpath.login("user", "pass", callback);
+
+        assertThat(callback.error.message()).isEqualTo("There was a problem with the network connection, please check your settings.");
+        assertThat(callback.error.throwable()).isNotNull();
+    }
 }

@@ -8,6 +8,7 @@ import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -341,7 +342,7 @@ public class ApiManager {
 
         @Override
         public void onFailure(Call call, IOException e) {
-            if (e instanceof UnknownHostException || e instanceof SocketTimeoutException) {
+            if (e instanceof UnknownHostException || e instanceof SocketTimeoutException || e instanceof SocketException) {
                 failureCallback(new StormpathError(platform.networkErrorMessage(), e));
             } else {
                 failureCallback(e);
