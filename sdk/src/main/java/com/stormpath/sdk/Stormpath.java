@@ -31,10 +31,17 @@ public class Stormpath {
     }
 
     /**
+     * @return true if the the SDK was initialized, false otherwise
+     */
+    public static boolean isInitialized() {
+        return config != null && Stormpath.platform != null && apiManager != null;
+    }
+
+    /**
      * Used for tests, we need to be able to mock the {@link Platform}.
      */
     static void init(@NonNull Platform platform, @NonNull StormpathConfiguration configuration) {
-        if (config != null && Stormpath.platform != null && apiManager != null) {
+        if (isInitialized()) {
             throw new IllegalStateException("You may only initialize Stormpath once!");
         }
 
@@ -149,7 +156,7 @@ public class Stormpath {
     }
 
     static void ensureConfigured() {
-        if (config == null || platform == null || apiManager == null) {
+        if (!isInitialized()) {
             throw new IllegalStateException(
                     "You need to initialize Stormpath before using it. To do that call Stormpath.init() with a valid configuration.");
         }

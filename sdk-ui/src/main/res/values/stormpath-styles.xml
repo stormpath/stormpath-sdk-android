@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="stormpathAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+    <style name="stormpathLoginLogo">
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginBottom">64dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+    <style name="stormpathButton">
+    </style>
+    <style name="stormpathButton.Login">
+        <item name="android:text">Login</item>
+    </style>
+    <style name="stormpathButton.Register">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:text">Register</item>
+    </style>
+    <style name="stormpathProgressBar">
+        <item name="android:visibility">invisible</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+    <style name="stormpathProgressBar.Login">
+        ]
+        <item name="android:visibility">invisible</item>
+    </style>
+    <style name="stormpathEditText">
+    </style>
+    <style name="stormpathEditText.Username">
+        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:hint">Email</item>
+    </style>
+    <style name="stormpathEditText.Password">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:hint">Password</item>
+        <item name="android:imeOptions">actionGo</item>
+    </style>
+</resources>

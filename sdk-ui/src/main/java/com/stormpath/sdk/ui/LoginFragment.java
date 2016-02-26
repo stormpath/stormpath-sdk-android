@@ -1,47 +1,61 @@
-package com.stormpath.sdk.exampleapp;
+package com.stormpath.sdk.ui;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.StormpathError;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+public class LoginFragment extends Fragment {
 
-public class LoginActivity extends AppCompatActivity {
+    protected EditText usernameInput;
 
-    @Bind(R.id.input_username)
-    EditText usernameInput;
+    protected EditText passwordInput;
 
-    @Bind(R.id.input_password)
-    EditText passwordInput;
+    protected ProgressBar progressBar;
 
-    @Bind(R.id.progress_bar_login)
-    ProgressBar progressBar;
+    protected Button loginButton;
 
-    @Bind(R.id.button_login)
-    Button loginButton;
+    protected Button registerButton;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.stormpath_fragment_login, container, false);
 
-        // TODO reset password button
+        usernameInput = (EditText) view.findViewById(R.id.stormpath_input_username);
+        passwordInput = (EditText) view.findViewById(R.id.stormpath_input_password);
+        progressBar = (ProgressBar) view.findViewById(R.id.stormpath_login_progress_bar);
+        loginButton = (Button) view.findViewById(R.id.stormpath_login_button);
+        registerButton = (Button) view.findViewById(R.id.stormpath_register_button);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoginButtonClicked();
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRegisterButtonClicked();
+            }
+        });
+
+        return view;
     }
 
-    @OnClick(R.id.button_login)
     protected void onLoginButtonClicked() {
         if (TextUtils.isEmpty(usernameInput.getText().toString()) || TextUtils.isEmpty(passwordInput.getText().toString())) {
             Snackbar.make(loginButton, "You need to fill in the username and password!", Snackbar.LENGTH_SHORT).show();
@@ -67,15 +81,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.button_register)
     protected void onRegisterButtonClicked() {
-        startActivity(new Intent(this, RegisterActivity.class));
-        finish();
+        // TODO
     }
 
     public void navigateToHome() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        // TODO
     }
 
     public void showProgress() {
@@ -87,4 +98,5 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
+
 }

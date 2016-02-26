@@ -13,15 +13,15 @@ version = getVersionFromGit()
 group = 'com.stormpath.sdk'
 
 // Maven Artifact ID
-def mavenArtifactId = 'stormpath-sdk-android'
+def mavenArtifactId = 'stormpath-sdk-android-ui'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 14
+        targetSdkVersion 23
         versionName version
     }
     buildTypes {
@@ -40,7 +40,7 @@ android {
     }
 
     // all resources need to be prefixed so users don't override them by accident
-    resourcePrefix 'stormpath_'
+    resourcePrefix 'stormpath'
 }
 
 // this ensures the archives have the correct name instead of just using the module name
@@ -51,14 +51,12 @@ configurations {
 }
 
 dependencies {
-    compile rootProject.ext.okHttp
-    compile rootProject.ext.okHttpLoggingInterceptor
-    compile rootProject.ext.moshi
-    compile rootProject.ext.supportAnnotations
-    javadocDeps rootProject.ext.okHttp
-    javadocDeps rootProject.ext.okHttpLoggingInterceptor
-    javadocDeps rootProject.ext.moshi
-    javadocDeps rootProject.ext.supportAnnotations
+    provided project(':sdk')
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    javadocDeps project(':sdk')
+    javadocDeps 'com.android.support:appcompat-v7:23.2.0'
+    javadocDeps 'com.android.support:design:23.2.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
@@ -74,7 +72,7 @@ install {
                 packaging 'aar'
 
                 // Add your description here
-                name 'Stormpath Android SDK'
+                name 'Stormpath Android SDK UI'
                 url siteUrl
 
                 // Set your license
