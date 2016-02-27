@@ -142,6 +142,11 @@ public class Stormpath {
         return platform.preferenceStore().getAccessToken();
     }
 
+    public static StormpathLogger logger() {
+        ensureConfigured();
+        return platform.logger();
+    }
+
     /**
      * Sets the log level for Stormpath, by default nothing is logged.
      *
@@ -160,10 +165,5 @@ public class Stormpath {
             throw new IllegalStateException(
                     "You need to initialize Stormpath before using it. To do that call Stormpath.init() with a valid configuration.");
         }
-    }
-
-    static StormpathLogger logger() {
-        ensureConfigured();
-        return platform.logger();
     }
 }

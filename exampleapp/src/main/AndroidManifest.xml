@@ -8,12 +8,17 @@
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
 
-        <activity android:name="com.stormpath.sdk.ui.LoginActivity">
+        <activity android:name="com.stormpath.sdk.exampleapp.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name="com.stormpath.sdk.ui.StormpathLoginActivity">
+            <meta-data
+                    android:name="StormpathLoginActivity.AUTO_LOGIN_AFTER_REGISTER"
+                    android:value="true"/>
         </activity>
         <activity android:name=".RegisterActivity"/>
         <activity android:name=".MainActivity"/>

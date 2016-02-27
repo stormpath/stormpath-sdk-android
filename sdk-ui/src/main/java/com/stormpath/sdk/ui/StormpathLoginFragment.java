@@ -4,6 +4,8 @@ import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.StormpathError;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -16,7 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-public class LoginFragment extends Fragment {
+public class StormpathLoginFragment extends Fragment {
 
     protected EditText usernameInput;
 
@@ -28,10 +30,22 @@ public class LoginFragment extends Fragment {
 
     protected Button registerButton;
 
+    private StormpathLoginConfig loginConfig;
+
+    private StormpathLoginFragmentListener loginFragmentListener;
+
+    public static StormpathLoginFragment newInstance(Bundle configOptions) {
+        StormpathLoginFragment lf = new StormpathLoginFragment();
+        lf.setArguments(configOptions);
+        return lf;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stormpath_fragment_login, container, false);
+
+        loginConfig = StormpathLoginConfig.fromBundle(getArguments());
 
         usernameInput = (EditText) view.findViewById(R.id.stormpath_input_username);
         passwordInput = (EditText) view.findViewById(R.id.stormpath_input_password);
@@ -56,6 +70,18 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        final Activity activity = getActivity();
+        if (activity instanceof StormpathLoginFragmentListener) {
+            loginFragmentListener = (StormpathLoginFragmentListener) activity;
+        } else {
+            throw new IllegalArgumentException("Activity must implement StormpathLoginFragmentListener");
+        }
+    }
+
     protected void onLoginButtonClicked() {
         if (TextUtils.isEmpty(usernameInput.getText().toString()) || TextUtils.isEmpty(passwordInput.getText().toString())) {
             Snackbar.make(loginButton, "You need to fill in the username and password!", Snackbar.LENGTH_SHORT).show();
@@ -69,8 +95,7 @@ public class LoginFragment extends Fragment {
             public void onSuccess(Void aVoid) {
                 hideProgress();
 
-                // login was successful, we can now show the main screen of the app
-                navigateToHome();
+                loginFragmentListener.onLoginSuccess();
             }
 
             @Override
@@ -82,11 +107,7 @@ public class LoginFragment extends Fragment {
     }
 
     protected void onRegisterButtonClicked() {
-        // TODO
-    }
-
-    public void navigateToHome() {
-        // TODO
+        loginFragmentListener.onRegisterClicked(usernameInput.getText().toString().trim(), passwordInput.getText().toString().trim());
     }
 
     public void showProgress() {
@@ -99,4 +120,12 @@ public class LoginFragment extends Fragment {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    public interface StormpathLoginFragmentListener {
+
+        void onRegisterClicked(String username, String password);
+
+        void onLoginSuccess();
+
+        void onForgotPasswordClicked(String username);
+    }
 }
