@@ -24,7 +24,6 @@
         <item name="android:layout_centerHorizontal">true</item>
     </style>
     <style name="stormpathProgressBar.Login">
-        ]
         <item name="android:visibility">invisible</item>
     </style>
     <style name="stormpathEditText">
