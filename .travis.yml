@@ -37,7 +37,7 @@ android:
     # - sys-img-x86-android-17
 
 after_success:
-  - ./gradlew cobertura coveralls
+  - ./gradlew :sdk:cobertura :sdk:coveralls
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
