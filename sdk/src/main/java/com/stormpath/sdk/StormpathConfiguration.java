@@ -16,6 +16,8 @@ public class StormpathConfiguration {
 
     private String userProfilePath;
 
+    private String socialProvidersPath;
+
     StormpathConfiguration(Builder builder) {
         baseUrl = normalizeUrl(builder.baseUrl);
         oauthPath = normalizePath(builder.oauthPath);
@@ -24,6 +26,7 @@ public class StormpathConfiguration {
         passwordResetPath = normalizePath(builder.passwordResetPath);
         logoutPath = normalizePath(builder.logoutPath);
         userProfilePath = normalizePath(builder.userProfilePath);
+        socialProvidersPath = normalizePath(builder.socialProvidersPath);
     }
 
     String baseUrl() {
@@ -54,6 +57,10 @@ public class StormpathConfiguration {
         return userProfilePath;
     }
 
+    String socialProvidersPath() {
+        return socialProvidersPath;
+    }
+
     String oauthUrl() {
         return baseUrl + oauthPath;
     }
@@ -76,6 +83,10 @@ public class StormpathConfiguration {
 
     String userProfileUrl() {
         return baseUrl + userProfilePath;
+    }
+
+    String socialProvidersUrl() {
+        return baseUrl + socialProvidersPath;
     }
 
     private static String normalizePath(String path) {
@@ -107,6 +118,8 @@ public class StormpathConfiguration {
         String logoutPath = "/logout";
 
         String userProfilePath = "/me";
+
+        String socialProvidersPath = "/spa-config";
 
         /**
          * @param baseUrl the base URL of your API, eg. "https://api.stormpath.com".
@@ -165,6 +178,14 @@ public class StormpathConfiguration {
             return this;
         }
 
+        /**
+         * @param socialProvidersPath the path used for fetching social providers
+         */
+        public Builder socialProvidersPath(String socialProvidersPath) {
+            this.socialProvidersPath = socialProvidersPath;
+            return this;
+        }
+
         public StormpathConfiguration build() {
             // if incorrectly configured, fail fast!
 
@@ -188,6 +209,9 @@ public class StormpathConfiguration {
             }
             if (userProfilePath == null) {
                 throw new IllegalStateException("userProfilePath == null");
+            }
+            if (socialProvidersPath == null) {
+                throw new IllegalStateException("socialProvidersPath == null");
             }
 
             return new StormpathConfiguration(this);

@@ -21,6 +21,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("/my-verify-email")
                 .userProfilePath("/my-me-path")
                 .logoutPath("/my-logout-path")
+                .socialProvidersPath("/my-social-providers-path")
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("/my-verify-email")
                 .userProfilePath("/my-me-path")
                 .logoutPath("/my-logout-path")
+                .socialProvidersPath("my-social-providers-path")
                 .build();
     }
 
@@ -47,6 +49,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("/my-verify-email")
                 .userProfilePath("/my-me-path")
                 .logoutPath("/my-logout-path")
+                .socialProvidersPath("/my-social-providers-path")
                 .build();
     }
 
@@ -60,6 +63,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath(null)
                 .userProfilePath("/my-me-path")
                 .logoutPath("/my-logout-path")
+                .socialProvidersPath("/my-social-providers-path")
                 .build();
     }
 
@@ -73,6 +77,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("/my-verify-email")
                 .userProfilePath(null)
                 .logoutPath("/my-logout-path")
+                .socialProvidersPath("/my-social-providers-path")
                 .build();
     }
 
@@ -86,6 +91,21 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("/my-verify-email")
                 .userProfilePath("/my-me-path")
                 .logoutPath(null)
+                .socialProvidersPath("/my-social-providers-path")
+                .build();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void exceptionThrownIfNullSocialProvidersPathSet() throws Exception {
+        new StormpathConfiguration.Builder()
+                .baseUrl("https://api.example.com")
+                .oauthPath("/my-oauth")
+                .registerPath("/my-register")
+                .passwordResetPath("/my-password-reset")
+                .verifyEmailPath("/my-verify-email")
+                .userProfilePath("/my-me-path")
+                .logoutPath("/my-logout-path")
+                .socialProvidersPath(null)
                 .build();
     }
 
@@ -99,6 +119,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .verifyEmailPath("my-verify-email")
                 .userProfilePath("my-me-path")
                 .logoutPath("my-logout-path")
+                .socialProvidersPath("my-social-providers-path")
                 .build();
 
         assertThat(stormpath.oauthPath()).isEqualTo("/my-oauth");
@@ -107,6 +128,7 @@ public class StormpathConfigurationTest extends BaseTest {
         assertThat(stormpath.verifyEmailPath()).isEqualTo("/my-verify-email");
         assertThat(stormpath.userProfilePath()).isEqualTo("/my-me-path");
         assertThat(stormpath.logoutPath()).isEqualTo("/my-logout-path");
+        assertThat(stormpath.socialProvidersPath()).isEqualTo("/my-social-providers-path");
     }
 
     @Test
