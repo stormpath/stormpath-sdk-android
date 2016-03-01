@@ -90,14 +90,10 @@ public class Stormpath {
      */
     public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
         ensureConfigured();
-        switch (providerId) {
-            case SocialProvidersResponse.GOOGLE:
-                apiManager.socialLogin(providerId, null, accessToken, callback);
-            case SocialProvidersResponse.FACEBOOK:
-            case SocialProvidersResponse.LINKEDIN:
-            case SocialProvidersResponse.GITHUB:
-            default:
-                apiManager.socialLogin(providerId, accessToken, null, callback);
+        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
+            apiManager.socialLogin(providerId, null, accessToken, callback);
+        } else {
+            apiManager.socialLogin(providerId, accessToken, null, callback);
         }
     }
 

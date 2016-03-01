@@ -146,6 +146,7 @@ public class StormpathConfigurationTest extends BaseTest {
                 .build();
 
         assertThat(stormpath.oauthPath()).isEqualTo("/my-oauth");
+        assertThat(stormpath.loginPath()).isEqualTo("/my-login");
         assertThat(stormpath.registerPath()).isEqualTo("/my-register");
         assertThat(stormpath.passwordResetPath()).isEqualTo("/my-password-reset");
         assertThat(stormpath.verifyEmailPath()).isEqualTo("/my-verify-email");

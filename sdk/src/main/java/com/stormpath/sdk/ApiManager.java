@@ -10,6 +10,7 @@ import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -462,7 +463,7 @@ public class ApiManager {
         }
     }
 
-    private class SocialLoginRequest {
+    private static class SocialLoginRequest implements Serializable {
 
         @Json(name = "providerData")
         private Map<String, String> providerData = new HashMap<>();
