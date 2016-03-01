@@ -18,7 +18,7 @@ public class CustomPathTest extends BaseTest {
     public void customLoginPathUsed() throws Exception {
         StormpathConfiguration config = new StormpathConfiguration.Builder()
                 .baseUrl(mockServerUrl())
-                .oauthPath("/my-oauth-path")
+                .loginPath("/my-login-path")
                 .build();
         Stormpath.init(mockPlatform(), config);
 
@@ -26,7 +26,7 @@ public class CustomPathTest extends BaseTest {
         Stormpath.login("user", "pass", mock(StormpathCallback.class));
 
         RecordedRequest request = takeLastRequest();
-        assertThat(request.getPath()).isEqualTo("/my-oauth-path");
+        assertThat(request.getPath()).isEqualTo("/my-login-path");
     }
 
     @Test

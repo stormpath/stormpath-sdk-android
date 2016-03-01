@@ -1,7 +1,15 @@
 {
-  "access_token": "eyJraWQiOiI2WjA3NEJBQzhTM0tGWE5KOVhFTldEVUhGIiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiIzQjlJQmJGR0FMTWd5MTRER1V6NXpZIiwiaWF0IjoxNDU1MjE4Mzg0LCJpc3MiOiJodHRwczovL2FwaS5zdG9ybXBhdGguY29tL3YxL2FwcGxpY2F0aW9ucy8yUnJxS25UaW91M1F3Tm50RTN0Y0VHIiwic3ViIjoiaHR0cHM6Ly9hcGkuc3Rvcm1wYXRoLmNvbS92MS9hY2NvdW50cy81TXNRVEE0UVI5c0hZNnlRQlFFSXlLIiwiZXhwIjoxNDU1MjIxOTg0LCJydGkiOiIzQjlEclh4NG9RdFR6VWU0dFhCR0d5In0.DzSz2LlBa40vBTwxhk5K_A1foKsUy-FZRU8SV9JPDTc",
-  "expires_in": 3600,
-  "refresh_token": "eyJraWQiOiI2WjA3NEJBQzhTM0tGWE5KOVhFTldEVUhGIiwiYWxnIjoiSFMyNTYifQ.eyJqdGkiOiIzQjlEclh4NG9RdFR6VWU0dFhCR0d5IiwiaWF0IjoxNDU1MjE4Mzg0LCJpc3MiOiJodHRwczovL2FwaS5zdG9ybXBhdGguY29tL3YxL2FwcGxpY2F0aW9ucy8yUnJxS25UaW91M1F3Tm50RTN0Y0VHIiwic3ViIjoiaHR0cHM6Ly9hcGkuc3Rvcm1wYXRoLmNvbS92MS9hY2NvdW50cy81TXNRVEE0UVI5c0hZNnlRQlFFSXlLIiwiZXhwIjoxNDYwNDAyMzg0fQ.ltFz1735IRnD0vIgdeKC4oInxe8K0KzhDJ95RgRuqmA",
-  "stormpath_access_token_href": "https://api.stormpath.com/v1/accessTokens/3B9IBbFGALMgy14DGUz5zY",
-  "token_type": "Bearer"
+  "account": {
+    "createdAt": "2016-02-11T19:14:35.996Z",
+    "email": "john.deere@example.com",
+    "emailVerificationToken": null,
+    "fullName": "John Deere",
+    "givenName": "John",
+    "href": "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6asdfasdf",
+    "middleName": null,
+    "modifiedAt": "2016-02-11T19:14:35.996Z",
+    "status": "ENABLED",
+    "surname": "Deere",
+    "username": "john.deere@example.com"
+  }
 }

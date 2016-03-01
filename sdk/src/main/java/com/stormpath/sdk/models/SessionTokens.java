@@ -4,7 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.io.Serializable;
 
-public class LoginResponse implements Serializable {
+public class SessionTokens implements Serializable {
 
     @Json(name = "access_token")
     private String accessToken;

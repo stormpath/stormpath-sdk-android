@@ -2,25 +2,28 @@ package com.stormpath.sdk;
 
 public class StormpathConfiguration {
 
-    private String baseUrl;
+    private final String loginPath;
 
-    private String oauthPath;
+    private final String baseUrl;
 
-    private String registerPath;
+    private final String oauthPath;
 
-    private String verifyEmailPath;
+    private final String registerPath;
 
-    private String passwordResetPath;
+    private final String verifyEmailPath;
 
-    private String logoutPath;
+    private final String passwordResetPath;
 
-    private String userProfilePath;
+    private final String logoutPath;
 
-    private String socialProvidersPath;
+    private final String userProfilePath;
+
+    private final String socialProvidersPath;
 
     StormpathConfiguration(Builder builder) {
         baseUrl = normalizeUrl(builder.baseUrl);
         oauthPath = normalizePath(builder.oauthPath);
+        loginPath = normalizePath(builder.loginPath);
         registerPath = normalizePath(builder.registerPath);
         verifyEmailPath = normalizePath(builder.verifyEmailPath);
         passwordResetPath = normalizePath(builder.passwordResetPath);
@@ -35,6 +38,10 @@ public class StormpathConfiguration {
 
     String oauthPath() {
         return oauthPath;
+    }
+
+    String loginPath() {
+        return loginPath;
     }
 
     String registerPath() {
@@ -63,6 +70,10 @@ public class StormpathConfiguration {
 
     String oauthUrl() {
         return baseUrl + oauthPath;
+    }
+
+    String loginUrl() {
+        return baseUrl + loginPath;
     }
 
     String registerUrl() {
@@ -109,6 +120,8 @@ public class StormpathConfiguration {
 
         String oauthPath = "/oauth/token";
 
+        String loginPath = "/login";
+
         String registerPath = "/register";
 
         String verifyEmailPath = "/verify";
@@ -134,6 +147,14 @@ public class StormpathConfiguration {
          */
         public Builder oauthPath(String oauthPath) {
             this.oauthPath = oauthPath;
+            return this;
+        }
+
+        /**
+         * @param loginPath the path used for registering a new user
+         */
+        public Builder loginPath(String loginPath) {
+            this.loginPath = loginPath;
             return this;
         }
 
@@ -194,6 +215,9 @@ public class StormpathConfiguration {
             }
             if (oauthPath == null) {
                 throw new IllegalStateException("oauthPath == null");
+            }
+            if (loginPath == null) {
+                throw new IllegalStateException("loginPath == null");
             }
             if (registerPath == null) {
                 throw new IllegalStateException("registerPath == null");
