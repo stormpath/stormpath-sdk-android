@@ -47,6 +47,13 @@ public class LoggerTest extends BaseTest {
         logger.w(new RuntimeException("w"), "warn");
         logger.e(new RuntimeException("e"), "error");
         logger.wtf(new RuntimeException("wtf"), "assert");
+
+        logger.v(new RuntimeException("v"), null);
+        logger.d(new RuntimeException("d"), null);
+        logger.i(new RuntimeException("i"), null);
+        logger.w(new RuntimeException("w"), null);
+        logger.e(new RuntimeException("e"), null);
+        logger.wtf(new RuntimeException("wtf"), null);
     }
 
     @Test
@@ -61,7 +68,7 @@ public class LoggerTest extends BaseTest {
         Stormpath.setLogLevel(StormpathLogger.VERBOSE);
         writeTestLogs();
 
-        assertThat(ShadowLog.getLogs()).hasSize(18);
+        assertThat(ShadowLog.getLogs()).hasSize(24);
     }
 
     @Test
