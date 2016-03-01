@@ -3,6 +3,7 @@ package com.stormpath.sdk;
 import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.models.LoginResponse;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
@@ -307,7 +308,7 @@ public class ApiManager {
 
         Request request = new Request.Builder()
                 .url(config.verifyEmailUrl())
-                .header("Accept", "application/json")
+                .headers(buildStandardHeaders())
                 .post(body)
                 .build();
 
@@ -315,6 +316,70 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 successCallback(null);
+            }
+        });
+    }
+
+    public void getSocialProviders(final StormpathCallback<SocialProvidersResponse> callback) {
+        String accessToken = preferenceStore.getAccessToken();
+
+        Request request = new Request.Builder()
+                .url(config.socialProvidersUrl())
+                .headers(buildStandardHeaders(accessToken))
+                .get()
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<SocialProvidersResponse>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<SocialProvidersResponse> callback) {
+                try {
+                    SocialProvidersResponse socialProvidersResponse = moshi.adapter(SocialProvidersResponse.class).fromJson(response.body().source());
+                    successCallback(socialProvidersResponse);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
+    }
+
+    void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
+        FormBody.Builder bodyBuilder = new FormBody.Builder();
+        bodyBuilder.add("providerId", providerId);
+
+        if (StringUtils.isNotBlank(accessToken)) {
+            bodyBuilder.add("accessToken", accessToken);
+        }
+
+        if (StringUtils.isNotBlank(code)) {
+            bodyBuilder.add("code", code);
+        }
+
+        Request request = new Request.Builder()
+                .url(config.oauthUrl())
+                .headers(buildStandardHeaders())
+                .post(bodyBuilder.build())
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                try {
+                    LoginResponse loginResponse = moshi.adapter(LoginResponse.class).fromJson(response.body().source());
+                    if (StringUtils.isBlank(loginResponse.getAccessToken())) {
+                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
+                        return;
+                    }
+
+                    if (StringUtils.isBlank(loginResponse.getRefreshToken())) {
+                        Stormpath.logger().e("There was no refresh_token in the login response!");
+                    }
+
+                    preferenceStore.setAccessToken(loginResponse.getAccessToken());
+                    preferenceStore.setRefreshToken(loginResponse.getRefreshToken());
+                    successCallback(null);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
             }
         });
     }

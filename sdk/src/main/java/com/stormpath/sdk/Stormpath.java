@@ -2,6 +2,7 @@ package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
 
 import android.content.Context;
@@ -79,6 +80,34 @@ public class Stormpath {
     public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.register(registerParams, callback);
+    }
+
+    /**
+     * Logs in a user and stores the user session tokens for later use. By default it uses path /oauth/token which can be overridden via
+     * {@link StormpathConfiguration}.
+     *
+     * @param accessToken the accessToken/code received from social provider after login
+     */
+    public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        switch (providerId) {
+            case SocialProvidersResponse.GOOGLE:
+                apiManager.socialLogin(providerId, null, accessToken, callback);
+            case SocialProvidersResponse.FACEBOOK:
+            case SocialProvidersResponse.LINKEDIN:
+            case SocialProvidersResponse.GITHUB:
+            default:
+                apiManager.socialLogin(providerId, accessToken, null, callback);
+        }
+    }
+
+    /**
+     * This method fetches a list of available providers for social login. By default it uses path /spa-config which can be overridden via
+     * {@link StormpathConfiguration}.
+     */
+    public static void getSocialProviders(StormpathCallback<SocialProvidersResponse> callback) {
+        ensureConfigured();
+        apiManager.getSocialProviders(callback);
     }
 
     /**

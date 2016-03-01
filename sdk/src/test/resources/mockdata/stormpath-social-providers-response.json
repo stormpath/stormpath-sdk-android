@@ -1,0 +1,19 @@
+{
+  "socialProviders": {
+    "facebook": {
+      "callbackUri": "/callbacks/facebook",
+      "clientId": "1234567890123456",
+      "enabled": true
+    },
+    "google": {
+      "callbackUri": "/callbacks/google",
+      "clientId": "123456789012-abcdefghijklmnopqrstuwvxyz123456.apps.googleusercontent.com",
+      "enabled": true
+    },
+    "linkedin": {
+      "callbackUri": "/callbacks/linkedin",
+      "clientId": "abcdef12345678",
+      "enabled": false
+    }
+  }
+}
