@@ -54,7 +54,7 @@ public class SocialLoginTest extends BaseTest {
 
     @Test
     public void correctGoogleRequest() throws Exception {
-        correctRequest("google", "asdf1234", "{\"code\":\"asdf1234\",\"providerId\":\"google\"}");
+        correctRequest("google", "asdf1234", "{\"providerId\":\"google\",\"code\":\"asdf1234\"}");
     }
 
     @Test

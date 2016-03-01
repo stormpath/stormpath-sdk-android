@@ -2,8 +2,8 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
-import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -466,7 +466,7 @@ public class ApiManager {
     private static class SocialLoginRequest implements Serializable {
 
         @Json(name = "providerData")
-        private Map<String, String> providerData = new HashMap<>();
+        private Map<String, String> providerData = new LinkedHashMap<>();
 
         public SocialLoginRequest(String providerId, String accessToken, String code) {
             providerData.put("providerId", providerId);
