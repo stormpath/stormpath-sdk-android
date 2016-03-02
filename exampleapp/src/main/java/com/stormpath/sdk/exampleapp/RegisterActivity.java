@@ -3,6 +3,7 @@ package com.stormpath.sdk.exampleapp;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.StormpathError;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -71,9 +72,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(StormpathError error) {
                 hideProgress();
-                Snackbar.make(registerButton, t.getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(registerButton, error.message(), Snackbar.LENGTH_LONG).show();
             }
         });
 

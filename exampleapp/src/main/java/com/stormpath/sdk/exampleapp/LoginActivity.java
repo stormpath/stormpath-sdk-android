@@ -2,6 +2,7 @@ package com.stormpath.sdk.exampleapp;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
+import com.stormpath.sdk.models.StormpathError;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,9 +60,9 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Throwable t) {
+            public void onFailure(StormpathError error) {
                 hideProgress();
-                Snackbar.make(loginButton, t.getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(loginButton, error.message(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

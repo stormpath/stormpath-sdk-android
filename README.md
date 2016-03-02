@@ -60,7 +60,7 @@ Stormpath.register(registerParams, new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // registration failed
     }
 });
@@ -78,7 +78,7 @@ Stormpath.login("user@example.com", "Pa55w0rd", new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -98,7 +98,7 @@ Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -116,7 +116,7 @@ Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong - the user will have to log in again
     }
 });
@@ -134,7 +134,7 @@ Stormpath.logout(new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // there was a problem while communicating with the API, but the session tokens were deleted anyway
     }
 });
@@ -152,7 +152,7 @@ Stormpath.resetPassword("user@example.com", new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -170,7 +170,7 @@ Stormpath.resendVerificationEmail("user@example.com", new StormpathCallback<Void
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -188,7 +188,7 @@ Stormpath.verifyEmail(sptoken, new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });

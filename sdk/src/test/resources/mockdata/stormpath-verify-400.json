@@ -1,3 +1,7 @@
 {
-  "error": "The requested resource does not exist."
+  "status": 400,
+  "message": "Registered resource does not exist.",
+  "code": 7100,
+  "developerMessage": "Registered resource does not exist, more details here.",
+  "moreInfo": "http://docs.stormpath.com/errors/7100"
 }

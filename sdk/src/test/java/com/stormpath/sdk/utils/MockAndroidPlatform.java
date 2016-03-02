@@ -40,4 +40,14 @@ public class MockAndroidPlatform extends AndroidPlatform {
     public StormpathLogger logger() {
         return logger;
     }
+
+    @Override
+    public String unknownErrorMessage() {
+        return "There was an unexpected error, please try again later.";
+    }
+
+    @Override
+    public String networkErrorMessage() {
+        return "There was a problem with the network connection, please check your settings.";
+    }
 }
