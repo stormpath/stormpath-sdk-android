@@ -23,7 +23,7 @@ ext {
     compileSdkVersion = 23
     buildToolsVersion = '23.0.2'
 
-    minSdkVersion = 14
+    minSdkVersion = 7
     targetSdkVersion = 23
 
     okHttp = 'com.squareup.okhttp3:okhttp:3.1.2'
