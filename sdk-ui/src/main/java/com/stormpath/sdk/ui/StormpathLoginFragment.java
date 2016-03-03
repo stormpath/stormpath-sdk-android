@@ -84,7 +84,7 @@ public class StormpathLoginFragment extends Fragment {
 
     protected void onLoginButtonClicked() {
         if (TextUtils.isEmpty(usernameInput.getText().toString()) || TextUtils.isEmpty(passwordInput.getText().toString())) {
-            Snackbar.make(loginButton, "You need to fill in the username and password!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(loginButton, R.string.stormpath_fill_in_credentials, Snackbar.LENGTH_SHORT).show();
             return;
         }
 

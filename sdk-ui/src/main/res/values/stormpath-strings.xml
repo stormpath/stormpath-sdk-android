@@ -1,2 +1,15 @@
 <resources>
+    <string name="stormpath.login">Login</string>
+    <string name="stormpath.register">Register</string>
+    <string name="stormpath.email">Email</string>
+    <string name="stormpath.password">Password</string>
+
+    <string name="stormpath.first_name">First name</string>
+    <string name="stormpath.surname">Surname</string>
+
+    <string name="stormpath.password_confirmation">Password confirmation</string>
+    <string name="stormpath.log_out">Log out</string>
+
+    <string name="stormpath.fill_in_credentials">You need to fill in the username and password!</string>
+
 </resources>

@@ -19,7 +19,7 @@ public class StormpathExampleApp extends Application {
 
         // initialize stormpath
         StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-                .baseUrl("http://192.168.1.100:3000")
+                .baseUrl("http://172.16.0.179:3000")
                 .build();
         Stormpath.init(this, stormpathConfiguration);
     }

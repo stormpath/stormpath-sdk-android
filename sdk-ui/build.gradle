@@ -52,8 +52,6 @@ configurations {
 
 dependencies {
     provided project(':sdk')
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
     javadocDeps project(':sdk')
     javadocDeps 'com.android.support:appcompat-v7:23.2.0'
     javadocDeps 'com.android.support:design:23.2.0'
@@ -62,6 +60,9 @@ dependencies {
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.1.2'
     testCompile 'org.robolectric:robolectric:3.0'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:support-v4:23.2.0'
 }
 
 install {
