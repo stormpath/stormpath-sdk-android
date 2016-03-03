@@ -20,7 +20,6 @@
                     android:name="StormpathLoginActivity.AUTO_LOGIN_AFTER_REGISTER"
                     android:value="true"/>
         </activity>
-        <activity android:name=".RegisterActivity"/>
         <activity android:name=".MainActivity"/>
     </application>
 </manifest>

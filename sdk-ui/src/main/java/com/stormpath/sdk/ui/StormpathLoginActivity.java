@@ -4,13 +4,14 @@ import com.stormpath.sdk.Stormpath;
 
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
-public class StormpathLoginActivity extends AppCompatActivity implements StormpathLoginFragment.StormpathLoginFragmentListener {
+public class StormpathLoginActivity extends AppCompatActivity implements StormpathLoginFragment.StormpathLoginFragmentListener, StormpathRegisterFragment.StormpathRegisterFragmentListener {
 
     private Bundle configOptions;
 
@@ -58,7 +59,10 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
     @Override
     public void onRegisterClicked(String username, String password) {
         // TODO
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.stormpath_container, StormpathRegisterFragment.newInstance(), null)
+                .addToBackStack("register")
+        .commit();
 
     }
 
@@ -70,6 +74,11 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
 
     @Override
     public void onForgotPasswordClicked(String username) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

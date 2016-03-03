@@ -8,15 +8,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/stormpath_activity_horizontal_margin"
+        android:paddingRight="@dimen/stormpath_activity_horizontal_margin"
+        android:paddingTop="@dimen/stormpath_activity_vertical_margin"
+        android:paddingBottom="@dimen/stormpath_activity_vertical_margin"
         android:orientation="vertical">
+
+        <ImageView
+            style="@style/stormpathLoginLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/stormpath_activity_horizontal_margin"
-            android:paddingRight="@dimen/stormpath_activity_horizontal_margin"
-            android:paddingTop="@dimen/stormpath_activity_vertical_margin"
-            android:paddingBottom="@dimen/stormpath_activity_vertical_margin"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -24,7 +29,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/input_firstname"
+                    android:id="@+id/stormpath_input_firstname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/stormpathEditText.FirstName"/>
@@ -35,7 +40,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/input_surname"
+                    android:id="@+id/stormpath_input_surname"
                     style="@style/stormpathEditText.Surname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -48,7 +53,7 @@
 
                 <EditText
                     style="@style/stormpathEditText.Username"
-                    android:id="@+id/input_username"
+                    android:id="@+id/stormpath_input_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </android.support.design.widget.TextInputLayout>
@@ -58,7 +63,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/input_password"
+                    android:id="@+id/stormpath_input_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/stormpathEditText.Password"/>
@@ -70,13 +75,13 @@
                 android:layout_marginTop="8dp">
 
                 <Button
-                    android:id="@+id/button_register"
+                    android:id="@+id/stormpath_register_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/stormpath.register"/>
 
                 <ProgressBar
-                    android:id="@+id/progress_bar_register"
+                    android:id="@+id/stormpath_register_progress_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/stormpath_button_height"
                     android:visibility="invisible"
