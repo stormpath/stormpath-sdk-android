@@ -18,7 +18,7 @@
         <item name="android:textColor">@color/primary</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:text">Sign up</item>
-        <item name="android:visibility">gone</item>
+        <item name="android:visibility">visible</item>
     </style>
     <style name="stormpathProgressBar">
         <item name="android:visibility">invisible</item>

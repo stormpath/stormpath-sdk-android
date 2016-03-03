@@ -58,6 +58,8 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
     @Override
     public void onRegisterClicked(String username, String password) {
         // TODO
+
+
     }
 
     @Override
