@@ -10,15 +10,13 @@
         <item name="android:height">72dp</item>
         <item name="android:textSize">18sp</item>
     </style>
-    <style name="stormpathButton.Login">
-        <item name="android:text">Sign in</item>
-    </style>
     <style name="stormpathButton.Register">
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:textColor">@color/primary</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:text">Sign up</item>
+        <item name="android:text">@string/stormpath.register</item>
         <item name="android:visibility">visible</item>
+        <item name="android:textSize">12sp</item>
     </style>
     <style name="stormpathProgressBar">
         <item name="android:visibility">invisible</item>

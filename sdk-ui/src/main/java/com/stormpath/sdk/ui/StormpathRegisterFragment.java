@@ -21,14 +21,6 @@ import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.StormpathError;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StormpathRegisterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StormpathRegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class StormpathRegisterFragment extends Fragment {
 
     EditText firstNameEditText;

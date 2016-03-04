@@ -3,6 +3,8 @@
     <string name="stormpath.register">Register</string>
     <string name="stormpath.email">Email</string>
     <string name="stormpath.password">Password</string>
+    <string name="stormpath.resetpassword">Forgot Password?</string>
+    <string name="stormpath.resetpassword.action">Send</string>
 
     <string name="stormpath.first_name">First name</string>
     <string name="stormpath.surname">Surname</string>
