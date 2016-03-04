@@ -6,7 +6,7 @@
 
 The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
 
-Currently it's known only to work against the [Express-Stormpath](https://github.com/stormpath/express-stormpath) integration.
+This SDK will not send direct requests to Stormpath, and instead assumes that you'll have a backend that conforms to the Stormpath Framework Spec. Currently the [Express](https://github.com/stormpath/express-stormpath) (v3.0) and [Laravel](https://github.com/stormpath/stormpath-laravel) (v0.3) implementations of the Stormpath server-side framework are compatible. With one of these backends, you'll be able to configure Stormpath so it fits your needs.
 
 # Requirements
 
