@@ -82,24 +82,24 @@ public class StormpathResetPasswordFragment extends Fragment {
     }
 
     protected void onSend() {
-        if (TextUtils.isEmpty(sendButton.getText().toString())) { //check for valid email
+        if (TextUtils.isEmpty(emailEditText.getText().toString())) { //check for valid email
             Snackbar.make(sendButton, R.string.stormpath_all_fields_mandatory, Snackbar.LENGTH_SHORT).show();
             return;
         }
 
-        /*Stormpath.register(new RegisterParams(firstNameEditText.getText().toString(), surnameEditText.getText().toString(),
-                usernameEditText.getText().toString(), passwordEditText.getText().toString()), new StormpathCallback<Void>() {
+        Stormpath.resetPassword(emailEditText.getText().toString(), new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 hideProgress();
+                Snackbar.make(sendButton, getString(R.string.stormpath_resetpassword_result), Snackbar.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(StormpathError error) {
                 hideProgress();
-                Snackbar.make(registerButton, error.message(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(sendButton, error.message(), Snackbar.LENGTH_LONG).show();
             }
-        });*/
+        });
 
         showProgress();
     }

@@ -16,6 +16,6 @@
     <string name="stormpath.all_fields_mandatory">All field are mandatory!</string>
 
     <string name="stormpath.resetpassword.title">Enter your email address below to reset your password.</string>
-    <string name="stormpath.resetpassword.result">You will be sent an email which you will need to open to continue. You may need to check your spam folder.</string>
+    <string name="stormpath_resetpassword_result">You will be sent an email which you will need to open to continue. You may need to check your spam folder.</string>
 
 </resources>
