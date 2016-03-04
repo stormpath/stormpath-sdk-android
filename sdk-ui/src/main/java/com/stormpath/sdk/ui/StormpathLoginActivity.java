@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
-public class StormpathLoginActivity extends AppCompatActivity implements StormpathLoginFragment.StormpathLoginFragmentListener, StormpathRegisterFragment.StormpathRegisterFragmentListener {
+public class StormpathLoginActivity extends AppCompatActivity implements StormpathLoginFragment.StormpathLoginFragmentListener, StormpathRegisterFragment.StormpathRegisterFragmentListener, StormpathResetPasswordFragment.StormpathResetPasswordFragmentListener {
 
     private Bundle configOptions;
 
@@ -74,6 +74,12 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
 
     @Override
     public void onForgotPasswordClicked(String username) {
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.stormpath_container, StormpathResetPasswordFragment.newInstance(username), null)
+                .addToBackStack("resetpw")
+                .commit();
+
 
     }
 

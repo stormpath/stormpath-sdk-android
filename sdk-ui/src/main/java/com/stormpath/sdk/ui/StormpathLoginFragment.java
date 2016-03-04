@@ -30,6 +30,8 @@ public class StormpathLoginFragment extends Fragment {
 
     protected Button registerButton;
 
+    protected Button resetPasswordButton;
+
     private StormpathLoginConfig loginConfig;
 
     private StormpathLoginFragmentListener loginFragmentListener;
@@ -52,6 +54,7 @@ public class StormpathLoginFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.stormpath_login_progress_bar);
         loginButton = (Button) view.findViewById(R.id.stormpath_login_button);
         registerButton = (Button) view.findViewById(R.id.stormpath_register_button);
+        resetPasswordButton = (Button) view.findViewById(R.id.stormpath_resetpw_button_button);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +69,16 @@ public class StormpathLoginFragment extends Fragment {
                 onRegisterButtonClicked();
             }
         });
+
+        resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onForgotPasswordClicked();
+            }
+        });
+
+
 
         return view;
     }
@@ -108,6 +121,10 @@ public class StormpathLoginFragment extends Fragment {
 
     protected void onRegisterButtonClicked() {
         loginFragmentListener.onRegisterClicked(usernameInput.getText().toString().trim(), passwordInput.getText().toString().trim());
+    }
+
+    protected void onForgotPasswordClicked() {
+        loginFragmentListener.onForgotPasswordClicked(usernameInput.getText().toString().trim());
     }
 
     public void showProgress() {

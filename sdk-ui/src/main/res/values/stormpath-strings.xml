@@ -13,5 +13,6 @@
     <string name="stormpath.log_out">Log out</string>
 
     <string name="stormpath.fill_in_credentials">You need to fill in the username and password!</string>
+    <string name="stormpath.all_fields_mandatory">All field are mandatory!</string>
 
 </resources>
