@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO fetch user profile and show data
         // TODO display button to refresh token
-    }
+}
 
     @OnClick(R.id.button_logout)
     protected void onLogoutClicked() {
