@@ -8,4 +8,10 @@
     <string name="login_incorrect_credentials">Login failed, please check your credentials and try again.</string>
 
     <string name="confirm_logout">Are you sure you want to log out?</string>
+
+    <string name="credits">
+        Creative Commons Attribution:\n
+        Love by Manav Dhiman from the Noun Project\n
+    </string>
+
 </resources>

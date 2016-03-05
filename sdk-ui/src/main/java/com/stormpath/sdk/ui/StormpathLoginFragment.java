@@ -10,13 +10,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class StormpathLoginFragment extends Fragment {
 
@@ -31,6 +37,8 @@ public class StormpathLoginFragment extends Fragment {
     protected Button registerButton;
 
     protected Button resetPasswordButton;
+
+    protected ImageView logo;
 
     private StormpathLoginConfig loginConfig;
 
@@ -49,12 +57,35 @@ public class StormpathLoginFragment extends Fragment {
 
         loginConfig = StormpathLoginConfig.fromBundle(getArguments());
 
+        logo = (ImageView) view.findViewById(R.id.stormpath_logo);
         usernameInput = (EditText) view.findViewById(R.id.stormpath_input_username);
         passwordInput = (EditText) view.findViewById(R.id.stormpath_input_password);
         progressBar = (ProgressBar) view.findViewById(R.id.stormpath_login_progress_bar);
         loginButton = (Button) view.findViewById(R.id.stormpath_login_button);
         registerButton = (Button) view.findViewById(R.id.stormpath_register_button);
         resetPasswordButton = (Button) view.findViewById(R.id.stormpath_resetpw_button_button);
+
+
+
+        usernameInput.addTextChangedListener(new TextWatcher() { //if doing client side validation, this is important.
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                //if()
+                    //editText.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,9 +109,20 @@ public class StormpathLoginFragment extends Fragment {
             }
         });
 
-
+        InputMethodManager imm =(InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm!=null)
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         return view;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        getView().setBackgroundColor(loginConfig.getBackgroundColor());
+        logo.setImageResource(loginConfig.getIconResource());
+
     }
 
     @Override

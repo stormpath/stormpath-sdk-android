@@ -7,8 +7,12 @@ import java.io.Serializable;
 public class StormpathLoginConfig implements Serializable {
 
     public static final String AUTO_LOGIN = "StormpathLoginActivity.AUTO_LOGIN_AFTER_REGISTER";
+    public static final String BACKGROUND_COLOR = "backgroundColor";
+    public static final String ICON = "icon";
 
     private boolean autoLoginAfterRegister;
+    private int iconResource;
+    private int backgroundColor;
 
     public static StormpathLoginConfig fromBundle(Bundle bundle) {
 
@@ -18,24 +22,66 @@ public class StormpathLoginConfig implements Serializable {
             configBuilder.autoLoginAfterRegister(bundle.getBoolean(AUTO_LOGIN));
         }
 
+        if (bundle.containsKey(ICON)){
+            configBuilder.setIcon(bundle.getInt(ICON));
+        }
+
+        if (bundle.containsKey(BACKGROUND_COLOR)){
+            configBuilder.setBackgroundColor(bundle.getInt(BACKGROUND_COLOR));
+        }
+
         return configBuilder.build();
+    }
+
+    public boolean isAutoLoginAfterRegister() {
+        return autoLoginAfterRegister;
+    }
+
+    public int getIconResource() {
+        return iconResource;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
     }
 
     private StormpathLoginConfig(Builder builder) {
         autoLoginAfterRegister = builder.autoLoginAfterRegister;
+        iconResource = builder.iconResource;
+        backgroundColor = builder.backgroundResource;
     }
 
     public static class Builder {
 
         private boolean autoLoginAfterRegister = false;
+        private int iconResource = 0;
+        private int backgroundResource = 0;
 
         public Builder autoLoginAfterRegister(boolean autoLogin) {
             this.autoLoginAfterRegister = autoLogin;
             return this;
         }
 
+        public Builder setIcon(int icon){
+            this.iconResource = icon;
+            return this;
+        }
+
+        public Builder setBackgroundColor(int background){
+            this.backgroundResource = background;
+            return this;
+        }
+
         public StormpathLoginConfig build() {
             return new StormpathLoginConfig(this);
+        }
+
+        public Bundle create(){
+            Bundle mBundle = new Bundle();
+            mBundle.putInt("icon", this.iconResource);
+            mBundle.putInt("backgroundColor", this.backgroundResource);
+
+            return mBundle;
         }
     }
 }

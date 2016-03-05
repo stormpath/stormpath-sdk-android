@@ -1,10 +1,13 @@
 package com.stormpath.sdk.exampleapp;
 
 import com.stormpath.sdk.Stormpath;
+import com.stormpath.sdk.StormpathConfiguration;
 import com.stormpath.sdk.ui.StormpathLoginActivity;
+import com.stormpath.sdk.ui.StormpathLoginConfig;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +28,15 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void navigateToLogin() {
-        startActivityForResult(new Intent(this, StormpathLoginActivity.class), REQUEST_LOGIN);
+
+        Intent stormpathLoginFlowIntent = new Intent(this, StormpathLoginActivity.class);
+
+        stormpathLoginFlowIntent.putExtras(new StormpathLoginConfig.Builder()
+                .setBackgroundColor(-1)
+                .setIcon(-1)
+                .create());
+
+        startActivityForResult(stormpathLoginFlowIntent, REQUEST_LOGIN);
     }
 
     private void navigateToHome() {

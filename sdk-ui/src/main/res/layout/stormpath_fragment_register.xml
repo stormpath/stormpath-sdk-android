@@ -53,7 +53,7 @@
 
                 <EditText
                     style="@style/stormpathEditText.Username"
-                    android:id="@+id/stormpath_input_username"
+                    android:id="@+id/stormpath_input_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </android.support.design.widget.TextInputLayout>
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#ffffff"
-                    android:text="@string/stormpath.register"/>
+                    android:text="@string/stormpath_register"/>
 
                 <ProgressBar
                     android:id="@+id/stormpath_register_progress_bar"

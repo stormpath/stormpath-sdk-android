@@ -1,13 +1,19 @@
 package com.stormpath.sdk.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +33,7 @@ public class StormpathRegisterFragment extends Fragment {
 
     EditText surnameEditText;
 
-    EditText usernameEditText;
+    EditText emailEditText;
 
     EditText passwordEditText;
 
@@ -66,7 +72,41 @@ public class StormpathRegisterFragment extends Fragment {
 
         firstNameEditText = (EditText) view.findViewById(R.id.stormpath_input_firstname);
         surnameEditText = (EditText) view.findViewById(R.id.stormpath_input_surname);
-        usernameEditText = (EditText) view.findViewById(R.id.stormpath_input_username);
+        emailEditText = (EditText) view.findViewById(R.id.stormpath_input_email);
+
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @TargetApi(8)
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                //do email validation
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+
+                        emailEditText.getBackground().clearColorFilter();
+
+                    }
+                    else{
+                        //set underline color
+                        emailEditText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         passwordEditText = (EditText) view.findViewById(R.id.stormpath_input_password);
         progressBar = (ProgressBar) view.findViewById(R.id.stormpath_register_progress_bar);
         registerButton = (Button) view.findViewById(R.id.stormpath_register_button);
@@ -83,14 +123,21 @@ public class StormpathRegisterFragment extends Fragment {
     protected void onRegisterButtonClicked() {
         if (TextUtils.isEmpty(firstNameEditText.getText().toString())
                 || TextUtils.isEmpty(surnameEditText.getText().toString())
-                || TextUtils.isEmpty(usernameEditText.getText().toString())
+                || TextUtils.isEmpty(emailEditText.getText().toString())
                 || TextUtils.isEmpty(passwordEditText.getText().toString())) {
             Snackbar.make(registerButton, R.string.stormpath_all_fields_mandatory, Snackbar.LENGTH_SHORT).show();
             return;
         }
 
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailEditText.getText().toString()).matches()) {
+                Snackbar.make(registerButton, R.string.stormpath_requires_valid_email, Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
         Stormpath.register(new RegisterParams(firstNameEditText.getText().toString(), surnameEditText.getText().toString(),
-                usernameEditText.getText().toString(), passwordEditText.getText().toString()), new StormpathCallback<Void>() {
+                emailEditText.getText().toString(), passwordEditText.getText().toString()), new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 hideProgress();

@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.stormpath.sdk.ui.StormpathLoginActivity">
+        <activity android:name="com.stormpath.sdk.ui.StormpathLoginActivity"
+                  android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                     android:name="StormpathLoginActivity.AUTO_LOGIN_AFTER_REGISTER"
                     android:value="true"/>
