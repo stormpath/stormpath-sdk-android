@@ -1,6 +1,10 @@
 package com.stormpath.sdk.ui;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -54,7 +58,7 @@ public class StormpathLoginConfig implements Serializable {
     public static class Builder {
 
         private boolean autoLoginAfterRegister = false;
-        private int iconResource = 0;
+        private int iconResource = 0; //0 is the fallback illegal identifier that doesn't throw a FATAL EXCEPTION
         private int backgroundResource = 0;
 
         public Builder autoLoginAfterRegister(boolean autoLogin) {
@@ -83,5 +87,9 @@ public class StormpathLoginConfig implements Serializable {
 
             return mBundle;
         }
-    }
+
+
+    } //end Builder
+
+
 }

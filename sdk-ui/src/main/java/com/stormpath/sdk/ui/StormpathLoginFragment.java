@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class StormpathLoginFragment extends Fragment {
+public class StormpathLoginFragment extends BaseFragment {
 
     protected EditText usernameInput;
 
@@ -120,8 +120,12 @@ public class StormpathLoginFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
+        //if(isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getBackgroundColor())) {
         getView().setBackgroundColor(loginConfig.getBackgroundColor());
-        logo.setImageResource(loginConfig.getIconResource());
+        //}
+        if(isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getIconResource())){
+            logo.setImageResource(loginConfig.getIconResource());
+        }
 
     }
 

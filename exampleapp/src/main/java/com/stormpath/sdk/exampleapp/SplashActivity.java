@@ -32,8 +32,8 @@ public class SplashActivity extends AppCompatActivity {
         Intent stormpathLoginFlowIntent = new Intent(this, StormpathLoginActivity.class);
 
         stormpathLoginFlowIntent.putExtras(new StormpathLoginConfig.Builder()
-                .setBackgroundColor(-1)
-                .setIcon(-1)
+                .setBackgroundColor(Color.GRAY)
+                .setIcon(R.drawable.ic_noun_86081_cc)
                 .create());
 
         startActivityForResult(stormpathLoginFlowIntent, REQUEST_LOGIN);

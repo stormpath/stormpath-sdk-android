@@ -19,7 +19,7 @@ import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.StormpathError;
 
-public class StormpathResetPasswordFragment extends Fragment {
+public class StormpathResetPasswordFragment extends BaseFragment {
 
     EditText emailEditText;
 

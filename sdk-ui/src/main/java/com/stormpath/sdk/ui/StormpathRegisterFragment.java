@@ -27,7 +27,7 @@ import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.StormpathError;
 
-public class StormpathRegisterFragment extends Fragment {
+public class StormpathRegisterFragment extends BaseFragment {
 
     EditText firstNameEditText;
 
