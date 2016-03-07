@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
 
         stormpathLoginFlowIntent.putExtras(new StormpathLoginConfig.Builder()
                 .setBackgroundColor(Color.GRAY)
-                .setIcon(R.drawable.ic_noun_86081_cc)
+                .setIcon(R.mipmap.ic_launcher)
                 .create());
 
         startActivityForResult(stormpathLoginFlowIntent, REQUEST_LOGIN);
