@@ -1,1 +1,1 @@
-include ':sdk', ':exampleapp', ':sdk-ui', ':sdk-example-app'
+include ':sdk', ':StormpathLoginSampleUsingBuilder', ':sdk-ui', ':StormpathLoginSample'
