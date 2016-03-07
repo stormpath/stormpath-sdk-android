@@ -67,10 +67,6 @@ public class UserProfileTest extends BaseTest {
         assertThat(callback.userProfile.getMiddleName()).isNull();
         assertThat(callback.userProfile.getSurname()).isEqualTo("Deere");
         assertThat(callback.userProfile.getFullName()).isEqualTo("John Deere");
-        assertThat(callback.userProfile.getCustomData()).containsOnlyKeys("createdAt", "modifiedAt", "href");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("createdAt", "2016-02-11T19:14:35.996Z");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("modifiedAt", "2016-02-11T19:14:35.997Z");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("href", "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/customData");
         assertThat(callback.userProfile.getStatus()).isEqualTo("ENABLED");
     }
 

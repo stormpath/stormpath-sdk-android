@@ -218,8 +218,8 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<UserProfile> callback) {
                 try {
-                    UserProfile userProfile = moshi.adapter(UserProfile.class).fromJson(response.body().source());
-                    successCallback(userProfile);
+                    UserProfileResponse userProfileResponse = moshi.adapter(UserProfileResponse.class).fromJson(response.body().source());
+                    successCallback(userProfileResponse.userProfile);
                 } catch (Throwable t) {
                     failureCallback(t);
                 }
@@ -461,6 +461,12 @@ public class ApiManager {
                 }
             });
         }
+    }
+
+    private static class UserProfileResponse implements Serializable {
+
+        @Json(name = "account")
+        private UserProfile userProfile;
     }
 
     private static class SocialLoginRequest implements Serializable {
