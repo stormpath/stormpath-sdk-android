@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent stormpathLoginFlowIntent = new Intent(this, StormpathLoginActivity.class);
 
         stormpathLoginFlowIntent.putExtras(new StormpathLoginConfig.Builder()
-                .setBackgroundColor(Color.GRAY)
+                .setBackgroundColor(Color.WHITE)
                 .setIcon(R.mipmap.ic_launcher)
                 .create());
 

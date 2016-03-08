@@ -64,7 +64,7 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
     public void onRegisterClicked(String username, String password) {
         // TODO
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.stormpath_container, StormpathRegisterFragment.newInstance(), null)
+        ft.replace(R.id.stormpath_container, StormpathRegisterFragment.newInstance(configOptions), null)
                 .addToBackStack("register")
         .commit();
 
@@ -79,8 +79,10 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
     @Override
     public void onForgotPasswordClicked(String username) {
 
+        configOptions.putString("username", username);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.stormpath_container, StormpathResetPasswordFragment.newInstance(username), null)
+        ft.replace(R.id.stormpath_container, StormpathResetPasswordFragment.newInstance(configOptions), null)
                 .addToBackStack("resetpw")
                 .commit();
 

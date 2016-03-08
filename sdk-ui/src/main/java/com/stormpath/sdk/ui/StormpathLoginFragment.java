@@ -38,9 +38,7 @@ public class StormpathLoginFragment extends BaseFragment {
 
     protected Button resetPasswordButton;
 
-    protected ImageView logo;
 
-    private StormpathLoginConfig loginConfig;
 
     private StormpathLoginFragmentListener loginFragmentListener;
 
@@ -116,18 +114,7 @@ public class StormpathLoginFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
 
-        //if(isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getBackgroundColor())) {
-        getView().setBackgroundColor(loginConfig.getBackgroundColor());
-        //}
-        if(isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getIconResource())){
-            logo.setImageResource(loginConfig.getIconResource());
-        }
-
-    }
 
     @Override
     public void onAttach(Context context) {
