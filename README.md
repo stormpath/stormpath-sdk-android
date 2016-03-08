@@ -1,3 +1,24 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Stormpath Android SDK](#stormpath-android-sdk)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Usage](#usage)
+- [1. Setting up](#1-setting-up)
+  - [2. User registration](#2-user-registration)
+  - [3. User login](#3-user-login)
+  - [4. User data](#4-user-data)
+  - [5. Refresh accessToken](#5-refresh-accesstoken)
+  - [6. Logout](#6-logout)
+  - [7. Reset password](#7-reset-password)
+  - [8. Resend verification email](#8-resend-verification-email)
+  - [9. Verify email](#9-verify-email)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Stormpath Android SDK
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
