@@ -48,9 +48,8 @@ public class StormpathRegisterFragment extends BaseFragment {
     }
 
 
-    public static StormpathRegisterFragment newInstance() {
+    public static StormpathRegisterFragment newInstance(Bundle args) {
         StormpathRegisterFragment fragment = new StormpathRegisterFragment();
-        Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,6 +68,8 @@ public class StormpathRegisterFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.stormpath_fragment_register, container, false);
+
+        loginConfig = StormpathLoginConfig.fromBundle(getArguments());
 
         firstNameEditText = (EditText) view.findViewById(R.id.stormpath_input_firstname);
         surnameEditText = (EditText) view.findViewById(R.id.stormpath_input_surname);

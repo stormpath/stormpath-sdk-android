@@ -34,12 +34,8 @@ public class StormpathResetPasswordFragment extends BaseFragment {
     }
 
 
-    public static StormpathResetPasswordFragment newInstance(String username) {
+    public static StormpathResetPasswordFragment newInstance(Bundle args) {
         StormpathResetPasswordFragment fragment = new StormpathResetPasswordFragment();
-        Bundle args = new Bundle();
-
-        args.putString("username", username);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,6 +54,8 @@ public class StormpathResetPasswordFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.stormpath_fragment_resetpassword, container, false);
+
+        loginConfig = StormpathLoginConfig.fromBundle(getArguments());
 
         emailEditText = (EditText) view.findViewById(R.id.stormpath_input_username);
 

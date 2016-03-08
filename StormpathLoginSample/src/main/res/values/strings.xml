@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stormpath SDK Example App</string>
+    <string name="app_name">Stormpath Login Plain</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->

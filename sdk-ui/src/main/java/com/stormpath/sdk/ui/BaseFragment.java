@@ -8,13 +8,30 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BaseFragment extends Fragment {
 
+    protected StormpathLoginConfig loginConfig;
+    protected ImageView logo;
 
     public BaseFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+       if(getView()!=null && loginConfig!=null) {
+           getView().setBackgroundColor(loginConfig.getBackgroundColor());
+       }
+
+        if(logo!=null && isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getIconResource())){
+            logo.setImageResource(loginConfig.getIconResource());
+        }
+
     }
 
 

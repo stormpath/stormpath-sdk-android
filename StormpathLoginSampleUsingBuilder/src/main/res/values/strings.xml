@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stormpath Android Example</string>
+    <string name="app_name">Stormpath Login UI</string>
     <string name="error_unknown_problem">An unknown error occurred. Please try again later.</string>
     <string name="error_network_problem">There was a problem connecting to the server. Please check your internet connection.</string>
 
