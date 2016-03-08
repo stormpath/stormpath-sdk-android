@@ -1,4 +1,4 @@
-package com.stormpath.sdk.exampleapp;
+package com.stormpath.sdk.StormpathLoginBasic;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathConfiguration;
