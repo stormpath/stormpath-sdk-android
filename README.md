@@ -1,8 +1,17 @@
+# Stormpath Android SDK
+
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Download](https://api.bintray.com/packages/stormpath/maven/stormpath-sdk-android/images/download.svg)](https://bintray.com/stormpath/maven/stormpath-sdk-android/_latestVersion)
+[![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=master)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=master)
+
+The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
+
+This SDK will not send direct requests to Stormpath, and instead assumes that you'll have a backend that conforms to the Stormpath Framework Spec. Currently the [Express](https://github.com/stormpath/express-stormpath) (v3.0) and [Laravel](https://github.com/stormpath/stormpath-laravel) (v0.3) implementations of the Stormpath server-side framework are compatible. With one of these backends, you'll be able to configure Stormpath so it fits your needs.
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+## **Table of Contents** 
 
-- [Stormpath Android SDK](#stormpath-android-sdk)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -19,15 +28,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Stormpath Android SDK
-
-[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Download](https://api.bintray.com/packages/stormpath/maven/stormpath-sdk-android/images/download.svg)](https://bintray.com/stormpath/maven/stormpath-sdk-android/_latestVersion)
-[![Coverage Status](https://coveralls.io/repos/github/stormpath/stormpath-sdk-android/badge.svg?branch=master)](https://coveralls.io/github/stormpath/stormpath-sdk-android?branch=master)
-
-The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
-
-This SDK will not send direct requests to Stormpath, and instead assumes that you'll have a backend that conforms to the Stormpath Framework Spec. Currently the [Express](https://github.com/stormpath/express-stormpath) (v3.0) and [Laravel](https://github.com/stormpath/stormpath-laravel) (v0.3) implementations of the Stormpath server-side framework are compatible. With one of these backends, you'll be able to configure Stormpath so it fits your needs.
 
 # Requirements
 
