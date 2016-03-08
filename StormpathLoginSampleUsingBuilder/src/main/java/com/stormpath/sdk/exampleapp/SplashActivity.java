@@ -14,23 +14,28 @@ import android.support.v7.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final int REQUEST_LOGIN = 422;
+        public static final int REQUEST_LOGIN = 422;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
 
-        if (Stormpath.accessToken() != null) {
-            navigateToHome();
-        } else {
-            navigateToLogin();
+            if (Stormpath.accessToken() != null) {
+                navigateToHome();
+            } else {
+                navigateToLogin();
+            }
         }
-    }
 
     private void navigateToLogin() {
 
         Intent stormpathLoginFlowIntent = new Intent(this, StormpathLoginActivity.class);
 
+
+        /*
+            Modify StormpathLoginConfig.Builder to modify parameters of logo and background. More parameters can be added in the future,
+            specifically in the Builder method's source code.
+         */
         stormpathLoginFlowIntent.putExtras(new StormpathLoginConfig.Builder()
                 .setBackgroundColor(Color.WHITE)
                 .setIcon(R.mipmap.ic_launcher)
