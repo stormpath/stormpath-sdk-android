@@ -1,7 +1,6 @@
-package com.stormpath.sdk.exampleapp;
+package com.stormpath.sdk.StormpathLoginWithStyle;
 
 import com.stormpath.sdk.Stormpath;
-import com.stormpath.sdk.StormpathConfiguration;
 import com.stormpath.sdk.ui.StormpathLoginActivity;
 import com.stormpath.sdk.ui.StormpathLoginConfig;
 
