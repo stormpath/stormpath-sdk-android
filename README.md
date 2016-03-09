@@ -129,18 +129,10 @@ Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
 You can also log the current user out:
 
 ```java
-Stormpath.logout(new StormpathCallback<Void>() {
-    @Override
-    public void onSuccess(Void aVoid) {
-        // successfully logged out!
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-        // there was a problem while communicating with the API, but the session tokens were deleted anyway
-    }
-});
+Stormpath.logout();
 ```
+
+This will clear the saved accessToken.
 
 ## 7. Reset password
 
