@@ -26,17 +26,6 @@ import android.widget.TextView;
 
 public class StormpathLoginFragment extends BaseFragment {
 
-    protected EditText usernameInput;
-
-    protected EditText passwordInput;
-
-    protected ProgressBar progressBar;
-
-    protected Button loginButton;
-
-    protected Button registerButton;
-
-    protected Button resetPasswordButton;
 
 
 

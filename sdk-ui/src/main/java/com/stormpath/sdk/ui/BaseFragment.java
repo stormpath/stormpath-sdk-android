@@ -8,13 +8,40 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class BaseFragment extends Fragment {
 
+    //in all fragments
     protected StormpathLoginConfig loginConfig;
+
     protected ImageView logo;
+
+    protected EditText usernameInput;
+
+    protected EditText passwordInput;
+
+    protected ProgressBar progressBar;
+
+    protected Button loginButton;
+
+    protected Button registerButton;
+
+    protected Button resetPasswordButton;
+
+    protected EditText firstNameEditText;
+
+    protected EditText surnameEditText;
+
+    protected EditText emailEditText;
+
+    protected EditText passwordEditText;
+
+    protected Button sendButton;
 
     public BaseFragment() {
         // Required empty public constructor
@@ -24,12 +51,56 @@ public class BaseFragment extends Fragment {
     public void onStart(){
         super.onStart();
 
-       if(getView()!=null && loginConfig!=null) {
+       if(getView()!=null && loginConfig!=null) { //
            getView().setBackgroundColor(loginConfig.getBackgroundColor());
        }
 
         if(logo!=null && isResourceIdInPackage(getActivity().getPackageName(),loginConfig.getIconResource())){
             logo.setImageResource(loginConfig.getIconResource());
+        }
+
+        if(usernameInput!=null){ //will accept default underline color change
+
+        }
+
+        if(passwordInput!=null){ //will accept default underline color change
+
+        }
+
+        if(progressBar!=null){ //change anything? color change
+
+        }
+
+        if(loginButton!=null){ //will accept color change
+
+        }
+
+        if(registerButton!=null){ //will accept color change
+
+        }
+
+        if(resetPasswordButton!=null){ //will accept color change
+
+        }
+
+        if(firstNameEditText!=null){ //will accept color change
+
+        }
+
+        if(surnameEditText!=null){ //will accept color change
+
+        }
+
+        if(emailEditText!=null){ //will accept color change
+
+        }
+
+        if(passwordEditText!=null){ //will accept color change
+
+        }
+
+        if(sendButton!=null){ //will accept color change
+
         }
 
     }

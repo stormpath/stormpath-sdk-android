@@ -21,11 +21,7 @@ import com.stormpath.sdk.models.StormpathError;
 
 public class StormpathResetPasswordFragment extends BaseFragment {
 
-    EditText emailEditText;
 
-    ProgressBar progressBar;
-
-    Button sendButton;
 
     private StormpathResetPasswordFragmentListener mListener;
 

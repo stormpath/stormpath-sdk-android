@@ -29,17 +29,6 @@ import com.stormpath.sdk.models.StormpathError;
 
 public class StormpathRegisterFragment extends BaseFragment {
 
-    EditText firstNameEditText;
-
-    EditText surnameEditText;
-
-    EditText emailEditText;
-
-    EditText passwordEditText;
-
-    ProgressBar progressBar;
-
-    Button registerButton;
 
     private StormpathRegisterFragmentListener mListener;
 
