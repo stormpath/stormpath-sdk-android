@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Stormpath Social Login SDK Example</string>
+    <string name="facebook_app_id">you-app-id</string>
+</resources>
