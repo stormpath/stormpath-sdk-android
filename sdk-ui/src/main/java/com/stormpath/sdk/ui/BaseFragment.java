@@ -59,6 +59,8 @@ public class BaseFragment extends Fragment {
             logo.setImageResource(loginConfig.getIconResource());
         }
 
+        //needs to alter based on color schemes than by individual UI element
+
         if(usernameInput!=null){ //will accept default underline color change
 
         }

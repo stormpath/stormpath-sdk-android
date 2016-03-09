@@ -1,12 +1,18 @@
 package com.stormpath.sdk.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +60,38 @@ public class StormpathResetPasswordFragment extends BaseFragment {
         loginConfig = StormpathLoginConfig.fromBundle(getArguments());
 
         emailEditText = (EditText) view.findViewById(R.id.stormpath_input_username);
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @TargetApi(8)
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                //do email validation
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+
+                        emailEditText.getBackground().clearColorFilter();
+
+                    }
+                    else{
+                        //set underline color
+                        emailEditText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Bundle localBundle = getArguments();
         String username = null;
