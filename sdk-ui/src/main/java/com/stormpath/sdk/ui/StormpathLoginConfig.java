@@ -18,6 +18,16 @@ public class StormpathLoginConfig implements Serializable {
     private int iconResource;
     private int backgroundColor;
 
+    private int primaryActionButtonColor;
+    private int primaryActionButtonColorSelected;
+    private int primaryActionTextColor;
+
+    private int secondaryActionButtonColor;
+    private int secondaryActionButtonColorSelected;
+    private int secondaryActionTextColor;
+
+    //private int tertiaryAction
+
     public static StormpathLoginConfig fromBundle(Bundle bundle) {
 
         StormpathLoginConfig.Builder configBuilder = new Builder();
