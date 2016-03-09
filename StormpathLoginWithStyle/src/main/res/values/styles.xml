@@ -65,4 +65,24 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="stormpathLoginLogo">
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginBottom">64dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:src">@mipmap/ic_launcher</item>
+    </style>
+    <style name="stormpathButton">
+        <item name="android:height">72dp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="stormpathButton.Register">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:text">@string/stormpath_register</item>
+        <item name="android:visibility">visible</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
 </resources>

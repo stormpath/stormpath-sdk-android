@@ -4,8 +4,12 @@ import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.StormpathError;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -54,17 +58,30 @@ public class StormpathLoginFragment extends BaseFragment {
 
 
 
-        usernameInput.addTextChangedListener(new TextWatcher() { //if doing client side validation, this is important.
+        usernameInput.addTextChangedListener(new TextWatcher() { //if username ever becomes more than email addresses, remove this
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
+            @TargetApi(8)
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                //if()
-                    //editText.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                //do email validation
+                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(s).matches()) {
+
+                        usernameInput.getBackground().clearColorFilter();
+
+                    }
+                    else{
+                        //set underline color
+                        usernameInput.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                    }
+                }
+
 
             }
 
