@@ -35,6 +35,8 @@ This SDK will not send direct requests to Stormpath, and instead assumes that yo
 
 # Installation
 
+Add the SDK as a dependency to your `build.gradle` to automatically download it from jcenter.
+
 ```groovy
 compile 'com.stormpath.sdk:stormpath-sdk-android:0.1.0'
 ```
