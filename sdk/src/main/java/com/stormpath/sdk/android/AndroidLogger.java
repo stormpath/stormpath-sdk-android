@@ -2,6 +2,7 @@ package com.stormpath.sdk.android;
 
 import com.stormpath.sdk.StormpathLogger;
 
+import android.os.Build;
 import android.util.Log;
 
 public class AndroidLogger extends StormpathLogger {
@@ -27,7 +28,11 @@ public class AndroidLogger extends StormpathLogger {
                 Log.e(TAG, message);
                 break;
             case StormpathLogger.ASSERT:
-                Log.wtf(TAG, message);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+                    Log.wtf(TAG, message);
+                } else {
+                    Log.e(TAG, message);
+                }
                 break;
             case StormpathLogger.SILENT:
                 // nothing to do here

@@ -1,5 +1,7 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.StormpathError;
+
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -76,7 +78,7 @@ public class RefreshTokenTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.refreshAccessToken(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -87,7 +89,7 @@ public class RefreshTokenTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.refreshAccessToken(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -98,7 +100,7 @@ public class RefreshTokenTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.refreshAccessToken(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -106,7 +108,7 @@ public class RefreshTokenTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.refreshAccessToken(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
         assertThat(requestCount()).isZero();
     }
 }

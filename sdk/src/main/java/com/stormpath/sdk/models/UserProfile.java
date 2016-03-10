@@ -3,7 +3,6 @@ package com.stormpath.sdk.models;
 import com.squareup.moshi.Json;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public class UserProfile implements Serializable {
 
@@ -27,9 +26,6 @@ public class UserProfile implements Serializable {
 
     @Json(name = "username")
     private String username;
-
-    @Json(name = "customData")
-    private Map<String, Object> customData;
 
     public String getEmail() {
         return email;
@@ -57,9 +53,5 @@ public class UserProfile implements Serializable {
 
     public String getUsername() {
         return username;
-    }
-
-    public Map<String, Object> getCustomData() {
-        return customData;
     }
 }

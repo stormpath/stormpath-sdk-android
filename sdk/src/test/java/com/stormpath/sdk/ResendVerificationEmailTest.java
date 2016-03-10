@@ -1,5 +1,7 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.StormpathError;
+
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -50,6 +52,6 @@ public class ResendVerificationEmailTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.resendVerificationEmail("john.deere@example.com", callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 }

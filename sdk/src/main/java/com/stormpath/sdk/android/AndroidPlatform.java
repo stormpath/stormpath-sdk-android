@@ -2,9 +2,11 @@ package com.stormpath.sdk.android;
 
 import com.stormpath.sdk.Platform;
 import com.stormpath.sdk.PreferenceStore;
+import com.stormpath.sdk.R;
 import com.stormpath.sdk.StormpathLogger;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -40,6 +42,8 @@ public class AndroidPlatform extends Platform {
 
     private final PreferenceStore preferenceStore;
 
+    private final Resources resources;
+
     public AndroidPlatform(Context context) {
         this(context, DEFAULT_HTTP_EXECUTOR_SERVICE);
     }
@@ -49,6 +53,7 @@ public class AndroidPlatform extends Platform {
         this.httpExecutor = httpExecutorService;
         this.callbackExecutor = DEFAULT_CALLBACK_EXECUTOR;
         this.logger = new AndroidLogger();
+        this.resources = context.getApplicationContext().getResources();
     }
 
     @Override
@@ -69,5 +74,15 @@ public class AndroidPlatform extends Platform {
     @Override
     public PreferenceStore preferenceStore() {
         return preferenceStore;
+    }
+
+    @Override
+    public String unknownErrorMessage() {
+        return resources.getString(R.string.stormpath_unknown_error_message);
+    }
+
+    @Override
+    public String networkErrorMessage() {
+        return resources.getString(R.string.stormpath_network_error_message);
     }
 }

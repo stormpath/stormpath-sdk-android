@@ -6,7 +6,7 @@
 
 The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
 
-Currently it's known only to work against the [Express-Stormpath](https://github.com/stormpath/express-stormpath) integration.
+This SDK will not send direct requests to Stormpath, and instead assumes that you'll have a backend that conforms to the Stormpath Framework Spec. Currently the [Express](https://github.com/stormpath/express-stormpath) (v3.0) and [Laravel](https://github.com/stormpath/stormpath-laravel) (v0.3) implementations of the Stormpath server-side framework are compatible. With one of these backends, you'll be able to configure Stormpath so it fits your needs.
 
 # Requirements
 
@@ -62,7 +62,7 @@ Stormpath.register(registerParams, new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // registration failed
     }
 });
@@ -80,7 +80,7 @@ Stormpath.login("user@example.com", "Pa55w0rd", new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -100,7 +100,7 @@ Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -118,7 +118,7 @@ Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong - the user will have to log in again
     }
 });
@@ -146,7 +146,7 @@ Stormpath.resetPassword("user@example.com", new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -164,7 +164,7 @@ Stormpath.resendVerificationEmail("user@example.com", new StormpathCallback<Void
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });
@@ -182,7 +182,7 @@ Stormpath.verifyEmail(sptoken, new StormpathCallback<Void>() {
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(StormpathError error) {
         // something went wrong
     }
 });

@@ -1,5 +1,6 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 
 import org.junit.Test;
@@ -66,10 +67,6 @@ public class UserProfileTest extends BaseTest {
         assertThat(callback.userProfile.getMiddleName()).isNull();
         assertThat(callback.userProfile.getSurname()).isEqualTo("Deere");
         assertThat(callback.userProfile.getFullName()).isEqualTo("John Deere");
-        assertThat(callback.userProfile.getCustomData()).containsOnlyKeys("createdAt", "modifiedAt", "href");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("createdAt", "2016-02-11T19:14:35.996Z");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("modifiedAt", "2016-02-11T19:14:35.997Z");
-        assertThat(callback.userProfile.getCustomData()).containsEntry("href", "https://api.stormpath.com/v1/accounts/5MsQTA4QR9sHY6yQBQEIyK/customData");
         assertThat(callback.userProfile.getStatus()).isEqualTo("ENABLED");
     }
 
@@ -81,7 +78,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -90,7 +87,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 
     @Test
@@ -98,7 +95,7 @@ public class UserProfileTest extends BaseTest {
         StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
         assertThat(requestCount()).isZero();
     }
 
@@ -111,9 +108,8 @@ public class UserProfileTest extends BaseTest {
         }
 
         @Override
-        public void onFailure(Throwable t) {
+        public void onFailure(StormpathError error) {
             throw new RuntimeException("onFailure was called but it shouldn't have been!");
         }
-    };
-
+    }
 }

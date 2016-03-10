@@ -1,6 +1,7 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.utils.ResourceUtils;
 
 import org.junit.Test;
@@ -81,6 +82,6 @@ public class RegisterTest extends BaseTest {
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
         Stormpath.register(new RegisterParams("John", "Deere", "john.deere@example.com", "Test1234"), callback);
 
-        verify(callback).onFailure(any(Throwable.class));
+        verify(callback).onFailure(any(StormpathError.class));
     }
 }

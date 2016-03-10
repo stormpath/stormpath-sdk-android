@@ -2,6 +2,7 @@ package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
 
 import android.content.Context;
@@ -31,10 +32,17 @@ public class Stormpath {
     }
 
     /**
+     * @return true if the the SDK was initialized, false otherwise
+     */
+    public static boolean isInitialized() {
+        return config != null && Stormpath.platform != null && apiManager != null;
+    }
+
+    /**
      * Used for tests, we need to be able to mock the {@link Platform}.
      */
     static void init(@NonNull Platform platform, @NonNull StormpathConfiguration configuration) {
-        if (config != null && Stormpath.platform != null && apiManager != null) {
+        if (isInitialized()) {
             throw new IllegalStateException("You may only initialize Stormpath once!");
         }
 
@@ -72,6 +80,30 @@ public class Stormpath {
     public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         ensureConfigured();
         apiManager.register(registerParams, callback);
+    }
+
+    /**
+     * Logs in a user and stores the user session tokens for later use. By default it uses path /oauth/token which can be overridden via
+     * {@link StormpathConfiguration}.
+     *
+     * @param accessToken the accessToken/code received from social provider after login
+     */
+    public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
+            apiManager.socialLogin(providerId, null, accessToken, callback);
+        } else {
+            apiManager.socialLogin(providerId, accessToken, null, callback);
+        }
+    }
+
+    /**
+     * This method fetches a list of available providers for social login. By default it uses path /spa-config which can be overridden via
+     * {@link StormpathConfiguration}.
+     */
+    public static void getSocialProviders(StormpathCallback<SocialProvidersResponse> callback) {
+        ensureConfigured();
+        apiManager.getSocialProviders(callback);
     }
 
     /**
@@ -135,6 +167,11 @@ public class Stormpath {
         return platform.preferenceStore().getAccessToken();
     }
 
+    public static StormpathLogger logger() {
+        ensureConfigured();
+        return platform.logger();
+    }
+
     /**
      * Sets the log level for Stormpath, by default nothing is logged.
      *
@@ -149,14 +186,9 @@ public class Stormpath {
     }
 
     static void ensureConfigured() {
-        if (config == null || platform == null || apiManager == null) {
+        if (!isInitialized()) {
             throw new IllegalStateException(
                     "You need to initialize Stormpath before using it. To do that call Stormpath.init() with a valid configuration.");
         }
-    }
-
-    static StormpathLogger logger() {
-        ensureConfigured();
-        return platform.logger();
     }
 }

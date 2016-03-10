@@ -19,6 +19,33 @@ allprojects {
     }
 }
 
+ext {
+    compileSdkVersion = 23
+    buildToolsVersion = '23.0.2'
+
+    minSdkVersion = 7
+    targetSdkVersion = 23
+
+    okHttp = 'com.squareup.okhttp3:okhttp:3.1.2'
+    okHttpLoggingInterceptor = 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    moshi = 'com.squareup.moshi:moshi:1.1.0'
+    supportAnnotations = 'com.android.support:support-annotations:23.1.1'
+
+    siteUrl = 'https://github.com/stormpath/stormpath-sdk-android'      // Homepage URL of the library
+    gitUrl = 'https://github.com/stormpath/stormpath-sdk-android.git'   // Git repository URL
+
+    bintrayUser = getProperty('bintray.user')
+    bintrayApiKey = getProperty('bintray.apikey')
+    bintrayGpgPassword = getProperty('bintray.gpg.password')
+}
+
+/**
+ * @return the tag if this commit is tagged, a unique version identifier otherwise
+ */
+def getVersionFromGit() {
+    return 'git describe --always'.execute().text.trim()
+}
+
 wrapper {
     gradleVersion = '2.10'
 }

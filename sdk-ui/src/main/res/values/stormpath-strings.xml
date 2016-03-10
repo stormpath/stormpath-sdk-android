@@ -1,0 +1,22 @@
+<resources>
+    <string name="stormpath_login">Login</string>
+    <string name="stormpath_register">Register</string>
+    <string name="stormpath_email">Email</string>
+    <string name="stormpath_password">Password</string>
+    <string name="stormpath_resetpassword">Forgot Password?</string>
+    <string name="stormpath_resetpassword_action">Send</string>
+
+    <string name="stormpath_first_name">First name</string>
+    <string name="stormpath_surname">Surname</string>
+
+    <string name="stormpath_password_confirmation">Password confirmation</string>
+    <string name="stormpath_log_out">Log out</string>
+
+    <string name="stormpath_fill_in_credentials">You need to fill in the username and password!</string>
+    <string name="stormpath_all_fields_mandatory">All field are mandatory!</string>
+    <string name="stormpath_requires_valid_email">Please enter a valid email address!</string>
+
+    <string name="stormpath_resetpassword_title">Enter your email address below to reset your password.</string>
+    <string name="stormpath_resetpassword_result">You will be sent an email which you will need to open to continue. You may need to check your spam folder.</string>
+
+</resources>

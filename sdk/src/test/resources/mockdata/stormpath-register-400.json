@@ -1,3 +1,7 @@
 {
-  "error": "Password required."
+  "status": 400,
+  "message": "Password required",
+  "code": 7100,
+  "developerMessage": "Register attempt failed because the password was not provided.",
+  "moreInfo": "http://docs.stormpath.com/errors/7100"
 }
