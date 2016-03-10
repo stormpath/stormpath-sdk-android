@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Stormpath Social Login SDK Example</string>
+    <string name="facebook_app_id">fb-app-id-goes-here</string>
+    <string name="log_in_with_facebook">Log in with Facebook</string>
+    <string name="log_out">Log out</string>
+</resources>
