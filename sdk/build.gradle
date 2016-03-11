@@ -86,6 +86,11 @@ install {
                 }
                 developers {
                     developer {
+                        id 'ericlw'
+                        name 'Eric LW'
+                        email 'eric@stormpath.com'
+                    }
+                    developer {
                         id 'reisub'
                         name 'Dino Kovač'
                         email 'dino.kovac@infinum.co'
