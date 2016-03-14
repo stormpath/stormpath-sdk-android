@@ -61,6 +61,7 @@ after_success:
   - test -z "$DEPLOY_DOCS" || git fetch origin source:source
   - test -z "$DEPLOY_DOCS" || git checkout source
   - test -z "$DEPLOY_DOCS" || rm -rf source/android/latest
+  - test -z "$DEPLOY_DOCS" || rm -rf source/android/$RELEASE_VERSION
   - test -z "$DEPLOY_DOCS" || mkdir -p source/android/latest
   - test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/android/latest
   - test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/android/$RELEASE_VERSION
