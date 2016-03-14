@@ -13,12 +13,12 @@ env:
   - secure: VbdzebSSUbc49vCHRrEgDYU8GIY2YlCQx4Anf28plUEk9ROhaN/RgvVkS03p54Hz2tLdWQjzcIgtRx5qMrAZWIZ6ASwTJYmWwpNmt8SaZaQ6AMsKidNSyg3r15XRjOekQrfusSQZnZV+6JHeWcqDwRneAG9LgsL6hvbIBpnCU5O4H9k7lswdJtZMQ7V74xz4IaJbVfN+rQ73e4295h9MugzDK6MIyPao6LXW29hYHxaPAzPFQoDfdF4O+vc2MoqVqpc0paq6WNzDGVo8isFW+qngFp7hm9m/i+Upwn3iM8PnbRxCDW2ovoI9d5f0JHEfKhaiuk/K9JzAiMrpAxRculIwdw/7QsXA6tchwflXguUaIXa9aoYGYdDxpY6fGeTqePyjQP9vbK4/fBb2EM3Qh7dXuElpxq95VNxAYpCOEJ2I4PhC5Za4lcqcRSLJ5l9fe3NPYB+v+Lg98LKtUDmtmUort6vMedsYpoeiI1rdMfAEcpAiRhbnGdQdTW2dPlxtQlMnLxqAR1+u52m5tYj7kvJKRO5e9TvKKP7XdMP3Wqi1gvM14nInrvwyIEIJAx0yzRiA6yh6StQtIZ1ATof2vg0vLBEfFGENMXI5dDGPWK+lP0CBZrnU6Fxo1BXXgslm7K2puHeaDuVKdvEm8BPViuC+gkZp/GXgI1il6An7dpM=
 
 install:
-- test -z "$BUILD_DOCS" || pip install --user sphinx
+- pip install --user sphinx
 
 script:
-- test -z "$BUILD_DOCS" || cd docs
-- test -z "$BUILD_DOCS" || make html
-- test -z "$BUILD_DOCS" || cd ..
+- cd docs
+- make html
+- cd ..
 
 android:
   components:
@@ -46,14 +46,14 @@ android:
 
 after_success:
   - ./gradlew :sdk:cobertura :sdk:coveralls
-  - test -z "$BUILD_DOCS" || CURRENT_HASH=`git rev-parse HEAD`
-  - test -z "$BUILD_DOCS" || RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | tail -n 1`
-  - test -z "$BUILD_DOCS" || RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
-  - test -z "$BUILD_DOCS" || if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
-  - test -z "$BUILD_DOCS" || echo $RELEASE_VERSION
-  - test -z "$BUILD_DOCS" || echo $CURRENT_HASH
-  - test -z "$BUILD_DOCS" || echo $RELEASE_HASH
-  - test -z "$BUILD_DOCS" || echo $DEPLOY_DOCS
+  - CURRENT_HASH=`git rev-parse HEAD`
+  - RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | tail -n 1`
+  - RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
+  - if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
+  - echo $RELEASE_VERSION
+  - echo $CURRENT_HASH
+  - echo $RELEASE_HASH
+  - echo $DEPLOY_DOCS
   - test -z "$DEPLOY_DOCS" || git config --global user.email "evangelists@stormpath.com"
   - test -z "$DEPLOY_DOCS" || git config --global user.name "stormpath-sdk-android Auto Doc Build"
   - test -z "$DEPLOY_DOCS" || git clone git@github.com:stormpath/stormpath.github.io.git
