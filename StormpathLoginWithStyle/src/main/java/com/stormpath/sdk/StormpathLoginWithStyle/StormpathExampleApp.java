@@ -19,7 +19,7 @@ public class StormpathExampleApp extends Application {
 
         // initialize stormpath
         StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-                .baseUrl("http://172.16.0.179:3000")
+                .baseUrl("https://stormpathnotes.herokuapp.com/")
                 .build();
         Stormpath.init(this, stormpathConfiguration);
     }
