@@ -32,7 +32,7 @@ This SDK will not send direct requests to Stormpath, and instead assumes that yo
 
 # Requirements
 
-- Android 4.0+ (API level 14)
+- Android 2.1+ (API level 7)
 
 # Installation
 
