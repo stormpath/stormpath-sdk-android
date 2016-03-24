@@ -30,7 +30,8 @@ public class StormpathLoginActivity extends AppCompatActivity implements Stormpa
 
         configOptions = getMergedOptions();
 
-        getIntent().getExtras().putAll(configOptions);
+        if(getIntent().getExtras()!=null)
+            getIntent().getExtras().putAll(configOptions);
 
         if (savedInstanceState == null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
