@@ -131,6 +131,9 @@ public class StormpathRegisterFragment extends BaseFragment {
             @Override
             public void onSuccess(Void aVoid) {
                 hideProgress();
+
+                Snackbar.make(registerButton, R.string.stormpath_registration_success, Snackbar.LENGTH_LONG).show();
+
             }
 
             @Override
