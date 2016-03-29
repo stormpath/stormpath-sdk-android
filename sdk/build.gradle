@@ -51,8 +51,12 @@ configurations {
 }
 
 dependencies {
-    compile rootProject.ext.okHttp
-    compile rootProject.ext.okHttpLoggingInterceptor
+    compile (rootProject.ext.okHttp) {
+        transitive = false
+    }
+    compile (rootProject.ext.okHttpLoggingInterceptor) {
+        transitive = false
+    }
     compile rootProject.ext.moshi
     compile rootProject.ext.supportAnnotations
     javadocDeps rootProject.ext.okHttp
