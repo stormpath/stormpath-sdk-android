@@ -8,17 +8,21 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
+import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class SocialLoginActivity extends AppCompatActivity implements FacebookCallback<LoginResult> {
 
     CallbackManager callbackManager;
+    Button deepLinking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,17 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().registerCallback(callbackManager, this);
 
+
+        deepLinking = (Button)findViewById(R.id.login_button_deeplink);
+        deepLinking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id) + "://", getString(R.string.facebook_app_id)));
+
+
+            }
+        });
 
     }
 
