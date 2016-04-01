@@ -29,6 +29,8 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         LoginManager.getInstance().registerCallback(callbackManager, this);
+
+
     }
 
     @Override

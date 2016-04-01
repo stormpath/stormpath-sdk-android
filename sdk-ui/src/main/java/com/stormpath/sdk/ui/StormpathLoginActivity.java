@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+
 public class StormpathLoginActivity extends AppCompatActivity implements StormpathLoginFragment.StormpathLoginFragmentListener, StormpathRegisterFragment.StormpathRegisterFragmentListener, StormpathResetPasswordFragment.StormpathResetPasswordFragmentListener {
 
     private Bundle configOptions;

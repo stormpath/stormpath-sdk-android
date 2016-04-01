@@ -1,13 +1,19 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
+import com.stormpath.sdk.android.CustomTabActivityHelper;
+import com.stormpath.sdk.android.WebviewFallback;
 import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
 
 public class Stormpath {
 
@@ -94,6 +100,30 @@ public class Stormpath {
             apiManager.socialLogin(providerId, null, accessToken, callback);
         } else {
             apiManager.socialLogin(providerId, accessToken, null, callback);
+        }
+    }
+
+    public static void socialLoginFlow(@NonNull Activity activity, String providerId, SocialProviderConfiguration providerConfig){
+        ensureConfigured();
+        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
+
+            //configure social provider to get the url
+
+            //launch custom client
+
+
+        } else if(SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)) {
+
+            //configure social provider to get the url
+
+            //launch custom client, in callback run socialLogin(...)
+
+            String url = "https://www.facebook.com/dialog/oauth?client_id="+providerConfig.appId+"&redirect_uri=" + providerConfig.urlScheme;
+
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+            CustomTabActivityHelper.openCustomTab(
+                    activity, customTabsIntent, Uri.parse(url), new WebviewFallback());
+
         }
     }
 

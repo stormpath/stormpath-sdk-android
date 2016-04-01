@@ -1,5 +1,7 @@
-<manifest package="com.stormpath.sdk.ui">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.stormpath.sdk.ui">
+    <uses-sdk
+            android:minSdkVersion="16"
+            android:targetSdkVersion="23" />
     <application/>
 
 </manifest>
