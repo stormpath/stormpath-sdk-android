@@ -35,8 +35,8 @@ public class FacebookLoginProvider implements LoginProvider {
 
         String scopes = application.scopes != null ? application.scopes : "email";
 
-        String queryString = "client_id=" + application.appId + "&redirect_uri=" + application.urlScheme
-                + "://authorize&response_type=token&scope=" + scopes + "&state=" + state.nextInt() + "&auth_type=rerequest";
+        String queryString = "client_id=" + application.appId.substring(2) + "&redirect_uri=" + application.urlScheme
+                + "://authorize&response_type=token&scope=" + scopes + "&state=" + Math.abs(state.nextInt()) + "&auth_type=rerequest";
 
 
         return "https://www.facebook.com/dialog/oauth?" + queryString;

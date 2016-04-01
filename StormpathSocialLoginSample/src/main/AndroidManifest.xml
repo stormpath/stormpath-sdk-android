@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.stormpath.sdk.exampleapp">
+          package="com.stormpath.sdk.StormpathSocialLoginSample">
 
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:supportsRtl="true"
-            android:name=".StormpathSdkExampleApp"
+            android:name="com.stormpath.sdk.StormpathSocialLoginSample.StormpathSdkExampleApp"
             android:theme="@style/AppTheme">
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".SocialLoginActivity">
+        <activity android:name="com.stormpath.sdk.StormpathSocialLoginSample.SocialLoginActivity"
+                  android:label="@string/app_name"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <!-- social providers uri schemes -->
+                <data android:scheme="@string/facebook_app_id"/>
+                <data android:scheme="com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4"/>
             </intent-filter>
         </activity>
 

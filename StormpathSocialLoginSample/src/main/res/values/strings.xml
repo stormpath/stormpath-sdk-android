@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Stormpath Social Login SDK Example</string>
-    <string name="facebook_app_id">you-app-id</string>
+    <string name="facebook_app_id">fb1697895913782798</string>
     <string name="facebook_deep_link_example">Login with Facebook via Deep Linking</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.stormpath.sdk.exampleapp;
+package com.stormpath.sdk.StormpathSocialLoginSample;
 
 import com.facebook.FacebookSdk;
 import com.stormpath.sdk.Stormpath;

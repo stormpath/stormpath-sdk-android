@@ -7,6 +7,7 @@ import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
+import com.stormpath.sdk.providers.FacebookLoginProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -118,11 +119,15 @@ public class Stormpath {
 
             //launch custom client, in callback run socialLogin(...)
 
-            String url = "https://www.facebook.com/dialog/oauth?client_id="+providerConfig.appId+"&redirect_uri=" + providerConfig.urlScheme;
+            FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
+
+
+            /*String url = "https://www.facebook.com/dialog/oauth?client_id="+providerConfig.appId+"&redirect_uri=" + providerConfig.urlScheme
+                    + "://authorize" + "&response_type=token&scope=";*/
 
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
             CustomTabActivityHelper.openCustomTab(
-                    activity, customTabsIntent, Uri.parse(url), new WebviewFallback());
+                    activity, customTabsIntent, Uri.parse(mFbLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
 
         }
     }

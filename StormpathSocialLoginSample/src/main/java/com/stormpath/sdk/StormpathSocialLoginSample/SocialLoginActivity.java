@@ -1,4 +1,4 @@
-package com.stormpath.sdk.exampleapp;
+package com.stormpath.sdk.StormpathSocialLoginSample;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -24,6 +24,22 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
     CallbackManager callbackManager;
     Button deepLinking;
 
+    //used to intercept the social media oauth callbacks
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // getIntent() should always return the most recent
+        setIntent(intent);
+
+        //check contents of intent
+        if (getIntent().getData() != null && getIntent().getData().getScheme() != null) {
+
+            if (getIntent().getData().getScheme().contentEquals(getString(R.string.facebook_app_id))) {
+
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +56,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
             @Override
             public void onClick(View v) {
 
-                Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id) + "://", getString(R.string.facebook_app_id)));
+                Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id), getString(R.string.facebook_app_id)));
 
 
             }
