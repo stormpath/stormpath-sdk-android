@@ -3,18 +3,22 @@ package com.stormpath.sdk.providers;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
 /**
  * Created by ericlw on 3/29/16.
  */
-public class FacebookLoginProvider implements LoginProvider {
+public class FacebookLoginProvider extends BaseLoginProvider implements LoginProvider {
 
     @Override
-    public void getResponseFromCallbackURL(String url, StormpathCallback callback) {
+    public String getResponseFromCallbackURL(String url) {
 
         if(url.contains("error")){
 
@@ -23,9 +27,14 @@ public class FacebookLoginProvider implements LoginProvider {
             // people cancelled the FB login according to https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
 
         }
+        Map<String, List<String>> mMap = null;
+        try {
+           mMap = dictionaryFromFormEncodedString(url);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
-        //String accessToken = url.contains("access_token")
-
+        return mMap.get("access_token").get(0);
     }
 
     @Override

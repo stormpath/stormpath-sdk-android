@@ -11,6 +11,7 @@ import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
+import com.stormpath.sdk.providers.FacebookLoginProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,9 +59,38 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
                 Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id), getString(R.string.facebook_app_id)));
 
-
             }
         });
+
+        //check contents of intent
+        if (getIntent()!=null && getIntent().getData() != null && getIntent().getData().getScheme() != null) {
+
+            if (getIntent().getData().getScheme().contentEquals(getString(R.string.facebook_app_id))) {
+
+                //tokenize and get access token
+                FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
+                final String accessToken = mFbLogin.getResponseFromCallbackURL(getIntent().getData().toString());
+                Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
+                        new StormpathCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // we are logged in via fb!
+                                Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show();
+
+                                //change button name to logout
+
+                                //implement logout
+
+                            }
+
+                            @Override
+                            public void onFailure(StormpathError error) {
+                                Toast.makeText(SocialLoginActivity.this, error.message(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+            }
+        }
 
     }
 

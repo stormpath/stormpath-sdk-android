@@ -115,15 +115,7 @@ public class Stormpath {
 
         } else if(SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)) {
 
-            //configure social provider to get the url
-
-            //launch custom client, in callback run socialLogin(...)
-
             FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
-
-
-            /*String url = "https://www.facebook.com/dialog/oauth?client_id="+providerConfig.appId+"&redirect_uri=" + providerConfig.urlScheme
-                    + "://authorize" + "&response_type=token&scope=";*/
 
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
             CustomTabActivityHelper.openCustomTab(
