@@ -20,7 +20,7 @@ public class StormpathExampleApp extends Application {
 
         // initialize stormpath
         StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-                .baseUrl("https://stormpath-laravel.herokuapp.com")
+                .baseUrl("http://52.90.108.22")
                 .build();
         Stormpath.init(this, stormpathConfiguration);
     }
