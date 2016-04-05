@@ -5,7 +5,6 @@ import com.stormpath.sdk.StormpathConfiguration;
 import com.stormpath.sdk.StormpathLogger;
 
 import android.app.Application;
-import android.support.v4.BuildConfig;
 
 public class StormpathExampleApp extends Application {
 
@@ -20,7 +19,7 @@ public class StormpathExampleApp extends Application {
 
         // initialize stormpath
         StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-                .baseUrl("http://52.90.108.22")
+                .baseUrl("https://stormpathnotes.herokuapp.com/")
                 .build();
         Stormpath.init(this, stormpathConfiguration);
     }
