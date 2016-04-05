@@ -39,13 +39,13 @@ This SDK will not send direct requests to Stormpath, and instead assumes that yo
 Add the SDK as a dependency to your `build.gradle` to automatically download it from jcenter.
 
 ```groovy
-compile 'com.stormpath.sdk:stormpath-sdk-android:1.0.3'
+compile 'com.stormpath.sdk:stormpath-sdk-android:1.0.5'
 ```
 
 If you intend to use the UI components for an integrated Login and Registration flow, add the following dependency as well
 
 ```groovy
-compile 'com.stormpath.sdk:stormpath-sdk-android-ui:1.0.3'
+compile 'com.stormpath.sdk:stormpath-sdk-android-ui:1.0.5'
 ```
 
 # Usage
