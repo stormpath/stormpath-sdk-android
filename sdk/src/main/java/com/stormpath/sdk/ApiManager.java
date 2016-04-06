@@ -2,12 +2,18 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
+import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
+import com.stormpath.sdk.BuildConfig;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -51,6 +57,8 @@ public class ApiManager {
     private final PreferenceStore preferenceStore;
 
     private final Moshi moshi = new Moshi.Builder().build();
+
+    private static String version;
 
     ApiManager(StormpathConfiguration config, Platform platform) {
         this.config = config;
@@ -400,9 +408,13 @@ public class ApiManager {
     private Headers buildStandardHeaders(String accessToken) {
         Headers.Builder builder = new Headers.Builder();
         builder.add("Accept", "application/json");
+        builder.add("X-Stormpath-Agent", "stormpath-sdk-android/" + config.VERSION + " Android/" + Build.VERSION.SDK_INT);
+
+
         if (StringUtils.isNotBlank(accessToken)) {
             builder.add("Authorization", "Bearer " + accessToken);
         }
+
         return builder.build();
     }
 
