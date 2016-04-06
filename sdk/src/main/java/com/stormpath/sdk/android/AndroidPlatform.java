@@ -6,6 +6,8 @@ import com.stormpath.sdk.R;
 import com.stormpath.sdk.StormpathLogger;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,6 +45,8 @@ public class AndroidPlatform extends Platform {
     private final PreferenceStore preferenceStore;
 
     private final Resources resources;
+
+    private String version;
 
     public AndroidPlatform(Context context) {
         this(context, DEFAULT_HTTP_EXECUTOR_SERVICE);

@@ -4,6 +4,7 @@ import com.facebook.FacebookSdk;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathConfiguration;
 import com.stormpath.sdk.StormpathLogger;
+import com.stormpath.sdk.exampleapp.BuildConfig;
 
 import android.app.Application;
 

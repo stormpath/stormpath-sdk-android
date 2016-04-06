@@ -6,14 +6,23 @@ apply plugin: 'com.jfrog.bintray'
 
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 
-// library version used when deploying the artifact
-version = getVersionFromGit()
-
 // Maven Group ID for the artifact
 group = 'com.stormpath.sdk'
 
 // Maven Artifact ID
 def mavenArtifactId = 'stormpath-sdk-android'
+
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+// library version used when deploying the artifact
+version = getVersionName()
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion

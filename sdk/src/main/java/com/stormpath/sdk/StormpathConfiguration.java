@@ -2,6 +2,8 @@ package com.stormpath.sdk;
 
 public class StormpathConfiguration {
 
+    public final static String VERSION = "1.0.5"; //has to be manually set (or via script) because it can't pull version from manifest, BuildConfig is not accessible, and getVersionFromGit() returns the parent app's version
+
     private final String loginPath;
 
     private final String baseUrl;

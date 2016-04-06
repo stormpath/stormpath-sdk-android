@@ -26,4 +26,5 @@ public abstract class Platform {
     public abstract String unknownErrorMessage();
 
     public abstract String networkErrorMessage();
+
 }

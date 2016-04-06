@@ -2,12 +2,18 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
+import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
+import com.stormpath.sdk.BuildConfig;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -52,6 +58,8 @@ public class ApiManager {
 
     private final Moshi moshi = new Moshi.Builder().build();
 
+    private static String version;
+
     ApiManager(StormpathConfiguration config, Platform platform) {
         this.config = config;
         this.preferenceStore = platform.preferenceStore();
@@ -71,13 +79,15 @@ public class ApiManager {
     }
 
     void login(String username, String password, StormpathCallback<Void> callback) {
+
         RequestBody formBody = new FormBody.Builder()
-                .add("login", username)
+                .add("username", username)
                 .add("password", password)
+                .add("grant_type", "password")
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.loginUrl())
+                .url(config.oauthUrl())
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
@@ -86,21 +96,18 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 try {
-                    String sessionTokens[] = parseSessionTokens(response);
-                    String accessToken = sessionTokens[0];
-                    String refreshToken = sessionTokens[1];
-
-                    if (StringUtils.isBlank(accessToken)) {
+                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
+                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
                         failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
                         return;
                     }
 
-                    if (StringUtils.isBlank(refreshToken)) {
-                        Stormpath.logger().e("There was no refresh_token in the response!");
+                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
+                        Stormpath.logger().e("There was no refresh_token in the login response!");
                     }
 
-                    preferenceStore.setAccessToken(accessToken);
-                    preferenceStore.setRefreshToken(refreshToken);
+                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
+                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
                     successCallback(null);
                 } catch (Throwable t) {
                     failureCallback(t);
@@ -135,7 +142,7 @@ public class ApiManager {
                         }
                     } else {
                         Stormpath.logger().i("There was no access_token in the register cookies, if you want to skip the login after "
-                                + "registration, enable the autologin in your Express app.");
+                                + "registration, enable the autologin in your Stormpath server app.");
                     }
                     successCallback(null);
                 } catch (Throwable t) {
@@ -255,7 +262,7 @@ public class ApiManager {
         Request request = new Request.Builder()
                 .url(config.logoutUrl())
                 .headers(buildStandardHeaders(accessToken))
-                .get()
+                .post(RequestBody.create(MediaType.parse("application/json"), ""))
                 .build();
 
         preferenceStore.clearAccessToken();
@@ -401,9 +408,13 @@ public class ApiManager {
     private Headers buildStandardHeaders(String accessToken) {
         Headers.Builder builder = new Headers.Builder();
         builder.add("Accept", "application/json");
+        builder.add("X-Stormpath-Agent", "stormpath-sdk-android/" + config.VERSION + " Android/" + Build.VERSION.SDK_INT);
+
+
         if (StringUtils.isNotBlank(accessToken)) {
             builder.add("Authorization", "Bearer " + accessToken);
         }
+
         return builder.build();
     }
 
