@@ -4,11 +4,11 @@ import com.facebook.FacebookSdk;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathConfiguration;
 import com.stormpath.sdk.StormpathLogger;
-import com.stormpath.sdk.exampleapp.BuildConfig;
+import com.stormpath.sdk.StormpathSocialLoginSample.BuildConfig;
 
 import android.app.Application;
 
-public class StormpathSdkExampleApp extends Application {
+public class StormpathSocialLoginSampleApp extends Application {
 
     @Override
     public void onCreate() {
