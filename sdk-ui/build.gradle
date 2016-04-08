@@ -51,21 +51,14 @@ configurations {
 }
 
 dependencies {
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    //provided project(':sdk')
     compile project(':sdk')
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    //javadocDeps 'com.android.support:appcompat-v7:23.2.0'
-    /*javadocDeps 'com.android.support:design:23.2.0'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.1.2'
     testCompile 'org.robolectric:robolectric:3.0'
-    //
-    */
-    //compile  'com.android.support:support-v4:23.2.0'
 }
 
 install {
