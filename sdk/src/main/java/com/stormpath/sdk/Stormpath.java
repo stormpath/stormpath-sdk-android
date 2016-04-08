@@ -8,6 +8,7 @@ import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.providers.FacebookLoginProvider;
+import com.stormpath.sdk.providers.GoogleLoginProvider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -106,18 +107,24 @@ public class Stormpath {
 
     public static void socialLoginFlow(@NonNull Activity activity, String providerId, SocialProviderConfiguration providerConfig){
         ensureConfigured();
+
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+
         if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
 
             //configure social provider to get the url
 
             //launch custom client
+            GoogleLoginProvider mGoogLogin = new GoogleLoginProvider();
+
+            CustomTabActivityHelper.openCustomTab(activity, customTabsIntent, Uri.parse(mGoogLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
 
 
         } else if(SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)) {
 
             FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
 
-            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+
             CustomTabActivityHelper.openCustomTab(
                     activity, customTabsIntent, Uri.parse(mFbLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
 

@@ -20,9 +20,17 @@
 
     <Button
             android:layout_below="@id/login_button"
-            android:id="@+id/login_button_deeplink"
+            android:id="@+id/fb_login_button_deeplink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/facebook_deep_link_example"/>
+
+    <Button
+            android:layout_below="@id/fb_login_button_deeplink"
+            android:id="@+id/goog_login_button_deeplink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/goog_deep_link_example"/>
 </RelativeLayout>

@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Stormpath Social Login SDK Example</string>
     <string name="facebook_app_id">fb1697895913782798</string>
+    <string name="goog_app_id">com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4</string>
+
     <string name="facebook_deep_link_example">Login with Facebook via Deep Linking</string>
+    <string name="goog_deep_link_example">Login with Google via Deep Linking</string>
 </resources>

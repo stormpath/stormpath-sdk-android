@@ -23,7 +23,8 @@ import android.widget.Toast;
 public class SocialLoginActivity extends AppCompatActivity implements FacebookCallback<LoginResult> {
 
     CallbackManager callbackManager;
-    Button deepLinking;
+    Button fbDeepLinking;
+    Button googDeepLinking;
 
     //used to intercept the social media oauth callbacks
     @Override
@@ -52,12 +53,23 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
         LoginManager.getInstance().registerCallback(callbackManager, this);
 
 
-        deepLinking = (Button)findViewById(R.id.login_button_deeplink);
-        deepLinking.setOnClickListener(new View.OnClickListener() {
+        fbDeepLinking = (Button)findViewById(R.id.fb_login_button_deeplink);
+        fbDeepLinking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id), getString(R.string.facebook_app_id)));
+
+            }
+        });
+
+        googDeepLinking = (Button)findViewById(R.id.goog_login_button_deeplink);
+        googDeepLinking.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.GOOGLE, new SocialProviderConfiguration(getString(R.string.goog_app_id), getString(R.string.goog_app_id)));
 
             }
         });
