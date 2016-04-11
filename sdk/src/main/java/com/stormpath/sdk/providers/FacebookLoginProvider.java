@@ -22,10 +22,10 @@ public class FacebookLoginProvider extends BaseLoginProvider implements LoginPro
 
         if(url.contains("error")){
 
-            //do nothing because the user never started
+            // do nothing because the user never started
             // the login process in the first place. Error is always because
             // people cancelled the FB login according to https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-
+            return null;
         }
         Map<String, List<String>> mMap = null;
         try {

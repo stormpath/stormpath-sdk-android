@@ -12,6 +12,7 @@ import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.providers.FacebookLoginProvider;
+import com.stormpath.sdk.providers.GoogleLoginProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -81,13 +82,13 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
                 //tokenize and get access token
                 FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
-                final String accessToken = mFbLogin.getResponseFromCallbackURL(getIntent().getData().toString());
+                final String accessToken = mFbLogin.getResponseFromCallbackURL(getIntent().getData().toString()); //can be null
                 Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
                         new StormpathCallback<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // we are logged in via fb!
-                                Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show();
+                                Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show(); //should not say "Success! null"
 
                                 //change button name to logout
 
@@ -101,6 +102,12 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
                             }
                         });
 
+            }
+            else if(getIntent().getData().getScheme().contentEquals(getString(R.string.goog_app_id))){
+                GoogleLoginProvider mGoogLogin = new GoogleLoginProvider();
+
+                //get code, might require method with callback
+                mGoogLogin.getResponseFromCallbackURL(getIntent().getData().toString());
             }
         }
 
