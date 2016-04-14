@@ -1,10 +1,12 @@
 package com.stormpath.sdk.providers;
 
 import com.stormpath.sdk.ApiManager;
+import com.stormpath.sdk.PreferenceStore;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
+import com.stormpath.sdk.models.SocialProviderConfigurationSingleton;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.utils.StringUtils;
 
@@ -30,7 +32,7 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
     private SocialProviderConfiguration application;
 
     @Override
-    public void getResponseFromCallbackURL(String url, StormpathCallback<String> callback) {
+    public void getResponseFromCallbackURL(String url, final StormpathCallback<String> callback) {
 
         if(url.contains("error")){
 
@@ -41,6 +43,8 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
                     new IllegalStateException("no code or access_token was not found, did you forget to login? See debug logs for details.")));
         }
 
+        //restore application, or use singleton
+
         Map<String, List<String>> mMap = null;
         try {
            mMap = dictionaryFromFormEncodedString(url);
@@ -48,26 +52,29 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
             e.printStackTrace();
         }
 
-        if(!mMap.containsKey(application.urlScheme + ":/oauth2callback" + "?code"))
+        if(!mMap.containsKey(SocialProviderConfigurationSingleton.getInstance().urlScheme + ":/oauth2callback" + "?code"))
         {
             callback.onFailure(new StormpathError("Unknown Error",
                     new IllegalStateException("no code or access_token was not found, did you forget to login? See debug logs for details.")));
         }
         else {
 
-            String authorizationCode = mMap.get("code").get(0);
+            String authorizationCode = mMap.get(SocialProviderConfigurationSingleton.getInstance().urlScheme + ":/oauth2callback" + "?code").get(0);
 
 
-            Stormpath.socialGoogleCodeAuth(authorizationCode, application, new StormpathCallback<Void>() {
+            Stormpath.socialGoogleCodeAuth(authorizationCode, SocialProviderConfigurationSingleton.getInstance(), new StormpathCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
 
                     //need the value back
+                    callback.onSuccess(null);
 
                 }
 
                 @Override
                 public void onFailure(StormpathError error) {
+
+                    callback.onFailure(error);
 
                 }
             });
@@ -81,6 +88,11 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
     public String authenticationRequestURL(SocialProviderConfiguration application) {
 
         this.application = application;
+
+        //store socialproviderconfiguration
+        SocialProviderConfigurationSingleton.getInstance().appId = application.appId;
+        SocialProviderConfigurationSingleton.getInstance().urlScheme = application.urlScheme;
+        SocialProviderConfigurationSingleton.getInstance().scopes = application.scopes;
 
         Random state = new Random(10000000);
 

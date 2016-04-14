@@ -16,6 +16,9 @@ public class SocialProviderConfiguration {
     //Scopes string formatted in the provider's format
     public String scopes;
 
+    public SocialProviderConfiguration() {
+    }
+
     public SocialProviderConfiguration(String urlScheme, String appId) {
         this.urlScheme = urlScheme;
         this.appId = appId;

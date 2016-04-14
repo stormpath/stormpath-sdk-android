@@ -135,7 +135,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
                     @Override
                     public void onFailure(StormpathError error) {
-
+                        Toast.makeText(SocialLoginActivity.this, "Error", Toast.LENGTH_LONG).show();
                     }
                 });
 
