@@ -1,6 +1,12 @@
 package com.stormpath.sdk.providers;
 
+import com.stormpath.sdk.ApiManager;
+import com.stormpath.sdk.Stormpath;
+import com.stormpath.sdk.StormpathCallback;
+import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
+import com.stormpath.sdk.models.StormpathError;
+import com.stormpath.sdk.utils.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -9,22 +15,32 @@ import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 /**
  * Created by ericlw on 3/29/16.
  */
 public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvider {
 
+    private SocialProviderConfiguration application;
+
     @Override
-    public String getResponseFromCallbackURL(String url) {
+    public void getResponseFromCallbackURL(String url, StormpathCallback<String> callback) {
 
         if(url.contains("error")){
 
             //do nothing because the user never started
             // the login process in the first place. Error is always because
             // people cancelled the FB login according to https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-
+            callback.onFailure(new StormpathError("Unknown Error",
+                    new IllegalStateException("no code or access_token was not found, did you forget to login? See debug logs for details.")));
         }
+
         Map<String, List<String>> mMap = null;
         try {
            mMap = dictionaryFromFormEncodedString(url);
@@ -32,11 +48,39 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
             e.printStackTrace();
         }
 
-        return mMap.get("access_token").get(0);
+        if(!mMap.containsKey(application.urlScheme + ":/oauth2callback" + "?code"))
+        {
+            callback.onFailure(new StormpathError("Unknown Error",
+                    new IllegalStateException("no code or access_token was not found, did you forget to login? See debug logs for details.")));
+        }
+        else {
+
+            String authorizationCode = mMap.get("code").get(0);
+
+
+            Stormpath.socialGoogleCodeAuth(authorizationCode, application, new StormpathCallback<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    //need the value back
+
+                }
+
+                @Override
+                public void onFailure(StormpathError error) {
+
+                }
+            });
+
+        }
+
+        //return mMap.get("access_token").get(0);
     }
 
     @Override
     public String authenticationRequestURL(SocialProviderConfiguration application) {
+
+        this.application = application;
 
         Random state = new Random(10000000);
 

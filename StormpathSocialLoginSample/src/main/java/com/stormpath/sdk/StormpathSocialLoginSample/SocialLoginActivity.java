@@ -82,32 +82,63 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
                 //tokenize and get access token
                 FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
-                final String accessToken = mFbLogin.getResponseFromCallbackURL(getIntent().getData().toString()); //can be null
-                Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
-                        new StormpathCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // we are logged in via fb!
-                                Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show(); //should not say "Success! null"
+                mFbLogin.getResponseFromCallbackURL(getIntent().getData().toString(), new StormpathCallback<String>() {
+                    @Override
+                    public void onSuccess(final String accessToken) {
 
-                                //change button name to logout
+                        //then use Stormpath SDK
+                        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
+                                new StormpathCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // we are logged in via fb!
+                                        Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show();
+                                    }
 
-                                //implement logout
+                                    @Override
+                                    public void onFailure(StormpathError error) {
+                                        Toast.makeText(SocialLoginActivity.this, error.message(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
 
-                            }
+                    @Override
+                    public void onFailure(StormpathError error) {
 
-                            @Override
-                            public void onFailure(StormpathError error) {
-                                Toast.makeText(SocialLoginActivity.this, error.message(), Toast.LENGTH_LONG).show();
-                            }
-                        });
+                    }
+                }); //can be null
+
 
             }
             else if(getIntent().getData().getScheme().contentEquals(getString(R.string.goog_app_id))){
                 GoogleLoginProvider mGoogLogin = new GoogleLoginProvider();
 
                 //get code, might require method with callback
-                mGoogLogin.getResponseFromCallbackURL(getIntent().getData().toString());
+                mGoogLogin.getResponseFromCallbackURL(getIntent().getData().toString(), new StormpathCallback<String>() {
+                    @Override
+                    public void onSuccess(final String accessToken) {
+                        //then use Stormpath SDK
+                        Stormpath.socialLogin(SocialProvidersResponse.GOOGLE, accessToken,
+                                new StormpathCallback<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // we are logged in via fb!
+                                        Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(StormpathError error) {
+                                        Toast.makeText(SocialLoginActivity.this, error.message(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onFailure(StormpathError error) {
+
+                    }
+                });
+
             }
         }
 

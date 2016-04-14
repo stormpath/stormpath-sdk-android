@@ -183,6 +183,11 @@ public class Stormpath {
         apiManager.resendVerificationEmail(email, callback);
     }
 
+    public static void socialGoogleCodeAuth(String code, SocialProviderConfiguration application, StormpathCallback<Void> callback){
+        ensureConfigured();
+        apiManager.socialGoogleCodeAuth(code, application, callback);
+    }
+
     /**
      * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
      * StormpathConfiguration}.

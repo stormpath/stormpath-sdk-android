@@ -2,6 +2,7 @@ package com.stormpath.sdk.providers;
 
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.SocialProviderConfiguration;
+import com.stormpath.sdk.models.StormpathError;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -17,15 +18,17 @@ import java.util.Random;
  */
 public class FacebookLoginProvider extends BaseLoginProvider implements LoginProvider {
 
+
     @Override
-    public String getResponseFromCallbackURL(String url) {
+    public void getResponseFromCallbackURL(String url, StormpathCallback<String> callback) {
 
         if(url.contains("error")){
 
             // do nothing because the user never started
             // the login process in the first place. Error is always because
             // people cancelled the FB login according to https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
-            return null;
+            callback.onFailure(new StormpathError("Unknown Error",
+                    new IllegalStateException("access_token was not found, did you forget to login? See debug logs for details.")));
         }
         Map<String, List<String>> mMap = null;
         try {
@@ -34,7 +37,8 @@ public class FacebookLoginProvider extends BaseLoginProvider implements LoginPro
             e.printStackTrace();
         }
 
-        return mMap.get("access_token").get(0);
+        callback.onSuccess(mMap.get("access_token").get(0));
+
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.stormpath.sdk.models.SocialProviderConfiguration;
  */
 public interface LoginProvider {
 
-    String getResponseFromCallbackURL(String url);
+    void getResponseFromCallbackURL(String url, StormpathCallback<String> callback);
 
     String authenticationRequestURL(SocialProviderConfiguration application);
 

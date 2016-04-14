@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi;
 import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SessionTokens;
+import com.stormpath.sdk.models.SocialProviderConfiguration;
 import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
@@ -23,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -378,6 +380,39 @@ public class ApiManager {
                 }
             }
         });
+    }
+
+    void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<Void> callback){
+
+        Random state = new Random(10000000);
+
+        String codeUrl = "https://www.googleapis.com/oauth2/v4/token";
+
+        //do network call, send broadcast since can't return result from threaded method
+        RequestBody formBody = new FormBody.Builder()
+                .add("client_id", application.appId)
+                .add("code", authorizationCode)
+                .add("grant_type", "authorization_code")
+                .add("redirect_uri", application.urlScheme + ":/oauth2callback")
+                .add("verifier", String.valueOf(Math.abs(state.nextInt())))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(codeUrl)
+                .post(formBody)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+                try {
+                    successCallback(null);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
+
     }
 
     private String[] parseSessionTokens(Response response) {
