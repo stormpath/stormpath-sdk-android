@@ -21,10 +21,12 @@ import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -382,15 +384,34 @@ public class ApiManager {
         });
     }
 
-    void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<Void> callback){
+    void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<String> callback){
 
         Random state = new Random(10000000);
 
         String codeUrl = "https://www.googleapis.com/oauth2/v4/token";
 
+        StringTokenizer multiTokenizer = new StringTokenizer(application.appId, ".");
+        int tokens = multiTokenizer.countTokens();
+        ArrayList<String> tokenArray = new ArrayList<String>();
+        while(multiTokenizer.hasMoreTokens()){
+            tokenArray.add(multiTokenizer.nextToken());
+        }
+
+        String clientId = "";
+        for(int i = tokenArray.size()-1; i > -1; i--) {
+            if(i != tokenArray.size()-1){
+                clientId = clientId + "." + tokenArray.get(i);
+            }
+            else
+            {
+                clientId = clientId + tokenArray.get(i);
+            }
+
+        }
+
         //do network call, send broadcast since can't return result from threaded method
         RequestBody formBody = new FormBody.Builder()
-                .add("client_id", application.appId)
+                .add("client_id", clientId)
                 .add("code", authorizationCode)
                 .add("grant_type", "authorization_code")
                 .add("redirect_uri", application.urlScheme + ":/oauth2callback")
@@ -402,15 +423,16 @@ public class ApiManager {
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<String>(callback) {
             @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
+            protected void onSuccess(Response response, StormpathCallback<String> callback) {
                 try {
-                    successCallback(null);
+                    successCallback(response.body().string());
                 } catch (Throwable t) {
                     failureCallback(t);
                 }
             }
+
         });
 
     }

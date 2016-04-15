@@ -87,7 +87,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
                     public void onSuccess(final String accessToken) {
 
                         //then use Stormpath SDK
-                        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
+                        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken, null,
                                 new StormpathCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -118,11 +118,11 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
                     @Override
                     public void onSuccess(final String accessToken) {
                         //then use Stormpath SDK
-                        Stormpath.socialLogin(SocialProvidersResponse.GOOGLE, accessToken,
+                        Stormpath.socialLogin(SocialProvidersResponse.GOOGLE, accessToken, null,
                                 new StormpathCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        // we are logged in via fb!
+                                        // we are logged in via goog!
                                         Toast.makeText(SocialLoginActivity.this, "Success! " + accessToken, Toast.LENGTH_LONG).show();
                                     }
 
@@ -146,7 +146,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
     @Override
     public void onSuccess(final LoginResult loginResult) {
-        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, loginResult.getAccessToken().getToken(),
+        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, loginResult.getAccessToken().getToken(), null,
                 new StormpathCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

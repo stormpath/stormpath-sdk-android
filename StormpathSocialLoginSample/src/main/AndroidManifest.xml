@@ -26,7 +26,7 @@
 
                 <!-- social providers uri schemes -->
                 <data android:scheme="@string/facebook_app_id"/>
-                <data android:scheme="com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4"/>
+                <data android:scheme="@string/goog_app_id"/>
             </intent-filter>
         </activity>
 

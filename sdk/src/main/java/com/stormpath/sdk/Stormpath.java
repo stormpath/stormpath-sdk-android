@@ -96,11 +96,17 @@ public class Stormpath {
      *
      * @param accessToken the accessToken/code received from social provider after login
      */
-    public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
+    public static void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
         ensureConfigured();
         if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
-            apiManager.socialLogin(providerId, null, accessToken, callback);
-        } else {
+            if(code!=null)
+                apiManager.socialLogin(providerId, null, code, callback);
+
+            if(accessToken!=null){
+                apiManager.socialLogin(providerId, accessToken, null, callback);
+            }
+        }
+        else if (SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)){
             apiManager.socialLogin(providerId, accessToken, null, callback);
         }
     }
@@ -183,7 +189,7 @@ public class Stormpath {
         apiManager.resendVerificationEmail(email, callback);
     }
 
-    public static void socialGoogleCodeAuth(String code, SocialProviderConfiguration application, StormpathCallback<Void> callback){
+    public static void socialGoogleCodeAuth(String code, SocialProviderConfiguration application, StormpathCallback<String> callback){
         ensureConfigured();
         apiManager.socialGoogleCodeAuth(code, application, callback);
     }

@@ -10,6 +10,9 @@ import com.stormpath.sdk.models.SocialProviderConfigurationSingleton;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.utils.StringUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +31,6 @@ import okhttp3.Response;
  * Created by ericlw on 3/29/16.
  */
 public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvider {
-
-    private SocialProviderConfiguration application;
 
     @Override
     public void getResponseFromCallbackURL(String url, final StormpathCallback<String> callback) {
@@ -62,12 +63,22 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
             String authorizationCode = mMap.get(SocialProviderConfigurationSingleton.getInstance().urlScheme + ":/oauth2callback" + "?code").get(0);
 
 
-            Stormpath.socialGoogleCodeAuth(authorizationCode, SocialProviderConfigurationSingleton.getInstance(), new StormpathCallback<Void>() {
+            Stormpath.socialGoogleCodeAuth(authorizationCode, SocialProviderConfigurationSingleton.getInstance(), new StormpathCallback<String>() {
                 @Override
-                public void onSuccess(Void aVoid) {
+                public void onSuccess(String response) {
 
                     //need the value back
-                    callback.onSuccess(null);
+                    JSONObject responseJson = null;
+                    String accessToken = null;
+                    try {
+                        responseJson =  new JSONObject(response);
+                        accessToken = responseJson.getString("access_token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    callback.onSuccess(accessToken);
 
                 }
 
@@ -86,8 +97,6 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
 
     @Override
     public String authenticationRequestURL(SocialProviderConfiguration application) {
-
-        this.application = application;
 
         //store socialproviderconfiguration
         SocialProviderConfigurationSingleton.getInstance().appId = application.appId;
@@ -120,7 +129,6 @@ public class GoogleLoginProvider extends BaseLoginProvider implements LoginProvi
         String queryString =  "response_type=code&scope=" + scopes + "&redirect_uri=" + application.urlScheme + ":/oauth2callback&client_id="
                 + clientId + "&verifier=" + Math.abs(state.nextInt());
         return "https://accounts.google.com/o/oauth2/auth?" + queryString;
-// android - https://accounts.google.com/o/oauth2/auth?response_type=code&scope=email profile&redirect_uri=com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4:/oauth2callback&client_id=com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4&verifier=1975323259
-// ios - https://accounts.google.com/o/oauth2/auth?response_type=code&scope=email%20profile&redirect_uri=com.googleusercontent.apps.120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4:/oauth2callback&client_id=120814890096-1dt9ac0f83eng66troavm0a6dt9dgsp4.apps.googleusercontent.com&verifier=4888242
     }
+
 }
