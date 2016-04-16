@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UserProfile userProfile) {
                 String profileInfoText = String
-                        .format("%s\n%s\n%s", userProfile.getFullName(), userProfile.getUsername(), userProfile.getStatus());
+                        .format("%s\n%s\n%s\n%s", userProfile.getHref(), userProfile.getFullName(), userProfile.getUsername(), userProfile.getStatus());
                 userProfileText.setText(profileInfoText);
             }
 

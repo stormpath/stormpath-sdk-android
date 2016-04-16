@@ -6,6 +6,9 @@ import java.io.Serializable;
 
 public class UserProfile implements Serializable {
 
+    @Json(name = "href")
+    private String href;
+
     @Json(name = "email")
     private String email;
 
@@ -26,6 +29,10 @@ public class UserProfile implements Serializable {
 
     @Json(name = "username")
     private String username;
+
+    public String getHref() {
+        return href;
+    }
 
     public String getEmail() {
         return email;
