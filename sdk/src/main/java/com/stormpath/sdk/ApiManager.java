@@ -44,10 +44,19 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
+/**
+ * The type Api manager.
+ */
 public class ApiManager {
 
+    /**
+     * The constant ACCESS_TOKEN_COOKIE_PATTERN.
+     */
     public static final Pattern ACCESS_TOKEN_COOKIE_PATTERN = Pattern.compile("access_token=(.*?);.*");
 
+    /**
+     * The constant REFRESH_TOKEN_COOKIE_PATTERN.
+     */
     public static final Pattern REFRESH_TOKEN_COOKIE_PATTERN = Pattern.compile("refresh_token=(.*?);.*");
 
     private final Platform platform;
@@ -64,6 +73,12 @@ public class ApiManager {
 
     private static String version;
 
+    /**
+     * Instantiates a new Api manager.
+     *
+     * @param config   the config
+     * @param platform the platform
+     */
     ApiManager(StormpathConfiguration config, Platform platform) {
         this.config = config;
         this.preferenceStore = platform.preferenceStore();
@@ -82,6 +97,13 @@ public class ApiManager {
         this.platform = platform;
     }
 
+    /**
+     * Login.
+     *
+     * @param username the username
+     * @param password the password
+     * @param callback the callback
+     */
     void login(String username, String password, StormpathCallback<Void> callback) {
 
         RequestBody formBody = new FormBody.Builder()
@@ -120,6 +142,12 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Register.
+     *
+     * @param registerParams the register params
+     * @param callback       the callback
+     */
     public void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody
                 .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
@@ -156,6 +184,11 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Refresh access token.
+     *
+     * @param callback the callback
+     */
     public void refreshAccessToken(final StormpathCallback<Void> callback) {
         String refreshToken = preferenceStore.getRefreshToken();
 
@@ -205,6 +238,11 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Gets user profile.
+     *
+     * @param callback the callback
+     */
     public void getUserProfile(final StormpathCallback<UserProfile> callback) {
         String accessToken = preferenceStore.getAccessToken();
 
@@ -238,6 +276,12 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Reset password.
+     *
+     * @param email    the email
+     * @param callback the callback
+     */
     public void resetPassword(String email, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"email\":\"" + email + "\"}");
 
@@ -255,6 +299,9 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Logout.
+     */
     public void logout() {
         String accessToken = preferenceStore.getAccessToken();
 
@@ -285,6 +332,12 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Verify email.
+     *
+     * @param sptoken  the sptoken
+     * @param callback the callback
+     */
     public void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
         HttpUrl url = HttpUrl.parse(config.verifyEmailUrl()).newBuilder()
                 .addQueryParameter("sptoken", sptoken)
@@ -304,6 +357,12 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Resend verification email.
+     *
+     * @param email    the email
+     * @param callback the callback
+     */
     public void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
         FormBody body = new FormBody.Builder()
                 .add("login", email)
@@ -323,6 +382,11 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Gets social providers.
+     *
+     * @param callback the callback
+     */
     public void getSocialProviders(final StormpathCallback<SocialProvidersResponse> callback) {
         String accessToken = preferenceStore.getAccessToken();
 
@@ -346,6 +410,14 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Social login.
+     *
+     * @param providerId  the provider id
+     * @param accessToken the access token
+     * @param code        the code
+     * @param callback    the callback
+     */
     void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
         SocialLoginRequest socialLoginRequest = new SocialLoginRequest(providerId, accessToken, code);
         String bodyJson = moshi.adapter(SocialLoginRequest.class).toJson(socialLoginRequest);
@@ -384,6 +456,13 @@ public class ApiManager {
         });
     }
 
+    /**
+     * Social google code auth.
+     *
+     * @param authorizationCode the authorization code
+     * @param application       the application
+     * @param callback          the callback
+     */
     void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<String> callback){
 
         Random state = new Random(10000000);
@@ -479,6 +558,11 @@ public class ApiManager {
 
         private StormpathCallback<T> stormpathCallback;
 
+        /**
+         * Instantiates a new Ok http callback.
+         *
+         * @param stormpathCallback the stormpath callback
+         */
         public OkHttpCallback(StormpathCallback<T> stormpathCallback) {
             this.stormpathCallback = stormpathCallback;
         }
@@ -506,8 +590,19 @@ public class ApiManager {
             }
         }
 
+        /**
+         * On success.
+         *
+         * @param response the response
+         * @param callback the callback
+         */
         protected abstract void onSuccess(Response response, StormpathCallback<T> callback);
 
+        /**
+         * Success callback.
+         *
+         * @param t the t
+         */
         void successCallback(final T t) {
             callbackExecutor.execute(new Runnable() {
                 @Override
@@ -517,10 +612,20 @@ public class ApiManager {
             });
         }
 
+        /**
+         * Failure callback.
+         *
+         * @param t the t
+         */
         void failureCallback(final Throwable t) {
             failureCallback(new StormpathError(platform.unknownErrorMessage(), t));
         }
 
+        /**
+         * Failure callback.
+         *
+         * @param error the error
+         */
         void failureCallback(final StormpathError error) {
             callbackExecutor.execute(new Runnable() {
                 @Override
@@ -542,6 +647,13 @@ public class ApiManager {
         @Json(name = "providerData")
         private Map<String, String> providerData = new LinkedHashMap<>();
 
+        /**
+         * Instantiates a new Social login request.
+         *
+         * @param providerId  the provider id
+         * @param accessToken the access token
+         * @param code        the code
+         */
         public SocialLoginRequest(String providerId, String accessToken, String code) {
             providerData.put("providerId", providerId);
             if (StringUtils.isNotBlank(accessToken)) {

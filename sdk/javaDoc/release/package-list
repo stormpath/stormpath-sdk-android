@@ -1,0 +1,5 @@
+com.stormpath.sdk
+com.stormpath.sdk.android
+com.stormpath.sdk.models
+com.stormpath.sdk.providers
+com.stormpath.sdk.utils

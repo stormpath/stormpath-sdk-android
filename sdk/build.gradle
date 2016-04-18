@@ -3,6 +3,7 @@ apply plugin: 'net.saliman.cobertura'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.vanniktech.android.javadoc'
 
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 
