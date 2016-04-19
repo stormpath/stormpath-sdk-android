@@ -3,7 +3,7 @@ apply plugin: 'net.saliman.cobertura'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.vanniktech.android.javadoc'
+//apply plugin: 'com.vanniktech.android.javadoc'
 
 cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
 
@@ -126,6 +126,13 @@ install {
         }
     }
 }
+
+/*
+compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
+*/
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs

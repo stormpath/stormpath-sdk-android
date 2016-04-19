@@ -43,6 +43,7 @@ ext {
     bintrayGpgPassword = getProperty('bintray.gpg.password')
 }
 
+
 /**
  * @return the tag if this commit is tagged, a unique version identifier otherwise
  */
