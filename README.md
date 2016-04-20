@@ -96,7 +96,7 @@ Stormpath.register(registerParams, new StormpathCallback<Void>() {
 });
 ```
 
-## 3. User login
+## 3a. User login
 
 To log the user in, call `Stormpath.login()` with the credentials:
 
@@ -115,6 +115,74 @@ Stormpath.login("user@example.com", "Pa55w0rd", new StormpathCallback<Void>() {
 ```
 
 After login succeeds, the accessToken will be saved by the SDK. You can then get it by calling `Stormpath.accessToken()`.
+
+## 3b. User login with Facebook or Google
+
+Stormpath also supports logging in with Facebook or Google. There are two flows for enabling this:
+
+1. Let Stormpath handle the Facebook / Google log in.
+2. Use the Facebook / Google iOS SDK to get an access token, and pass it to Stormpath to log in.
+
+We've made it extremely easy to set up social login without using the Facebook / Google SDK, but if you need to use their SDKs for more features besides logging in, you skip to the section about "Using the Google or Facebook SDK"
+
+First, make sure your StormpathConfiguration's baseUrl is pointing at your server. If it is pointing at an example project's server you will not get accurate indication of your keys working. You will not be able to retrieve an access token.
+
+### Setting up Facebook Login
+
+To get started, you first need to [register an application](https://developers.facebook.com/?advanced_app_create=true) with Facebook. After registering your app, go into your app dashboard's settings page. Click "Add Platform", and fill in your android package name, generate hashes for your android keys (typically your android debug key as well as the one you will be signing your app with), and turn "Single Sign On" on. 
+
+Then, [sign into Stormpath](https://api.stormpath.com/login) and add a Facebook directory to your account. Fill the App ID and Secret with the values given to you in the Facebook app dashboard. 
+
+Add the Facebook directory to your Stormpath application.
+
+Finally, open up your App's project and go to the project's strings.xml. Add a key called facebook_app_id type in `fb[APP_ID_HERE]`, replacing `[APP_ID_HERE]` with your Facebook App ID. ex. <string name="facebook_app_id">fbyourappid</string>
+
+Then, you can initiate the login screen by calling: 
+
+```java
+Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id), getString(R.string.facebook_app_id)));
+```
+
+SocialProviderConfiguration takes an urlScheme and appId. For Facebook and Google the Stormpath SDK is currently configured to manipulate the app_id strings to conform with both urlScheme and appId.
+
+### Setting up Google Login
+
+To get started, you first need to [register an application](https://console.developers.google.com/project) with Google. Click "Enable and Manage APIs", and then the credentials tab. Create two sets of OAuth Client IDs, one as "Web Application", and one as "Android". 
+
+Edit the "Web Application", to specify the authorized redirect URI, which will be the Client ID tokens in reverse order + :/oauth2callback. ie. if client ID  58993jddjd.apps.googleusercontent.com then your redirect URI here will be com.googleusercontent.apps.58993jddjd:/oauth2callback
+
+Copy your reverse order client id ("com.googleusercontent.apps.58993jddjd" continuing the example), and paste it in your android strings.xml file in a key called goog_app_id
+
+Then, [sign into Stormpath](https://api.stormpath.com/login) and add a Google directory to your account. Fill in the Client ID and Secret with the values given to you for the web client. (You can fill in "Google Authorized Redirect URI" with the same redirect URI created in the Google Developers Console. 
+
+Then, add the directory to your Stormpath application. 
+
+Finally, you can initiate the login screen by calling: 
+
+```java
+Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.goog_app_id), getString(R.string.goog_app_id)));
+```
+
+### Using the Google or Facebook SDK
+
+If you're using the Facebook SDK or Google SDK for your app, follow their setup instructions instead. Once you successfully sign in with their SDK, utilize the following methods to send your access token to Stormpath, and log in your user:
+
+```java
+Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, /*access token from SDK*/, null,
+                new StormpathCallback<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        /*your code here*/
+    }
+
+    @Override
+    public void onFailure(StormpathError error) {
+        /*your code here*/
+    }
+});
+```
+
+SocialProvidersResponse.GOOGLE is a valid provider for authenticating with Google.
 
 ## 4. User data
 

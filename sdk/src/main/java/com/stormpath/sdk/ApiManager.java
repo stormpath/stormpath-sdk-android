@@ -453,6 +453,15 @@ public class ApiManager {
                     failureCallback(t);
                 }
             }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (e instanceof UnknownHostException || e instanceof SocketTimeoutException || e instanceof SocketException) {
+                    failureCallback(new StormpathError(platform.networkErrorMessage(), e));
+                } else {
+                    failureCallback(e);
+                }
+            }
         });
     }
 
