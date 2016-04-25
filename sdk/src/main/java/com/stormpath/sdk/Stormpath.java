@@ -61,11 +61,11 @@ public class Stormpath {
 
         Stormpath.logger().v("Initialized Stormpath SDK with baseUrl: " + config.baseUrl());
     }
-
+    
     /**
      * Used only for tests, we need to reset the initialization after each test.
      */
-    static void reset() {
+    public static void reset() {
         Stormpath.platform = null;
         config = null;
         apiManager = null;
