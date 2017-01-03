@@ -138,15 +138,6 @@ public class Stormpath {
     }
 
     /**
-     * This method fetches a list of available providers for social login. By default it uses path /spa-config which can be overridden via
-     * {@link StormpathConfiguration}.
-     */
-    public static void getSocialProviders(StormpathCallback<SocialProvidersResponse> callback) {
-        ensureConfigured();
-        apiManager.getSocialProviders(callback);
-    }
-
-    /**
      * Refreshes the access token and stores the new value which you can access via {@link Stormpath#accessToken()}. By default it uses
      * path /oauth/token which can be overridden via {@link StormpathConfiguration}.
      */

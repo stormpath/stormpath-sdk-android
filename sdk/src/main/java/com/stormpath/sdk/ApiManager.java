@@ -383,34 +383,6 @@ public class ApiManager {
     }
 
     /**
-     * Gets social providers.
-     *
-     * @param callback the callback
-     */
-    public void getSocialProviders(final StormpathCallback<SocialProvidersResponse> callback) {
-        String accessToken = preferenceStore.getAccessToken();
-
-        Request request = new Request.Builder()
-                .url(config.socialProvidersUrl())
-                .headers(buildStandardHeaders(accessToken))
-                .get()
-                .build();
-
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<SocialProvidersResponse>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<SocialProvidersResponse> callback) {
-                try {
-                    SocialProvidersResponse socialProvidersResponse = moshi.adapter(SocialProvidersResponse.class)
-                            .fromJson(response.body().source());
-                    successCallback(socialProvidersResponse);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
-    }
-
-    /**
      * Social login.
      *
      * @param providerId  the provider id
