@@ -600,27 +600,4 @@ public class ApiManager {
         @Json(name = "account")
         private UserProfile userProfile;
     }
-
-    private static class SocialLoginRequest implements Serializable {
-
-        @Json(name = "providerData")
-        private Map<String, String> providerData = new LinkedHashMap<>();
-
-        /**
-         * Instantiates a new Social login request.
-         *
-         * @param providerId  the provider id
-         * @param accessToken the access token
-         * @param code        the code
-         */
-        public SocialLoginRequest(String providerId, String accessToken, String code) {
-            providerData.put("providerId", providerId);
-            if (StringUtils.isNotBlank(accessToken)) {
-                providerData.put("accessToken", accessToken);
-            }
-            if (StringUtils.isNotBlank(code)) {
-                providerData.put("code", code);
-            }
-        }
-    }
 }
