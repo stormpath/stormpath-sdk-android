@@ -113,7 +113,7 @@ public class ApiManager {
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.oauthUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
@@ -153,7 +153,7 @@ public class ApiManager {
                 .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
 
         Request request = new Request.Builder()
-                .url(config.registerUrl())
+                .url(config.getBaseUrl() + Endpoints.REGISTER)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -209,7 +209,7 @@ public class ApiManager {
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.oauthUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
@@ -258,7 +258,7 @@ public class ApiManager {
         }
 
         Request request = new Request.Builder()
-                .url(config.userProfileUrl())
+                .url(config.getBaseUrl() + Endpoints.ME)
                 .headers(buildStandardHeaders(accessToken))
                 .get()
                 .build();
@@ -286,7 +286,7 @@ public class ApiManager {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"email\":\"" + email + "\"}");
 
         Request request = new Request.Builder()
-                .url(config.passwordResetUrl())
+                .url(config.getBaseUrl() + Endpoints.FORGOT)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -311,7 +311,7 @@ public class ApiManager {
         }
 
         Request request = new Request.Builder()
-                .url(config.logoutUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_REVOKE)
                 .headers(buildStandardHeaders(accessToken))
                 .post(RequestBody.create(MediaType.parse("application/json"), ""))
                 .build();
@@ -338,8 +338,9 @@ public class ApiManager {
      * @param sptoken  the sptoken
      * @param callback the callback
      */
+    // TODO: may not need this for now...
     public void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
-        HttpUrl url = HttpUrl.parse(config.verifyEmailUrl()).newBuilder()
+        HttpUrl url = HttpUrl.parse(config.getBaseUrl() + "/verify").newBuilder()
                 .addQueryParameter("sptoken", sptoken)
                 .build();
 
@@ -363,13 +364,14 @@ public class ApiManager {
      * @param email    the email
      * @param callback the callback
      */
+    // TODO: may not need this for now...
     public void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
         FormBody body = new FormBody.Builder()
                 .add("login", email)
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.verifyEmailUrl())
+                .url(config.getBaseUrl() + "/verify")
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -396,7 +398,7 @@ public class ApiManager {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), bodyJson);
 
         Request request = new Request.Builder()
-                .url(config.loginUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
