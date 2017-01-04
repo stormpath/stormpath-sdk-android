@@ -296,17 +296,20 @@ public class ApiManager {
      * Logout.
      */
     public void logout() {
-        String accessToken = preferenceStore.getAccessToken();
+        String refreshToken = preferenceStore.getRefreshToken();
 
-        if (StringUtils.isBlank(accessToken)) {
-            Stormpath.logger().e("access_token was not found, did you forget to login? See debug logs for details.");
+        if (StringUtils.isBlank(refreshToken)) {
             return;
         }
 
+        RequestBody body = new FormBody.Builder()
+                .add("token", refreshToken)
+                .build();
+
         Request request = new Request.Builder()
                 .url(config.getBaseUrl() + Endpoints.OAUTH_REVOKE)
-                .headers(buildStandardHeaders(accessToken))
-                .post(RequestBody.create(MediaType.parse("application/json"), ""))
+                .headers(buildStandardHeaders())
+                .post(body)
                 .build();
 
         preferenceStore.clearAccessToken();
