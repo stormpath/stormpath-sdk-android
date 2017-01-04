@@ -109,28 +109,7 @@ public class ApiManager {
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
-                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
-                        Stormpath.logger().e("There was no refresh_token in the login response!");
-                    }
-
-                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
-                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**
@@ -207,28 +186,7 @@ public class ApiManager {
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
-                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
-                        Stormpath.logger().e("There was no refresh_token in the login response!");
-                    }
-
-                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
-                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**
@@ -402,38 +360,7 @@ public class ApiManager {
                 .post(body)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    // TODO: remove copy paste & separate out
-                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
-                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
-                        Stormpath.logger().e("There was no refresh_token in the login response!");
-                    }
-
-                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
-                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (e instanceof UnknownHostException || e instanceof SocketTimeoutException || e instanceof SocketException) {
-                    failureCallback(new StormpathError(platform.networkErrorMessage(), e));
-                } else {
-                    failureCallback(e);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**
@@ -513,6 +440,41 @@ public class ApiManager {
         return builder.build();
     }
 
+    /**
+     * Callback specifically for OAuth Token
+     */
+    private class StormpathOAuthTokenCallback<T> extends OkHttpCallback {
+
+        public StormpathOAuthTokenCallback(StormpathCallback<T> stormpathCallback) {
+            super(stormpathCallback);
+        }
+
+        @Override
+        protected void onSuccess(Response response, StormpathCallback callback) {
+            try {
+                SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
+                if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
+                    failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
+                    return;
+                }
+
+                if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
+                    Stormpath.logger().e("There was no refresh_token in the login response!");
+                }
+
+                preferenceStore.setAccessToken(sessionTokens.getAccessToken());
+                preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
+                successCallback(null);
+            } catch (Throwable t) {
+                failureCallback(t);
+            }
+        }
+    }
+
+    /**
+     * The OkHttpCallback encapsulates a Stormpath callback provided by the
+     * end developer. This catches errors and converts them into a standard "StormpathError".
+     */
     private abstract class OkHttpCallback<T> implements Callback {
 
         private StormpathCallback<T> stormpathCallback;
