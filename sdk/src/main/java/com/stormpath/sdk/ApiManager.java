@@ -15,6 +15,7 @@ import com.stormpath.sdk.BuildConfig;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -48,16 +49,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * The type Api manager.
  */
 public class ApiManager {
-
-    /**
-     * The constant ACCESS_TOKEN_COOKIE_PATTERN.
-     */
-    public static final Pattern ACCESS_TOKEN_COOKIE_PATTERN = Pattern.compile("access_token=(.*?);.*");
-
-    /**
-     * The constant REFRESH_TOKEN_COOKIE_PATTERN.
-     */
-    public static final Pattern REFRESH_TOKEN_COOKIE_PATTERN = Pattern.compile("refresh_token=(.*?);.*");
 
     private final Platform platform;
 
@@ -162,7 +153,9 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 try {
-                    String sessionTokens[] = parseSessionTokens(response);
+                    // TODO: what the hell, how do we know if registration is successful or not?
+                    // Does this code just always return success if the API call goes through?
+                    String sessionTokens[] = {"PLACEHOLDER"};
                     String accessToken = sessionTokens[0];
                     String refreshToken = sessionTokens[1];
 
@@ -392,10 +385,13 @@ public class ApiManager {
      * @param code        the code
      * @param callback    the callback
      */
-    void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
-        SocialLoginRequest socialLoginRequest = new SocialLoginRequest(providerId, accessToken, code);
-        String bodyJson = moshi.adapter(SocialLoginRequest.class).toJson(socialLoginRequest);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), bodyJson);
+    void socialLogin(@NonNull String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("grant_type", "stormpath_social")
+                .add("providerId", providerId)
+                .add("accessToken", accessToken)
+                .add("code", code)
+                .build();
 
         Request request = new Request.Builder()
                 .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
@@ -407,21 +403,19 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 try {
-                    String sessionTokens[] = parseSessionTokens(response);
-                    String accessToken = sessionTokens[0];
-                    String refreshToken = sessionTokens[1];
-
-                    if (StringUtils.isBlank(accessToken)) {
+                    // TODO: remove copy paste & separate out
+                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
+                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
                         failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
                         return;
                     }
 
-                    if (StringUtils.isBlank(refreshToken)) {
-                        Stormpath.logger().e("There was no refresh_token in the response!");
+                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
+                        Stormpath.logger().e("There was no refresh_token in the login response!");
                     }
 
-                    preferenceStore.setAccessToken(accessToken);
-                    preferenceStore.setRefreshToken(refreshToken);
+                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
+                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
                     successCallback(null);
                 } catch (Throwable t) {
                     failureCallback(t);
@@ -497,27 +491,6 @@ public class ApiManager {
 
         });
 
-    }
-
-    private String[] parseSessionTokens(Response response) {
-        List<String> cookies = response.headers("Set-Cookie");
-
-        String accessToken = null;
-        String refreshToken = null;
-
-        for (String cookieHeader : cookies) {
-            Matcher accessTokenMatcher = ACCESS_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
-            if (accessTokenMatcher.find()) {
-                accessToken = accessTokenMatcher.group(1);
-            }
-
-            Matcher refreshTokenMatcher = REFRESH_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
-            if (refreshTokenMatcher.find()) {
-                refreshToken = refreshTokenMatcher.group(1);
-            }
-        }
-
-        return new String[]{accessToken, refreshToken};
     }
 
     private Headers buildStandardHeaders() {
