@@ -2,18 +2,12 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
-import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SessionTokens;
-import com.stormpath.sdk.models.SocialProviderConfiguration;
-import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
-import com.stormpath.sdk.BuildConfig;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
@@ -23,14 +17,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -340,18 +329,15 @@ public class ApiManager {
 
     /**
      * Social login.
-     *
-     * @param providerId  the provider id
+     *  @param providerId  the provider id
      * @param accessToken the access token
-     * @param code        the code
      * @param callback    the callback
      */
-    void socialLogin(@NonNull String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
+    void socialLogin(@NonNull String providerId, String accessToken, StormpathCallback<Void> callback) {
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "stormpath_social")
                 .add("providerId", providerId)
                 .add("accessToken", accessToken)
-                .add("code", code)
                 .build();
 
         Request request = new Request.Builder()
@@ -361,66 +347,6 @@ public class ApiManager {
                 .build();
 
         okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
-    }
-
-    /**
-     * Social google code auth.
-     *
-     * @param authorizationCode the authorization code
-     * @param application       the application
-     * @param callback          the callback
-     */
-    void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<String> callback){
-
-        Random state = new Random(10000000);
-
-        String codeUrl = "https://www.googleapis.com/oauth2/v4/token";
-
-        StringTokenizer multiTokenizer = new StringTokenizer(application.appId, ".");
-        int tokens = multiTokenizer.countTokens();
-        ArrayList<String> tokenArray = new ArrayList<String>();
-        while(multiTokenizer.hasMoreTokens()){
-            tokenArray.add(multiTokenizer.nextToken());
-        }
-
-        String clientId = "";
-        for(int i = tokenArray.size()-1; i > -1; i--) {
-            if(i != tokenArray.size()-1){
-                clientId = clientId + "." + tokenArray.get(i);
-            }
-            else
-            {
-                clientId = clientId + tokenArray.get(i);
-            }
-
-        }
-
-        //do network call, send broadcast since can't return result from threaded method
-        RequestBody formBody = new FormBody.Builder()
-                .add("client_id", clientId)
-                .add("code", authorizationCode)
-                .add("grant_type", "authorization_code")
-                .add("redirect_uri", application.urlScheme + ":/oauth2callback")
-                .add("verifier", String.valueOf(Math.abs(state.nextInt())))
-                .build();
-
-        Request request = new Request.Builder()
-                .url(codeUrl)
-                .post(formBody)
-                .build();
-
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<String>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<String> callback) {
-                try {
-                    successCallback(response.body().string());
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-
-        });
-
     }
 
     private Headers buildStandardHeaders() {

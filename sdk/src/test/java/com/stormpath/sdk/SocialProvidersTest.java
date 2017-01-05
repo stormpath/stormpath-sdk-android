@@ -1,6 +1,5 @@
 package com.stormpath.sdk;
 
-import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
 
 import org.junit.Test;

@@ -1,21 +1,12 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
-import com.stormpath.sdk.android.CustomTabActivityHelper;
-import com.stormpath.sdk.android.WebviewFallback;
 import com.stormpath.sdk.models.RegisterParams;
-import com.stormpath.sdk.models.SocialProviderConfiguration;
-import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.UserProfile;
-import com.stormpath.sdk.providers.FacebookLoginProvider;
-import com.stormpath.sdk.providers.GoogleLoginProvider;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 
 public class Stormpath {
 
@@ -96,45 +87,9 @@ public class Stormpath {
      *
      * @param accessToken the accessToken/code received from social provider after login
      */
-    public static void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
+    public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
         ensureConfigured();
-        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
-            if(code!=null)
-                apiManager.socialLogin(providerId, null, code, callback);
-
-            if(accessToken!=null){
-                apiManager.socialLogin(providerId, accessToken, null, callback);
-            }
-        }
-        else if (SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)){
-            apiManager.socialLogin(providerId, accessToken, null, callback);
-        }
-    }
-
-    public static void socialLoginFlow(@NonNull Activity activity, String providerId, SocialProviderConfiguration providerConfig){
-        ensureConfigured();
-
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-
-        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
-
-            //configure social provider to get the url
-
-            //launch custom client
-            GoogleLoginProvider mGoogLogin = new GoogleLoginProvider();
-
-            CustomTabActivityHelper.openCustomTab(activity, customTabsIntent, Uri.parse(mGoogLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
-
-
-        } else if(SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)) {
-
-            FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
-
-
-            CustomTabActivityHelper.openCustomTab(
-                    activity, customTabsIntent, Uri.parse(mFbLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
-
-        }
+        //TODO: implement
     }
 
     /**
@@ -180,11 +135,6 @@ public class Stormpath {
         apiManager.resendVerificationEmail(email, callback);
     }
 
-    public static void socialGoogleCodeAuth(String code, SocialProviderConfiguration application, StormpathCallback<String> callback){
-        ensureConfigured();
-        apiManager.socialGoogleCodeAuth(code, application, callback);
-    }
-
     /**
      * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
      * StormpathConfiguration}.
@@ -198,7 +148,7 @@ public class Stormpath {
      * @return the accessToken if it was saved, null otherwise
      */
     @Nullable
-    public static String accessToken() {
+    public static String getAccessToken() {
         ensureConfigured();
         return platform.preferenceStore().getAccessToken();
     }

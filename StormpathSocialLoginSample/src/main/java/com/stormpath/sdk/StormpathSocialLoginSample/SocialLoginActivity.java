@@ -8,11 +8,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.SocialProviderConfiguration;
-import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
-import com.stormpath.sdk.providers.FacebookLoginProvider;
-import com.stormpath.sdk.providers.GoogleLoginProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,7 +83,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
                     public void onSuccess(final String accessToken) {
 
                         //then use Stormpath SDK
-                        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken, null,
+                        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, accessToken,
                                 new StormpathCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -118,7 +114,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
                     @Override
                     public void onSuccess(final String accessToken) {
                         //then use Stormpath SDK
-                        Stormpath.socialLogin(SocialProvidersResponse.GOOGLE, accessToken, null,
+                        Stormpath.socialLogin(SocialProvidersResponse.GOOGLE, accessToken,
                                 new StormpathCallback<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -146,7 +142,7 @@ public class SocialLoginActivity extends AppCompatActivity implements FacebookCa
 
     @Override
     public void onSuccess(final LoginResult loginResult) {
-        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, loginResult.getAccessToken().getToken(), null,
+        Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, loginResult.getAccessToken().getToken(),
                 new StormpathCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
