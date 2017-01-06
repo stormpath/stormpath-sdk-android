@@ -2,19 +2,27 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
+import com.stormpath.sdk.android.CustomTabActivityHelper;
+import com.stormpath.sdk.android.WebviewFallback;
+import com.stormpath.sdk.models.AccountStore;
+import com.stormpath.sdk.models.LoginModel;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -216,6 +224,27 @@ public class ApiManager {
         });
     }
 
+    void getLoginModel(StormpathCallback<LoginModel> callback) {
+        Request request = new Request.Builder()
+                .url(config.getBaseUrl() + Endpoints.LOGIN)
+                .headers(buildStandardHeaders())
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<LoginModel>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<LoginModel> callback) {
+                try {
+                    LoginModel loginModel = moshi.adapter(LoginModel.class).fromJson(response.body().source());
+                    successCallback(loginModel);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
+    }
+
+
+
     /**
      * Reset password.
      *
@@ -333,7 +362,7 @@ public class ApiManager {
      * @param accessToken the access token
      * @param callback    the callback
      */
-    void socialLogin(@NonNull String providerId, String accessToken, StormpathCallback<Void> callback) {
+    void loginWithProvider(@NonNull String providerId, String accessToken, StormpathCallback<Void> callback) {
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "stormpath_social")
                 .add("providerId", providerId)
@@ -347,6 +376,19 @@ public class ApiManager {
                 .build();
 
         okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
+    }
+
+    void loginWithStormpathToken(@NonNull String stormpathToken, StormpathCallback<Void> callback) {
+        RequestBody body = new FormBody().Builder()
+                .add("grant_type", "stormpath_token")
+                .add("token", stormpathToken)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
+                .headers(buildStandardHeaders())
+                .post(body)
+                .build()
     }
 
     private Headers buildStandardHeaders() {

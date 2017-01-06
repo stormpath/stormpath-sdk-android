@@ -4,6 +4,7 @@ import com.stormpath.sdk.android.AndroidPlatform;
 import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.UserProfile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,8 @@ public class Stormpath {
     static Platform platform;
 
     static ApiManager apiManager;
+
+    static SocialLoginManager socialLoginManager = new SocialLoginManager();
 
     @StormpathLogger.LogLevel
     static int logLevel = StormpathLogger.SILENT;
@@ -81,15 +84,33 @@ public class Stormpath {
         apiManager.register(registerParams, callback);
     }
 
+    public static void loginWithProvider(Provider provider, String accessToken, StormpathCallback<Void> callback) {
+        loginWithProvider(provider.name(), accessToken, callback);
+    }
+
     /**
      * Logs in a user and stores the user session tokens for later use. By default it uses path /oauth/token which can be overridden via
      * {@link StormpathConfiguration}.
      *
      * @param accessToken the accessToken/code received from social provider after login
      */
-    public static void socialLogin(String providerId, String accessToken, StormpathCallback<Void> callback) {
+    public static void loginWithProvider(String providerId, String accessToken, StormpathCallback<Void> callback) {
         ensureConfigured();
-        //TODO: implement
+        apiManager.loginWithProvider(providerId, accessToken, callback);
+    }
+
+    public static void loginWithProvider(Provider provider, Activity activity, StormpathCallback<Void> callback) {
+        loginWithProvider(provider.name(), activity, callback);
+    }
+
+    public static void loginWithProvider(String providerId, Activity activity, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        socialLoginManager.loginWithProvider(providerId, activity, callback);
+    }
+
+    public static void loginWithAccountStore(String href, Activity activity, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        socialLoginManager.loginWithAccountStore(href, activity, callback);
     }
 
     /**
