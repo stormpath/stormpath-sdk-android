@@ -1,5 +1,7 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.AccountStore;
+import com.stormpath.sdk.models.LoginModel;
 import com.stormpath.sdk.models.StormpathError;
 
 import org.junit.Test;
@@ -25,7 +27,7 @@ public class SocialProvidersTest extends BaseTest {
     @Test
     public void correctRequest() throws Exception {
         enqueueResponse("stormpath-social-providers-response.json");
-        Stormpath.getSocialProviders(mock(StormpathCallback.class));
+        Stormpath.apiManager.getLoginModel(mock(StormpathCallback.class));
 
         RecordedRequest request = takeLastRequest();
 
@@ -37,10 +39,10 @@ public class SocialProvidersTest extends BaseTest {
     @Test
     public void successfulFetchCallsSuccess() throws Exception {
         enqueueResponse("stormpath-social-providers-response.json");
-        StormpathCallback<SocialProvidersResponse> callback = mock(StormpathCallback.class);
-        Stormpath.getSocialProviders(callback);
+        StormpathCallback<LoginModel> callback = mock(StormpathCallback.class);
+        Stormpath.apiManager.getLoginModel(callback);
 
-        verify(callback).onSuccess(any(SocialProvidersResponse.class));
+        verify(callback).onSuccess(any(LoginModel.class));
     }
 
     @Test
@@ -50,30 +52,27 @@ public class SocialProvidersTest extends BaseTest {
         SocialProvidersCallback callback = new SocialProvidersCallback();
         enqueueResponse("stormpath-social-providers-response.json");
 
-        Stormpath.getSocialProviders(callback);
-        assertThat(callback.socialProvidersResponse.getSocialProviders()).hasSize(3);
-        SocialProvidersResponse.SocialProvider facebook = callback.socialProvidersResponse.getSocialProviders().get(0);
-        SocialProvidersResponse.SocialProvider google = callback.socialProvidersResponse.getSocialProviders().get(1);
-        SocialProvidersResponse.SocialProvider linkedin = callback.socialProvidersResponse.getSocialProviders().get(2);
+        Stormpath.apiManager.getLoginModel(callback);
+        assertThat(callback.loginModel.getAccountStores()).hasSize(3);
+        AccountStore facebook = callback.loginModel.getAccountStores().get(0);
+        AccountStore google = callback.loginModel.getAccountStores().get(1);
+        AccountStore linkedin = callback.loginModel.getAccountStores().get(2);
 
-        assertThat(facebook.providerId()).isEqualTo("facebook");
-        assertThat(facebook.clientId()).isEqualTo("1234567890123456");
-        assertThat(facebook.isEnabled()).isEqualTo(true);
+        assertThat(facebook.getProviderId()).isEqualTo("facebook");
+        assertThat(facebook.getHref()).isEqualTo("1234567890123456");
 
-        assertThat(google.providerId()).isEqualTo("google");
-        assertThat(google.clientId()).isEqualTo("123456789012-abcdefghijklmnopqrstuwvxyz123456.apps.googleusercontent.com");
-        assertThat(google.isEnabled()).isEqualTo(true);
+        assertThat(google.getProviderId()).isEqualTo("google");
+        assertThat(google.getHref()).isEqualTo("123456789012-abcdefghijklmnopqrstuwvxyz123456.apps.googleusercontent.com");
 
-        assertThat(linkedin.providerId()).isEqualTo("linkedin");
-        assertThat(linkedin.clientId()).isEqualTo("abcdef12345678");
-        assertThat(linkedin.isEnabled()).isEqualTo(false);
+        assertThat(linkedin.getProviderId()).isEqualTo("linkedin");
+        assertThat(linkedin.getHref()).isEqualTo("abcdef12345678");
     }
 
     @Test
     public void failedFetchCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_BAD_REQUEST);
-        StormpathCallback<SocialProvidersResponse> callback = mock(StormpathCallback.class);
-        Stormpath.getSocialProviders(callback);
+        StormpathCallback<LoginModel> callback = mock(StormpathCallback.class);
+        Stormpath.apiManager.getLoginModel(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
@@ -81,19 +80,19 @@ public class SocialProvidersTest extends BaseTest {
     @Test
     public void failedDeserializationCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        StormpathCallback<SocialProvidersResponse> callback = mock(StormpathCallback.class);
-        Stormpath.getSocialProviders(callback);
+        StormpathCallback<LoginModel> callback = mock(StormpathCallback.class);
+        Stormpath.apiManager.getLoginModel(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
 
-    private static class SocialProvidersCallback implements StormpathCallback<SocialProvidersResponse> {
+    private static class SocialProvidersCallback implements StormpathCallback<LoginModel> {
 
-        public SocialProvidersResponse socialProvidersResponse;
+        public LoginModel loginModel;
 
         @Override
-        public void onSuccess(SocialProvidersResponse socialProvidersResponse) {
-            this.socialProvidersResponse = socialProvidersResponse;
+        public void onSuccess(LoginModel loginModel) {
+            this.loginModel = loginModel;
         }
 
         @Override

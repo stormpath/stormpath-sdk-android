@@ -15,7 +15,7 @@ public class StormpathTest extends BaseTest {
         assertThat(Stormpath.isInitialized()).isFalse();
         Stormpath.init(RuntimeEnvironment.application, new StormpathConfiguration.Builder().baseUrl("https://example.com").build());
         assertThat(Stormpath.isInitialized()).isTrue();
-        assertThat(Stormpath.config.baseUrl()).isEqualTo("https://example.com");
+        assertThat(Stormpath.config.getBaseUrl()).isEqualTo("https://example.com");
     }
 
     @Test
@@ -25,7 +25,7 @@ public class StormpathTest extends BaseTest {
         String accessToken = "asdf1234";
         Stormpath.platform.preferenceStore().setAccessToken(accessToken);
         assertThat(Stormpath.isInitialized()).isTrue();
-        assertThat(Stormpath.accessToken()).isEqualTo(accessToken);
+        assertThat(Stormpath.getAccessToken()).isEqualTo(accessToken);
     }
 
     @Test(expected = IllegalStateException.class)
