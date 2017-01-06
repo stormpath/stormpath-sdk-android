@@ -1,1 +1,1 @@
-include ':sdk', ':sdk-ui', ':StormpathLoginBasic', ':StormpathLoginWithStyle', ':StormpathSocialLoginSample'
+include ':sdk', ':sdk-ui', ':StormpathAndroidExample', ':StormpathLoginWithStyle', ':StormpathSocialLoginSample'

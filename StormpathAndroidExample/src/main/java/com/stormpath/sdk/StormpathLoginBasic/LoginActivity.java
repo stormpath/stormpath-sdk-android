@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
         loginButton = (Button) findViewById(R.id.login_button);
 
-        if (!TextUtils.isEmpty(Stormpath.accessToken())) {
+        if (!TextUtils.isEmpty(Stormpath.getAccessToken())) {
             // if we already have an accessToken saved, the user should be logged in
             navigateToHome();
         }
