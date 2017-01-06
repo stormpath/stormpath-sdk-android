@@ -1,5 +1,12 @@
 package com.stormpath.sdk;
 
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import okhttp3.HttpUrl;
+
 public class StormpathConfiguration {
 
     public final static String VERSION = "1.0.5"; //has to be manually set (or via script) because it can't pull version from manifest, BuildConfig is not accessible, and getVersionFromGit() returns the parent app's version
@@ -12,6 +19,18 @@ public class StormpathConfiguration {
 
     String getBaseUrl() {
         return apiUrl;
+    }
+
+    String getUrlScheme() {
+        List<String> urlSchemeComponents = Arrays.asList(HttpUrl.parse(apiUrl).host().split("\\."));
+        Collections.reverse(urlSchemeComponents);
+
+        String result = "";
+        for(String component : urlSchemeComponents) {
+            result += component;
+        }
+
+        return result;
     }
 
     private static String normalizePath(String path) {
