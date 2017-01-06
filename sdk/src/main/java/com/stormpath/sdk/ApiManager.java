@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -379,7 +378,7 @@ public class ApiManager {
     }
 
     void loginWithStormpathToken(@NonNull String stormpathToken, StormpathCallback<Void> callback) {
-        RequestBody body = new FormBody().Builder()
+        RequestBody body = new FormBody.Builder()
                 .add("grant_type", "stormpath_token")
                 .add("token", stormpathToken)
                 .build();
@@ -388,7 +387,9 @@ public class ApiManager {
                 .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(body)
-                .build()
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     private Headers buildStandardHeaders() {
