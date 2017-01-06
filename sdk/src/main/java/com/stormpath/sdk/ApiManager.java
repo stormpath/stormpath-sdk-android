@@ -44,7 +44,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 /**
  * The type Api manager.
  */
-public class ApiManager {
+class ApiManager {
 
     private final Platform platform;
 
@@ -114,7 +114,7 @@ public class ApiManager {
      * @param registerParams the register params
      * @param callback       the callback
      */
-    public void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+    void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody
                 .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
 
@@ -157,7 +157,7 @@ public class ApiManager {
      *
      * @param callback the callback
      */
-    public void refreshAccessToken(final StormpathCallback<Void> callback) {
+    void refreshAccessToken(final StormpathCallback<Void> callback) {
         String refreshToken = preferenceStore.getRefreshToken();
 
         if (StringUtils.isBlank(refreshToken)) {
@@ -190,7 +190,7 @@ public class ApiManager {
      *
      * @param callback the callback
      */
-    public void getUserProfile(final StormpathCallback<UserProfile> callback) {
+    void getUserProfile(final StormpathCallback<UserProfile> callback) {
         String accessToken = preferenceStore.getAccessToken();
 
         if (StringUtils.isBlank(accessToken)) {
@@ -250,7 +250,7 @@ public class ApiManager {
      * @param email    the email
      * @param callback the callback
      */
-    public void resetPassword(String email, StormpathCallback<Void> callback) {
+    void resetPassword(String email, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"email\":\"" + email + "\"}");
 
         Request request = new Request.Builder()
@@ -270,7 +270,7 @@ public class ApiManager {
     /**
      * Logout.
      */
-    public void logout() {
+    void logout() {
         String refreshToken = preferenceStore.getRefreshToken();
 
         if (StringUtils.isBlank(refreshToken)) {
@@ -310,7 +310,7 @@ public class ApiManager {
      * @param callback the callback
      */
     // TODO: may not need this for now...
-    public void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
+    void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
         HttpUrl url = HttpUrl.parse(config.getBaseUrl() + "/verify").newBuilder()
                 .addQueryParameter("sptoken", sptoken)
                 .build();
@@ -336,7 +336,7 @@ public class ApiManager {
      * @param callback the callback
      */
     // TODO: may not need this for now...
-    public void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
+    void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
         FormBody body = new FormBody.Builder()
                 .add("login", email)
                 .build();
