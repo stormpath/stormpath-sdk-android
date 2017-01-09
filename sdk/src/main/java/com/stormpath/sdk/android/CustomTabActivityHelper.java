@@ -15,6 +15,7 @@
 package com.stormpath.sdk.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsClient;
@@ -55,6 +56,7 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
             }
         } else {
             customTabsIntent.intent.setPackage(packageName);
+            customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             customTabsIntent.launchUrl(activity, uri);
         }
     }
