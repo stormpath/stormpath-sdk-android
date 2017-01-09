@@ -44,7 +44,7 @@ class SocialLoginManager {
         String authorizeUrl = HttpUrl.parse(Stormpath.config.getBaseUrl() + "/authorize").newBuilder()
                 .addQueryParameter("response_type", "stormpath_token")
                 .addQueryParameter("account_store_href", href)
-                .addQueryParameter("redirect_uri", "TODO: url scheme")
+                .addQueryParameter("redirect_uri", Stormpath.config.getUrlScheme() + "://stormpathCallback")
                 .build()
                 .toString();
 

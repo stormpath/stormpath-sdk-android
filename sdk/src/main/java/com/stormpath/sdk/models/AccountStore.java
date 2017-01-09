@@ -2,14 +2,15 @@ package com.stormpath.sdk.models;
 
 import com.squareup.moshi.Json;
 
+import java.util.Map;
+
 /**
  * Created by edjiang on 1/5/17.
  */
 public class AccountStore {
     private String href;
 
-    @Json(name = "provider.providerId")
-    private String providerId;
+    private Map<String, String> provider;
 
     private String authorizeUri;
 
@@ -18,7 +19,7 @@ public class AccountStore {
     }
 
     public String getProviderId() {
-        return providerId;
+        return provider.get("providerId");
     }
 
     public String getAuthorizeUri() {

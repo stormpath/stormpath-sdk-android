@@ -26,8 +26,10 @@ public class StormpathConfiguration {
         Collections.reverse(urlSchemeComponents);
 
         String result = "";
-        for(String component : urlSchemeComponents) {
-            result += component;
+        result = urlSchemeComponents.get(0);
+
+        for(int i = 1; i<urlSchemeComponents.size(); i++) {
+            result += "." + urlSchemeComponents.get(i);
         }
 
         return result;
