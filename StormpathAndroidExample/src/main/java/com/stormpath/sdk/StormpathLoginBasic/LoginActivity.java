@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         public void onSuccess(Void aVoid) {
             new AlertDialog.Builder(LoginActivity.this)
                     .setTitle("Password Reset Sent!")
-                    .setMessage("Please check your email for the password reset email")
+                    .setMessage("Please check your email for the password reset email!")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Stormpath.loginWithProvider(Provider.GOOGLE, this, loginCallback);
                 break;
             case R.id.button_forgot_password:
-                Stormpath.resendVerificationEmail(usernameInput.getText().toString(), forgotPasswordCallback);
+                Stormpath.resetPassword(usernameInput.getText().toString(), forgotPasswordCallback);
                 break;
             case R.id.button_register:
                 startActivity(new Intent(this, RegisterActivity.class));
