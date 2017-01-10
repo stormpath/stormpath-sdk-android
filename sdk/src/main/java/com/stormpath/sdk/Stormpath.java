@@ -126,7 +126,7 @@ public class Stormpath {
      * Fetches the user profile data and returns it via the provided callback. By default it uses path /me which can be overridden via
      * {@link StormpathConfiguration}.
      */
-    public static void getUserProfile(StormpathCallback<Account> callback) {
+    public static void getAccount(StormpathCallback<Account> callback) {
         ensureConfigured();
         apiManager.getUserProfile(callback);
     }

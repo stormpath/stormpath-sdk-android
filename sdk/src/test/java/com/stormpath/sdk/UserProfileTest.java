@@ -32,7 +32,7 @@ public class UserProfileTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn(accessToken);
 
         enqueueResponse("stormpath-user-profile-response.json");
-        Stormpath.getUserProfile(mock(StormpathCallback.class));
+        Stormpath.getAccount(mock(StormpathCallback.class));
 
         RecordedRequest request = takeLastRequest();
 
@@ -48,7 +48,7 @@ public class UserProfileTest extends BaseTest {
 
         enqueueResponse("stormpath-user-profile-response.json");
         StormpathCallback<Account> callback = mock(StormpathCallback.class);
-        Stormpath.getUserProfile(callback);
+        Stormpath.getAccount(callback);
 
         verify(callback).onSuccess(any(Account.class));
     }
@@ -60,7 +60,7 @@ public class UserProfileTest extends BaseTest {
         UserProfileCallback callback = new UserProfileCallback();
         enqueueResponse("stormpath-user-profile-response.json");
 
-        Stormpath.getUserProfile(callback);
+        Stormpath.getAccount(callback);
         assertThat(callback.account.getEmail()).isEqualTo("john.deere@example.com");
         assertThat(callback.account.getUsername()).isEqualTo("john.deere@example.com");
         assertThat(callback.account.getGivenName()).isEqualTo("John");
@@ -76,7 +76,7 @@ public class UserProfileTest extends BaseTest {
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_BAD_REQUEST);
         StormpathCallback<Account> callback = mock(StormpathCallback.class);
-        Stormpath.getUserProfile(callback);
+        Stormpath.getAccount(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
@@ -85,7 +85,7 @@ public class UserProfileTest extends BaseTest {
     public void failedDeserializationCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
         StormpathCallback<Account> callback = mock(StormpathCallback.class);
-        Stormpath.getUserProfile(callback);
+        Stormpath.getAccount(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
@@ -93,7 +93,7 @@ public class UserProfileTest extends BaseTest {
     @Test
     public void missingAccessTokenCallsFailureWithoutCallingApi() throws Exception {
         StormpathCallback<Account> callback = mock(StormpathCallback.class);
-        Stormpath.getUserProfile(callback);
+        Stormpath.getAccount(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
         assertThat(requestCount()).isZero();

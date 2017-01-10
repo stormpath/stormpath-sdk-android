@@ -19,15 +19,15 @@
             </intent-filter>
         </activity>
         <activity android:name="com.stormpath.sdk.StormpathAndroidExample.RegisterActivity"></activity>
-        <activity android:name="com.stormpath.sdk.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="io.stormpath.apps.stormpath-notes" />
-            </intent-filter>
-        </activity>
+<activity android:name="com.stormpath.sdk.CustomTabActivity"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="io.stormpath.apps.stormpath-notes" />
+    </intent-filter>
+</activity>
     </application>
 
 </manifest>

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText accessTokenEditText = (EditText) findViewById(R.id.input_access_token);
         final EditText refreshTokenEditText = (EditText) findViewById(R.id.input_refresh_token);
 
-        Stormpath.getUserProfile(new StormpathCallback<Account>() {
+        Stormpath.getAccount(new StormpathCallback<Account>() {
             @Override
             public void onSuccess(Account account) {
                 String profileInfoText = "Email: " + account.getEmail() + "\n" +
