@@ -1,5 +1,7 @@
 package com.stormpath.sdk.StormpathLoginBasic;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,13 +45,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Stormpath.register(registrationData, new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
                 finish();
             }
 
             @Override
             public void onFailure(StormpathError error) {
-                // TODO: display error dialog
+                new AlertDialog.Builder(RegisterActivity.this)
+                        .setTitle("Error")
+                        .setMessage(error.message())
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
     }

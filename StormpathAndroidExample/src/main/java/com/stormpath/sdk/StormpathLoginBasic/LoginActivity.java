@@ -5,6 +5,8 @@ import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
 import com.stormpath.sdk.models.StormpathError;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,14 +14,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText usernameInput;
     private EditText passwordInput;
-    private ProgressBar progressBar;
     private Button loginButton;
     private Button loginWithFacebookButton;
     private Button loginWithGoogleButton;
@@ -29,14 +28,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private StormpathCallback<Void> loginCallback = new StormpathCallback<Void>() {
         @Override
         public void onSuccess(Void aVoid) {
-            hideProgress();
             navigateToHome();
         }
 
         @Override
         public void onFailure(StormpathError error) {
-            hideProgress();
-            Toast.makeText(LoginActivity.this, error.message(), Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle("Error")
+                    .setMessage(error.message())
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
         }
     };
 
@@ -44,12 +50,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private StormpathCallback<Void> forgotPasswordCallback = new StormpathCallback<Void>() {
         @Override
         public void onSuccess(Void aVoid) {
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle("Password Reset Sent!")
+                    .setMessage("Please check your email for the password reset email")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    })
+                    .show();
         }
 
         @Override
         public void onFailure(StormpathError error) {
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle("Error")
+                    .setMessage(error.message())
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    })
+                    .show();
         }
     };
 
@@ -60,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         usernameInput = (EditText) findViewById(R.id.input_username);
         passwordInput = (EditText) findViewById(R.id.input_password);
-        progressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
 
         loginButton = (Button) findViewById(R.id.button_login);
         loginWithFacebookButton = (Button) findViewById(R.id.button_login_facebook);
@@ -102,12 +125,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     protected void onLoginButtonClicked() {
-        if (TextUtils.isEmpty(usernameInput.getText().toString()) || TextUtils.isEmpty(passwordInput.getText().toString())) {
-            Toast.makeText(this, "You need to fill in the username and password!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        showProgress();
 
         Stormpath.login(usernameInput.getText().toString(), passwordInput.getText().toString(), loginCallback);
     }
@@ -115,16 +132,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void navigateToHome() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
-    }
-
-    public void showProgress() {
-        loginButton.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgress() {
-        loginButton.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
     }
 }
 

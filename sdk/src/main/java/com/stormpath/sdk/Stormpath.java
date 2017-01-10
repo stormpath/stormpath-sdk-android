@@ -174,6 +174,15 @@ public class Stormpath {
         return platform.preferenceStore().getAccessToken();
     }
 
+    /**
+     * @return the refreshToken if it was saved, null otherwise
+     */
+    @Nullable
+    public static String getRefreshToken() {
+        ensureConfigured();
+        return platform.preferenceStore().getRefreshToken();
+    }
+
     public static StormpathLogger logger() {
         ensureConfigured();
         return platform.logger();

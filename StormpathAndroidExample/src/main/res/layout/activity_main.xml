@@ -11,18 +11,60 @@
         android:orientation="vertical"
         tools:context="com.stormpath.sdk.StormpathLoginWithStyle.MainActivity">
 
-    <TextView
-            android:id="@+id/user_profile_text"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="User:\nJohn Deere"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Hello, User!"
+            android:id="@+id/tv_welcome"
+            android:layout_gravity="center_horizontal" />
 
-    <android.support.v4.widget.Space
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Profile text goes here"
+            android:id="@+id/tv_profile" />
+
+        <android.support.v4.widget.Space
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Access Token"
+        android:id="@+id/textView" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_access_token"
+        android:layout_gravity="center_horizontal"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh Token"
+        android:id="@+id/textView2" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_refresh_token"
+        android:layout_gravity="center_horizontal"
+        android:inputType="text" />
+
     <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh Access Token"
+            android:id="@+id/button_refresh_token"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
             android:id="@+id/logout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

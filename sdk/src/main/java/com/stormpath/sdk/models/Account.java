@@ -30,6 +30,9 @@ public class Account implements Serializable {
     @Json(name = "username")
     private String username;
 
+    @Json(name = "customData")
+    private Object customData;
+
     public String getHref() {
         return href;
     }
@@ -60,5 +63,9 @@ public class Account implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public Object getCustomData() {
+        return customData;
     }
 }

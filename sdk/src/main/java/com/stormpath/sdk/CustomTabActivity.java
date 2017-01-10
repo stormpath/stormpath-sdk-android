@@ -20,5 +20,6 @@ public class CustomTabActivity extends Activity {
         String stormpathToken = callbackUri.getQueryParameter("jwtResponse");
 
         Stormpath.socialLoginManager.handleCallback(stormpathToken);
+        finish();
     }
 }
