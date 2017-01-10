@@ -6,9 +6,9 @@
 [![Stories in Ready](https://badge.waffle.io/stormpath/stormpath-sdk-android.png?label=ready&title=Ready)](https://waffle.io/stormpath/stormpath-sdk-android)
 [![Slack Status](https://talkstormpath.shipit.xyz/badge.svg)](https://talkstormpath.shipit.xyz)
 
-The Android SDK for [Stormpath](https://stormpath.com/), a framework for authentication & authorization.
+Stormpath's Android SDK allows developers utilizing Stormpath to quickly integrate authentication and token management into their apps. 
 
-This SDK will not send direct requests to Stormpath, and instead assumes that you'll have a backend that conforms to the Stormpath Framework Spec. Currently the [Express](https://github.com/stormpath/express-stormpath) (v3.0) and [Laravel](https://github.com/stormpath/stormpath-laravel) (v0.3) implementations of the Stormpath server-side framework are compatible. With one of these backends, you'll be able to configure Stormpath so it fits your needs.
+We're constantly iterating and improving the SDK, so please don't hesitate to send us your feedback! You can reach us via support@stormpath.com, or on the issue tracker for feature requests. 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -17,15 +17,20 @@ This SDK will not send direct requests to Stormpath, and instead assumes that yo
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-    - [1. Setting up](#1-setting-up)
-    - [2. User registration](#2-user-registration)
-    - [3. User login](#3-user-login)
-    - [4. User data](#4-user-data)
-    - [5. Refresh accessToken](#5-refresh-accesstoken)
-    - [6. Logout](#6-logout)
-    - [7. Reset password](#7-reset-password)
-    - [8. Resend verification email](#8-resend-verification-email)
-    - [9. Verify email](#9-verify-email)
+  - [Configuring Stormpath](#configuring-stormpath)
+  - [User registration](#user-registration)
+  - [Logging in](#logging-in)
+  - [Logging in with Social Providers](#logging-in-with-social-providers)
+    - [Configure Your Social Directory in Stormpath](#configure-your-social-directory-in-stormpath)
+    - [Setting up your Android project](#setting-up-your-android-project)
+    - [Initiating Social Login](#initiating-social-login)
+    - [Using the Google or Facebook SDK](#using-the-google-or-facebook-sdk)
+  - [User data](#user-data)
+  - [Using the Access Token](#using-the-access-token)
+  - [Logout](#logout)
+  - [Reset password](#reset-password)
+  - [Resend verification email](#resend-verification-email)
+  - [Verify email](#verify-email)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -40,29 +45,24 @@ This SDK will not send direct requests to Stormpath, and instead assumes that yo
 Add the SDK as a dependency to your `build.gradle` to automatically download it from jcenter.
 
 ```groovy
-compile 'com.stormpath.sdk:stormpath-sdk-android:1.1.2'
-```
-
-If you intend to use the UI components for an integrated Login and Registration flow, add the following dependency as well
-
-```groovy
-compile 'com.stormpath.sdk:stormpath-sdk-android-ui:1.1.2'
+compile 'com.stormpath.sdk:stormpath-sdk-android:2.0'
 ```
 
 # Usage
 
-# 1. Setting up
+To see the SDK in action, you can try running the `com.stormpath.sdk.StormpathAndroidExample` project. 
 
-To set up the SDK call `Stormpath.init()` in your Applications `onCreate()` method:
+## Configuring Stormpath
+
+The Android SDK (v2) leverages the [Stormpath Client API](https://docs.stormpath.com/client-api/product-guide/latest/index.html) for its authentication needs. You'll need to sign into the [Stormpath Admin Console](https://api.stormpath.com/) to get your Client API details. Go into your Application > Policies > Client API, and ensure that it's enabled. Copy your Client API URL, and set it in your Android project: 
+
 
 ```java
 StormpathConfiguration stormpathConfiguration = new StormpathConfiguration.Builder()
-        .baseUrl("https://api.example.com")
+        .baseUrl("https://stormpath-notes.apps.stormpath.io/")
         .build();
 Stormpath.init(this, stormpathConfiguration);
 ```
-
-You can set custom paths via `StormpathConfiguration.Builder` methods if you need to.
 
 You can also enable logging for your debug builds:
 
@@ -73,139 +73,149 @@ if (BuildConfig.DEBUG) {
 }
 ```
 
-## 2. User registration
+## User registration
 
-To register a user create a `RegisterParams` object with valid data:
+In order to register a user, instantiate a `RegistrationForm` object. Stormpath requires an `email` and `password` to register.
 
 ```java
-RegisterParams registerParams = new RegisterParams("firstName", "surname", "user@example.com", "Pa55w0rd");
+RegistrationForm registrationForm = new RegistrationForm("user@example.com", "Pa55w0rd");
 ```
 
-and use it to call `Stormpath.register()`:
+Then, just invoke the register method on `Stormpath` class:
 
 ```java
-Stormpath.register(registerParams, new StormpathCallback<Void>() {
+Stormpath.register(registrationData, new StormpathCallback<Void>() {
     @Override
     public void onSuccess(Void aVoid) {
-        // user successfully registered
+        // Handle successful registration
     }
 
     @Override
     public void onFailure(StormpathError error) {
-        // registration failed
+        // Handle registration error
     }
 });
 ```
 
-## 3a. User login
+## Logging in
 
-To log the user in, call `Stormpath.login()` with the credentials:
+To log in, collect the email (or username) and password from the user, and then pass them to the login method:
 
 ```java
 Stormpath.login("user@example.com", "Pa55w0rd", new StormpathCallback<Void>() {
     @Override
     public void onSuccess(Void aVoid) {
-        // login was successful, we can now show the main screen of the app
+        // Handle successful login
     }
 
     @Override
     public void onFailure(StormpathError error) {
-        // something went wrong
+        // Handle login error
     }
 });
 ```
 
 After login succeeds, the accessToken will be saved by the SDK. You can then get it by calling `Stormpath.accessToken()`.
 
-## 3b. User login with Facebook or Google
+## Logging in with Social Providers
 
-Stormpath also supports logging in with Facebook or Google. There are two flows for enabling this:
+Stormpath also supports logging in with a variety of social providers Facebook, Google, LinkedIn, GitHub, and more. There are two flows for enabling this:
 
-1. Let Stormpath handle the Facebook / Google log in.
-2. Use the Facebook / Google iOS SDK to get an access token, and pass it to Stormpath to log in.
+1. Let Stormpath handle the social login.
+2. Use the social provider's iOS SDK to get an access token, and pass it to Stormpath to log in.
 
-We've made it extremely easy to set up social login without using the Facebook / Google SDK, but if you need to use their SDKs for more features besides logging in, you skip to the section about "Using the Google or Facebook SDK"
+We've made it extremely easy to set up social login without using the social provider SDKs, but if you need to use their SDKs for more features besides logging in, you should use flow #2 (and skip directly to [Using a social provider SDK](#using-a-social-provider-sdk)). 
 
-First, make sure your StormpathConfiguration's baseUrl is pointing at your server. If it is pointing at an example project's server you will not get accurate indication of your keys working. You will not be able to retrieve an access token.
+### Configure Your Social Directory in Stormpath
 
-### Setting up Facebook Login
+To set up your social directory, read more about [social login in the Stormpath Client API Guide](https://docs.stormpath.com/client-api/product-guide/latest/social_login.html#before-you-start).
 
-To get started, you first need to [register an application](https://developers.facebook.com/?advanced_app_create=true) with Facebook. After registering your app, go into your app dashboard's settings page. Click "Add Platform", and fill in your android package name, generate hashes for your android keys (typically your android debug key as well as the one you will be signing your app with), and turn "Single Sign On" on. 
 
-Then, [sign into Stormpath](https://api.stormpath.com/login) and add a Facebook directory to your account. Fill the App ID and Secret with the values given to you in the Facebook app dashboard. 
+### Setting up your Android project
 
-Add the Facebook directory to your Stormpath application.
+In your `AndroidManifest.xml`, you'll need to add Stormpath's login handler activity and configure it with an intent filter to recieve login callbacks from Stormpath. 
 
-Finally, open up your App's project and go to the project's strings.xml. Add a key called facebook_app_id type in `fb[APP_ID_HERE]`, replacing `[APP_ID_HERE]` with your Facebook App ID. ex. <string name="facebook_app_id">fbyourappid</string>
+Add this to your manifest:
 
-Then, you can initiate the login screen by calling: 
-
-```java
-Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.facebook_app_id), getString(R.string.facebook_app_id)));
+```xml
+<activity android:name="com.stormpath.sdk.CustomTabActivity"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="REPLACE-ME-HERE" />
+    </intent-filter>
+</activity>
 ```
 
-SocialProviderConfiguration takes an urlScheme and appId. For Facebook and Google the Stormpath SDK is currently configured to manipulate the app_id strings to conform with both urlScheme and appId.
+For the `data android:scheme` tag, type in your Client API's DNS label, but reversed. For instance, if your Client API DNS Label is `edjiang.apps.stormpath.io`, type in `io.stormpath.apps.edjiang`. 
 
-### Setting up Google Login
+In the [Stormpath Admin Console](https://api.stormpath.com)'s Application settings, add that URL as an "authorized callback URL", appending `://stormpathCallback`. Following my earlier example, I would use `io.stormpath.apps.edjiang`. 
 
-To get started, you first need to [register an application](https://console.developers.google.com/project) with Google. Click "Enable and Manage APIs", and then the credentials tab. Create two sets of OAuth Client IDs, one as "Web Application", and one as "Android". 
+### Initiating Social Login
 
-Edit the "Web Application", to specify the authorized redirect URI, which will be the Client ID tokens in reverse order + :/oauth2callback. ie. if client ID  58993jddjd.apps.googleusercontent.com then your redirect URI here will be com.googleusercontent.apps.58993jddjd:/oauth2callback
-
-Copy your reverse order client id ("com.googleusercontent.apps.58993jddjd" continuing the example), and paste it in your android strings.xml file in a key called goog_app_id
-
-Then, [sign into Stormpath](https://api.stormpath.com/login) and add a Google directory to your account. Fill in the Client ID and Secret with the values given to you for the web client. (You can fill in "Google Authorized Redirect URI" with the same redirect URI created in the Google Developers Console. 
-
-Then, add the directory to your Stormpath application. 
-
-Finally, you can initiate the login screen by calling: 
+Now, you can initiate the login screen by calling: 
 
 ```java
-Stormpath.socialLoginFlow(SocialLoginActivity.this, SocialProvidersResponse.FACEBOOK, new SocialProviderConfiguration(getString(R.string.goog_app_id), getString(R.string.goog_app_id)));
+Stormpath.loginWithProvider(Provider.FACEBOOK, this, new StormpathCallback<Void>() {
+    @Override
+    public void onSuccess(Void aVoid) {
+        // Handle successful login
+    }
+
+    @Override
+    public void onFailure(StormpathError error) {
+        // Handle login error
+    }
+});
 ```
+
+Valid `Provider` enum values are: `FACEBOOK, GOOGLE, LINKEDIN, GITHUB, TWITTER`, or you can enter a string. 
 
 ### Using the Google or Facebook SDK
 
 If you're using the Facebook SDK or Google SDK for your app, follow their setup instructions instead. Once you successfully sign in with their SDK, utilize the following methods to send your access token to Stormpath, and log in your user:
 
 ```java
-Stormpath.socialLogin(SocialProvidersResponse.FACEBOOK, /*access token from SDK*/, null,
-                new StormpathCallback<Void>() {
+Stormpath.loginWithProvider(Provider.FACEBOOK, accessToken, new StormpathCallback<Void>() {
     @Override
     public void onSuccess(Void aVoid) {
-        /*your code here*/
+        // Handle successful login
     }
 
     @Override
     public void onFailure(StormpathError error) {
-        /*your code here*/
+        // Handle login error
     }
 });
 ```
 
-SocialProvidersResponse.GOOGLE is a valid provider for authenticating with Google.
-
-## 4. User data
+## User data
 
 You can fetch the user data for the currently logged in user:
 
 ```java
-Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
+Stormpath.getAccount(new StormpathCallback<Account>() {
     @Override
-    public void onSuccess(UserProfile userProfile) {
-        // user data ready
+    public void onSuccess(Account account) {
+        // Do things with the account
     }
 
     @Override
     public void onFailure(StormpathError error) {
-        // something went wrong
+        // Account request failed
     }
 });
 ```
 
-## 5. Refresh accessToken
+## Using the Access Token
 
-If the accessToken expires, you can try to refresh it:
+You can utilize the access token to access any of your API endpoints that require authentication. It's stored as a property on the Stormpath object as `Stormpath.getAccessToken()`. You can use the access token by adding it to your `Authorization` header using the `Bearer scheme`. This looks like the following:
+
+`Authorization: Bearer ACCESSTOKEN`
+
+When the access token expires, you may need to refresh it. Expiration times are configurable in the Stormpath application settings. 
 
 ```java
 Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
@@ -221,7 +231,7 @@ Stormpath.refreshAccessToken(new StormpathCallback<Void>() {
 });
 ```
 
-## 6. Logout
+## Logout
 
 You can also log the current user out:
 
@@ -229,9 +239,9 @@ You can also log the current user out:
 Stormpath.logout();
 ```
 
-This will clear the saved accessToken.
+This will clear the saved accessToken and invalidate the token with the server.
 
-## 7. Reset password
+## Reset password
 
 To reset a password for a user, use their email address to call `Stormpath.resetPassword()`:
 
@@ -249,7 +259,7 @@ Stormpath.resetPassword("user@example.com", new StormpathCallback<Void>() {
 });
 ```
 
-## 8. Resend verification email
+## Resend verification email
 
 You can resend a verification email if the email verification flow is enabled:
 
@@ -267,7 +277,7 @@ Stormpath.resendVerificationEmail("user@example.com", new StormpathCallback<Void
 });
 ```
 
-## 9. Verify email
+## Verify email
 
 If you need to verify the user via the API, you can do so using the `sptoken` from the verification email:
 
