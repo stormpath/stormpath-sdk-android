@@ -1,8 +1,8 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
+import com.stormpath.sdk.models.Account;
 import com.stormpath.sdk.models.RegistrationForm;
-import com.stormpath.sdk.models.UserProfile;
 
 import android.app.Activity;
 import android.content.Context;
@@ -126,7 +126,7 @@ public class Stormpath {
      * Fetches the user profile data and returns it via the provided callback. By default it uses path /me which can be overridden via
      * {@link StormpathConfiguration}.
      */
-    public static void getUserProfile(StormpathCallback<UserProfile> callback) {
+    public static void getUserProfile(StormpathCallback<Account> callback) {
         ensureConfigured();
         apiManager.getUserProfile(callback);
     }

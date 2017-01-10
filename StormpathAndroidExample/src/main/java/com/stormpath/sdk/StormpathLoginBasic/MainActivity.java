@@ -2,8 +2,8 @@ package com.stormpath.sdk.StormpathLoginBasic;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
+import com.stormpath.sdk.models.Account;
 import com.stormpath.sdk.models.StormpathError;
-import com.stormpath.sdk.models.UserProfile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,11 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView userProfileText = (TextView) findViewById(R.id.user_profile_text);
 
-        Stormpath.getUserProfile(new StormpathCallback<UserProfile>() {
+        Stormpath.getUserProfile(new StormpathCallback<Account>() {
             @Override
-            public void onSuccess(UserProfile userProfile) {
+            public void onSuccess(Account account) {
                 String profileInfoText = String
-                        .format("%s\n%s\n%s\n%s", userProfile.getHref(), userProfile.getFullName(), userProfile.getUsername(), userProfile.getStatus());
+                        .format("%s\n%s\n%s\n%s", account.getHref(), account.getFullName(), account.getUsername(), account.getStatus());
                 userProfileText.setText(profileInfoText);
             }
 

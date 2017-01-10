@@ -2,11 +2,11 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
+import com.stormpath.sdk.models.Account;
 import com.stormpath.sdk.models.LoginModel;
 import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.StormpathError;
-import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
 import android.os.Build;
@@ -181,7 +181,7 @@ class ApiManager {
      *
      * @param callback the callback
      */
-    void getUserProfile(final StormpathCallback<UserProfile> callback) {
+    void getUserProfile(final StormpathCallback<Account> callback) {
         String accessToken = preferenceStore.getAccessToken();
 
         if (StringUtils.isBlank(accessToken)) {
@@ -201,12 +201,12 @@ class ApiManager {
                 .get()
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<UserProfile>(callback) {
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Account>(callback) {
             @Override
-            protected void onSuccess(Response response, StormpathCallback<UserProfile> callback) {
+            protected void onSuccess(Response response, StormpathCallback<Account> callback) {
                 try {
                     UserProfileResponse userProfileResponse = moshi.adapter(UserProfileResponse.class).fromJson(response.body().source());
-                    successCallback(userProfileResponse.userProfile);
+                    successCallback(userProfileResponse.account);
                 } catch (Throwable t) {
                     failureCallback(t);
                 }
@@ -520,6 +520,6 @@ class ApiManager {
     private static class UserProfileResponse implements Serializable {
 
         @Json(name = "account")
-        private UserProfile userProfile;
+        private Account account;
     }
 }

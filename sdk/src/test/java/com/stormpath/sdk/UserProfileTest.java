@@ -1,7 +1,7 @@
 package com.stormpath.sdk;
 
+import com.stormpath.sdk.models.Account;
 import com.stormpath.sdk.models.StormpathError;
-import com.stormpath.sdk.models.UserProfile;
 
 import org.junit.Test;
 
@@ -47,10 +47,10 @@ public class UserProfileTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
 
         enqueueResponse("stormpath-user-profile-response.json");
-        StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
+        StormpathCallback<Account> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
-        verify(callback).onSuccess(any(UserProfile.class));
+        verify(callback).onSuccess(any(Account.class));
     }
 
     @Test
@@ -61,13 +61,13 @@ public class UserProfileTest extends BaseTest {
         enqueueResponse("stormpath-user-profile-response.json");
 
         Stormpath.getUserProfile(callback);
-        assertThat(callback.userProfile.getEmail()).isEqualTo("john.deere@example.com");
-        assertThat(callback.userProfile.getUsername()).isEqualTo("john.deere@example.com");
-        assertThat(callback.userProfile.getGivenName()).isEqualTo("John");
-        assertThat(callback.userProfile.getMiddleName()).isNull();
-        assertThat(callback.userProfile.getSurname()).isEqualTo("Deere");
-        assertThat(callback.userProfile.getFullName()).isEqualTo("John Deere");
-        assertThat(callback.userProfile.getStatus()).isEqualTo("ENABLED");
+        assertThat(callback.account.getEmail()).isEqualTo("john.deere@example.com");
+        assertThat(callback.account.getUsername()).isEqualTo("john.deere@example.com");
+        assertThat(callback.account.getGivenName()).isEqualTo("John");
+        assertThat(callback.account.getMiddleName()).isNull();
+        assertThat(callback.account.getSurname()).isEqualTo("Deere");
+        assertThat(callback.account.getFullName()).isEqualTo("John Deere");
+        assertThat(callback.account.getStatus()).isEqualTo("ENABLED");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class UserProfileTest extends BaseTest {
         stub(mockPlatform().preferenceStore().getAccessToken()).toReturn("abcdefghijklmnopqrstuvwyxz0123456789");
 
         enqueueEmptyResponse(HttpURLConnection.HTTP_BAD_REQUEST);
-        StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
+        StormpathCallback<Account> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
@@ -84,7 +84,7 @@ public class UserProfileTest extends BaseTest {
     @Test
     public void failedDeserializationCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
-        StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
+        StormpathCallback<Account> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
@@ -92,19 +92,19 @@ public class UserProfileTest extends BaseTest {
 
     @Test
     public void missingAccessTokenCallsFailureWithoutCallingApi() throws Exception {
-        StormpathCallback<UserProfile> callback = mock(StormpathCallback.class);
+        StormpathCallback<Account> callback = mock(StormpathCallback.class);
         Stormpath.getUserProfile(callback);
 
         verify(callback).onFailure(any(StormpathError.class));
         assertThat(requestCount()).isZero();
     }
 
-    private static class UserProfileCallback implements StormpathCallback<UserProfile> {
-        public UserProfile userProfile;
+    private static class UserProfileCallback implements StormpathCallback<Account> {
+        public Account account;
 
         @Override
-        public void onSuccess(UserProfile userProfile) {
-            this.userProfile = userProfile;
+        public void onSuccess(Account account) {
+            this.account = account;
         }
 
         @Override

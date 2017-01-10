@@ -4,7 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.io.Serializable;
 
-public class UserProfile implements Serializable {
+public class Account implements Serializable {
 
     @Json(name = "href")
     private String href;
