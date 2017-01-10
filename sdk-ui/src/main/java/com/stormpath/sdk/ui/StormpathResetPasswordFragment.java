@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,7 +21,6 @@ import android.widget.ProgressBar;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.RegisterParams;
 import com.stormpath.sdk.models.StormpathError;
 
 public class StormpathResetPasswordFragment extends BaseFragment {

@@ -4,7 +4,7 @@ import com.squareup.moshi.Json;
 
 import java.io.Serializable;
 
-public class RegisterParams implements Serializable {
+public class RegistrationForm implements Serializable {
 
     @Json(name = "givenName")
     private String givenName;
@@ -21,11 +21,11 @@ public class RegisterParams implements Serializable {
     @Json(name = "username")
     private String username;
 
-    public RegisterParams(String givenName, String surname, String email, String password) {
+    public RegistrationForm(String givenName, String surname, String email, String password) {
         this(givenName, surname, email, password, null);
     }
 
-    public RegisterParams(String givenName, String surname, String email, String password, String username) {
+    public RegistrationForm(String givenName, String surname, String email, String password, String username) {
         this.givenName = givenName;
         this.surname = surname;
         this.email = email;

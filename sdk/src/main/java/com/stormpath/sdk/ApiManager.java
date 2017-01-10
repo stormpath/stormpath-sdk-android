@@ -2,30 +2,21 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
-import com.stormpath.sdk.android.CustomTabActivityHelper;
-import com.stormpath.sdk.android.WebviewFallback;
-import com.stormpath.sdk.models.AccountStore;
 import com.stormpath.sdk.models.LoginModel;
-import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.SessionTokens;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.customtabs.CustomTabsIntent;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
 
 import okhttp3.Call;
@@ -111,12 +102,12 @@ class ApiManager {
     /**
      * Register.
      *
-     * @param registerParams the register params
+     * @param registrationForm the register params
      * @param callback       the callback
      */
-    void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+    void register(RegistrationForm registrationForm, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody
-                .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
+                .create(MediaType.parse("application/json"), moshi.adapter(RegistrationForm.class).toJson(registrationForm));
 
         Request request = new Request.Builder()
                 .url(config.getBaseUrl() + Endpoints.REGISTER)

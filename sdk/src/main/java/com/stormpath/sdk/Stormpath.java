@@ -1,7 +1,7 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
-import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.UserProfile;
 
 import android.app.Activity;
@@ -79,9 +79,9 @@ public class Stormpath {
      * This method registers a user from the data provided. By default it uses path /register which can be overridden via
      * {@link StormpathConfiguration}.
      */
-    public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+    public static void register(RegistrationForm registrationForm, StormpathCallback<Void> callback) {
         ensureConfigured();
-        apiManager.register(registerParams, callback);
+        apiManager.register(registrationForm, callback);
     }
 
     public static void loginWithProvider(Provider provider, String accessToken, StormpathCallback<Void> callback) {
