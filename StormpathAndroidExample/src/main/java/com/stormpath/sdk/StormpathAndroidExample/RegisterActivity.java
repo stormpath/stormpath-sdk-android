@@ -1,4 +1,4 @@
-package com.stormpath.sdk.StormpathLoginBasic;
+package com.stormpath.sdk.StormpathAndroidExample;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

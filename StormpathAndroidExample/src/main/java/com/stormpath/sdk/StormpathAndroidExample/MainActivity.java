@@ -1,4 +1,4 @@
-package com.stormpath.sdk.StormpathLoginBasic;
+package com.stormpath.sdk.StormpathAndroidExample;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
