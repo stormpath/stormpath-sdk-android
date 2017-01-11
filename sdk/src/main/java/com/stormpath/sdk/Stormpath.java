@@ -1,21 +1,13 @@
 package com.stormpath.sdk;
 
 import com.stormpath.sdk.android.AndroidPlatform;
-import com.stormpath.sdk.android.CustomTabActivityHelper;
-import com.stormpath.sdk.android.WebviewFallback;
-import com.stormpath.sdk.models.RegisterParams;
-import com.stormpath.sdk.models.SocialProviderConfiguration;
-import com.stormpath.sdk.models.SocialProvidersResponse;
-import com.stormpath.sdk.models.UserProfile;
-import com.stormpath.sdk.providers.FacebookLoginProvider;
-import com.stormpath.sdk.providers.GoogleLoginProvider;
+import com.stormpath.sdk.models.Account;
+import com.stormpath.sdk.models.RegistrationForm;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.customtabs.CustomTabsIntent;
 
 public class Stormpath {
 
@@ -24,6 +16,8 @@ public class Stormpath {
     static Platform platform;
 
     static ApiManager apiManager;
+
+    static SocialLoginManager socialLoginManager = new SocialLoginManager();
 
     @StormpathLogger.LogLevel
     static int logLevel = StormpathLogger.SILENT;
@@ -59,7 +53,7 @@ public class Stormpath {
         config = configuration;
         apiManager = new ApiManager(config, platform);
 
-        Stormpath.logger().v("Initialized Stormpath SDK with baseUrl: " + config.baseUrl());
+        Stormpath.logger().v("Initialized Stormpath SDK with baseUrl: " + config.getBaseUrl());
     }
     
     /**
@@ -85,9 +79,13 @@ public class Stormpath {
      * This method registers a user from the data provided. By default it uses path /register which can be overridden via
      * {@link StormpathConfiguration}.
      */
-    public static void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+    public static void register(RegistrationForm registrationForm, StormpathCallback<Void> callback) {
         ensureConfigured();
-        apiManager.register(registerParams, callback);
+        apiManager.register(registrationForm, callback);
+    }
+
+    public static void loginWithProvider(Provider provider, String accessToken, StormpathCallback<Void> callback) {
+        loginWithProvider(provider.name(), accessToken, callback);
     }
 
     /**
@@ -96,54 +94,23 @@ public class Stormpath {
      *
      * @param accessToken the accessToken/code received from social provider after login
      */
-    public static void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
+    public static void loginWithProvider(String providerId, String accessToken, StormpathCallback<Void> callback) {
         ensureConfigured();
-        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
-            if(code!=null)
-                apiManager.socialLogin(providerId, null, code, callback);
-
-            if(accessToken!=null){
-                apiManager.socialLogin(providerId, accessToken, null, callback);
-            }
-        }
-        else if (SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)){
-            apiManager.socialLogin(providerId, accessToken, null, callback);
-        }
+        apiManager.loginWithProvider(providerId, accessToken, callback);
     }
 
-    public static void socialLoginFlow(@NonNull Activity activity, String providerId, SocialProviderConfiguration providerConfig){
-        ensureConfigured();
-
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-
-        if (SocialProvidersResponse.GOOGLE.equalsIgnoreCase(providerId)) {
-
-            //configure social provider to get the url
-
-            //launch custom client
-            GoogleLoginProvider mGoogLogin = new GoogleLoginProvider();
-
-            CustomTabActivityHelper.openCustomTab(activity, customTabsIntent, Uri.parse(mGoogLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
-
-
-        } else if(SocialProvidersResponse.FACEBOOK.equalsIgnoreCase(providerId)) {
-
-            FacebookLoginProvider mFbLogin = new FacebookLoginProvider();
-
-
-            CustomTabActivityHelper.openCustomTab(
-                    activity, customTabsIntent, Uri.parse(mFbLogin.authenticationRequestURL(providerConfig)), new WebviewFallback());
-
-        }
+    public static void loginWithProvider(Provider provider, Activity activity, StormpathCallback<Void> callback) {
+        loginWithProvider(provider.name(), activity, callback);
     }
 
-    /**
-     * This method fetches a list of available providers for social login. By default it uses path /spa-config which can be overridden via
-     * {@link StormpathConfiguration}.
-     */
-    public static void getSocialProviders(StormpathCallback<SocialProvidersResponse> callback) {
+    public static void loginWithProvider(String providerId, Activity activity, StormpathCallback<Void> callback) {
         ensureConfigured();
-        apiManager.getSocialProviders(callback);
+        socialLoginManager.loginWithProvider(providerId, activity, callback);
+    }
+
+    public static void loginWithAccountStore(String href, Activity activity, StormpathCallback<Void> callback) {
+        ensureConfigured();
+        socialLoginManager.loginWithAccountStore(href, activity, callback);
     }
 
     /**
@@ -159,7 +126,7 @@ public class Stormpath {
      * Fetches the user profile data and returns it via the provided callback. By default it uses path /me which can be overridden via
      * {@link StormpathConfiguration}.
      */
-    public static void getUserProfile(StormpathCallback<UserProfile> callback) {
+    public static void getAccount(StormpathCallback<Account> callback) {
         ensureConfigured();
         apiManager.getUserProfile(callback);
     }
@@ -189,11 +156,6 @@ public class Stormpath {
         apiManager.resendVerificationEmail(email, callback);
     }
 
-    public static void socialGoogleCodeAuth(String code, SocialProviderConfiguration application, StormpathCallback<String> callback){
-        ensureConfigured();
-        apiManager.socialGoogleCodeAuth(code, application, callback);
-    }
-
     /**
      * Logs the user out and deletes his session tokens. By default it uses path /logout which can be overridden via {@link
      * StormpathConfiguration}.
@@ -207,9 +169,18 @@ public class Stormpath {
      * @return the accessToken if it was saved, null otherwise
      */
     @Nullable
-    public static String accessToken() {
+    public static String getAccessToken() {
         ensureConfigured();
         return platform.preferenceStore().getAccessToken();
+    }
+
+    /**
+     * @return the refreshToken if it was saved, null otherwise
+     */
+    @Nullable
+    public static String getRefreshToken() {
+        ensureConfigured();
+        return platform.preferenceStore().getRefreshToken();
     }
 
     public static StormpathLogger logger() {

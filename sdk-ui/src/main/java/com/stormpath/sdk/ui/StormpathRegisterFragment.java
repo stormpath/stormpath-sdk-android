@@ -9,8 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,11 +18,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.stormpath.sdk.Stormpath;
 import com.stormpath.sdk.StormpathCallback;
-import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.StormpathError;
 
 public class StormpathRegisterFragment extends BaseFragment {
@@ -126,7 +123,7 @@ public class StormpathRegisterFragment extends BaseFragment {
             }
         }
 
-        Stormpath.register(new RegisterParams(firstNameEditText.getText().toString(), surnameEditText.getText().toString(),
+        Stormpath.register(new RegistrationForm(firstNameEditText.getText().toString(), surnameEditText.getText().toString(),
                 emailEditText.getText().toString(), passwordEditText.getText().toString()), new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

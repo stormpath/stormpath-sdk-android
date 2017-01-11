@@ -2,34 +2,22 @@ package com.stormpath.sdk;
 
 import com.squareup.moshi.Json;
 import com.squareup.moshi.Moshi;
-import com.stormpath.sdk.android.AndroidPlatform;
-import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.Account;
+import com.stormpath.sdk.models.LoginModel;
+import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.SessionTokens;
-import com.stormpath.sdk.models.SocialProviderConfiguration;
-import com.stormpath.sdk.models.SocialProvidersResponse;
 import com.stormpath.sdk.models.StormpathError;
-import com.stormpath.sdk.models.UserProfile;
 import com.stormpath.sdk.utils.StringUtils;
-import com.stormpath.sdk.BuildConfig;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.StringTokenizer;
 import java.util.concurrent.Executor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -47,17 +35,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 /**
  * The type Api manager.
  */
-public class ApiManager {
-
-    /**
-     * The constant ACCESS_TOKEN_COOKIE_PATTERN.
-     */
-    public static final Pattern ACCESS_TOKEN_COOKIE_PATTERN = Pattern.compile("access_token=(.*?);.*");
-
-    /**
-     * The constant REFRESH_TOKEN_COOKIE_PATTERN.
-     */
-    public static final Pattern REFRESH_TOKEN_COOKIE_PATTERN = Pattern.compile("refresh_token=(.*?);.*");
+class ApiManager {
 
     private final Platform platform;
 
@@ -113,47 +91,26 @@ public class ApiManager {
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.oauthUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
-                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
-                        Stormpath.logger().e("There was no refresh_token in the login response!");
-                    }
-
-                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
-                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**
      * Register.
      *
-     * @param registerParams the register params
+     * @param registrationForm the register params
      * @param callback       the callback
      */
-    public void register(RegisterParams registerParams, StormpathCallback<Void> callback) {
+    void register(RegistrationForm registrationForm, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody
-                .create(MediaType.parse("application/json"), moshi.adapter(RegisterParams.class).toJson(registerParams));
+                .create(MediaType.parse("application/json"), moshi.adapter(RegistrationForm.class).toJson(registrationForm));
 
         Request request = new Request.Builder()
-                .url(config.registerUrl())
+                .url(config.getBaseUrl() + Endpoints.REGISTER)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -162,7 +119,9 @@ public class ApiManager {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
                 try {
-                    String sessionTokens[] = parseSessionTokens(response);
+                    // TODO: what the hell, how do we know if registration is successful or not?
+                    // Does this code just always return success if the API call goes through?
+                    String sessionTokens[] = {"PLACEHOLDER"};
                     String accessToken = sessionTokens[0];
                     String refreshToken = sessionTokens[1];
 
@@ -189,7 +148,7 @@ public class ApiManager {
      *
      * @param callback the callback
      */
-    public void refreshAccessToken(final StormpathCallback<Void> callback) {
+    void refreshAccessToken(final StormpathCallback<Void> callback) {
         String refreshToken = preferenceStore.getRefreshToken();
 
         if (StringUtils.isBlank(refreshToken)) {
@@ -209,33 +168,12 @@ public class ApiManager {
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.oauthUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
-                    if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
-                        Stormpath.logger().e("There was no refresh_token in the login response!");
-                    }
-
-                    preferenceStore.setAccessToken(sessionTokens.getAccessToken());
-                    preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**
@@ -243,7 +181,7 @@ public class ApiManager {
      *
      * @param callback the callback
      */
-    public void getUserProfile(final StormpathCallback<UserProfile> callback) {
+    void getUserProfile(final StormpathCallback<Account> callback) {
         String accessToken = preferenceStore.getAccessToken();
 
         if (StringUtils.isBlank(accessToken)) {
@@ -258,17 +196,17 @@ public class ApiManager {
         }
 
         Request request = new Request.Builder()
-                .url(config.userProfileUrl())
+                .url(config.getBaseUrl() + Endpoints.ME)
                 .headers(buildStandardHeaders(accessToken))
                 .get()
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<UserProfile>(callback) {
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Account>(callback) {
             @Override
-            protected void onSuccess(Response response, StormpathCallback<UserProfile> callback) {
+            protected void onSuccess(Response response, StormpathCallback<Account> callback) {
                 try {
                     UserProfileResponse userProfileResponse = moshi.adapter(UserProfileResponse.class).fromJson(response.body().source());
-                    successCallback(userProfileResponse.userProfile);
+                    successCallback(userProfileResponse.account);
                 } catch (Throwable t) {
                     failureCallback(t);
                 }
@@ -276,17 +214,38 @@ public class ApiManager {
         });
     }
 
+    void getLoginModel(StormpathCallback<LoginModel> callback) {
+        Request request = new Request.Builder()
+                .url(config.getBaseUrl() + Endpoints.LOGIN)
+                .headers(buildStandardHeaders())
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new OkHttpCallback<LoginModel>(callback) {
+            @Override
+            protected void onSuccess(Response response, StormpathCallback<LoginModel> callback) {
+                try {
+                    LoginModel loginModel = moshi.adapter(LoginModel.class).fromJson(response.body().source());
+                    successCallback(loginModel);
+                } catch (Throwable t) {
+                    failureCallback(t);
+                }
+            }
+        });
+    }
+
+
+
     /**
      * Reset password.
      *
      * @param email    the email
      * @param callback the callback
      */
-    public void resetPassword(String email, StormpathCallback<Void> callback) {
+    void resetPassword(String email, StormpathCallback<Void> callback) {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), "{\"email\":\"" + email + "\"}");
 
         Request request = new Request.Builder()
-                .url(config.passwordResetUrl())
+                .url(config.getBaseUrl() + Endpoints.FORGOT)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -302,18 +261,21 @@ public class ApiManager {
     /**
      * Logout.
      */
-    public void logout() {
-        String accessToken = preferenceStore.getAccessToken();
+    void logout() {
+        String refreshToken = preferenceStore.getRefreshToken();
 
-        if (StringUtils.isBlank(accessToken)) {
-            Stormpath.logger().e("access_token was not found, did you forget to login? See debug logs for details.");
+        if (StringUtils.isBlank(refreshToken)) {
             return;
         }
 
+        RequestBody body = new FormBody.Builder()
+                .add("token", refreshToken)
+                .build();
+
         Request request = new Request.Builder()
-                .url(config.logoutUrl())
-                .headers(buildStandardHeaders(accessToken))
-                .post(RequestBody.create(MediaType.parse("application/json"), ""))
+                .url(config.getBaseUrl() + Endpoints.OAUTH_REVOKE)
+                .headers(buildStandardHeaders())
+                .post(body)
                 .build();
 
         preferenceStore.clearAccessToken();
@@ -338,8 +300,9 @@ public class ApiManager {
      * @param sptoken  the sptoken
      * @param callback the callback
      */
-    public void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
-        HttpUrl url = HttpUrl.parse(config.verifyEmailUrl()).newBuilder()
+    // TODO: may not need this for now...
+    void verifyEmail(String sptoken, StormpathCallback<Void> callback) {
+        HttpUrl url = HttpUrl.parse(config.getBaseUrl() + "/verify").newBuilder()
                 .addQueryParameter("sptoken", sptoken)
                 .build();
 
@@ -363,13 +326,14 @@ public class ApiManager {
      * @param email    the email
      * @param callback the callback
      */
-    public void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
+    // TODO: may not need this for now...
+    void resendVerificationEmail(String email, StormpathCallback<Void> callback) {
         FormBody body = new FormBody.Builder()
                 .add("login", email)
                 .build();
 
         Request request = new Request.Builder()
-                .url(config.verifyEmailUrl())
+                .url(config.getBaseUrl() + "/verify")
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
@@ -383,167 +347,40 @@ public class ApiManager {
     }
 
     /**
-     * Gets social providers.
-     *
-     * @param callback the callback
-     */
-    public void getSocialProviders(final StormpathCallback<SocialProvidersResponse> callback) {
-        String accessToken = preferenceStore.getAccessToken();
-
-        Request request = new Request.Builder()
-                .url(config.socialProvidersUrl())
-                .headers(buildStandardHeaders(accessToken))
-                .get()
-                .build();
-
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<SocialProvidersResponse>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<SocialProvidersResponse> callback) {
-                try {
-                    SocialProvidersResponse socialProvidersResponse = moshi.adapter(SocialProvidersResponse.class)
-                            .fromJson(response.body().source());
-                    successCallback(socialProvidersResponse);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-        });
-    }
-
-    /**
      * Social login.
-     *
-     * @param providerId  the provider id
+     *  @param providerId  the provider id
      * @param accessToken the access token
-     * @param code        the code
      * @param callback    the callback
      */
-    void socialLogin(String providerId, String accessToken, String code, StormpathCallback<Void> callback) {
-        SocialLoginRequest socialLoginRequest = new SocialLoginRequest(providerId, accessToken, code);
-        String bodyJson = moshi.adapter(SocialLoginRequest.class).toJson(socialLoginRequest);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), bodyJson);
+    void loginWithProvider(@NonNull String providerId, String accessToken, StormpathCallback<Void> callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("grant_type", "stormpath_social")
+                .add("providerId", providerId)
+                .add("accessToken", accessToken)
+                .build();
 
         Request request = new Request.Builder()
-                .url(config.loginUrl())
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(body)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    String sessionTokens[] = parseSessionTokens(response);
-                    String accessToken = sessionTokens[0];
-                    String refreshToken = sessionTokens[1];
-
-                    if (StringUtils.isBlank(accessToken)) {
-                        failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
-                        return;
-                    }
-
-                    if (StringUtils.isBlank(refreshToken)) {
-                        Stormpath.logger().e("There was no refresh_token in the response!");
-                    }
-
-                    preferenceStore.setAccessToken(accessToken);
-                    preferenceStore.setRefreshToken(refreshToken);
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (e instanceof UnknownHostException || e instanceof SocketTimeoutException || e instanceof SocketException) {
-                    failureCallback(new StormpathError(platform.networkErrorMessage(), e));
-                } else {
-                    failureCallback(e);
-                }
-            }
-        });
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
-    /**
-     * Social google code auth.
-     *
-     * @param authorizationCode the authorization code
-     * @param application       the application
-     * @param callback          the callback
-     */
-    void socialGoogleCodeAuth(String authorizationCode, SocialProviderConfiguration application, StormpathCallback<String> callback){
-
-        Random state = new Random(10000000);
-
-        String codeUrl = "https://www.googleapis.com/oauth2/v4/token";
-
-        StringTokenizer multiTokenizer = new StringTokenizer(application.appId, ".");
-        int tokens = multiTokenizer.countTokens();
-        ArrayList<String> tokenArray = new ArrayList<String>();
-        while(multiTokenizer.hasMoreTokens()){
-            tokenArray.add(multiTokenizer.nextToken());
-        }
-
-        String clientId = "";
-        for(int i = tokenArray.size()-1; i > -1; i--) {
-            if(i != tokenArray.size()-1){
-                clientId = clientId + "." + tokenArray.get(i);
-            }
-            else
-            {
-                clientId = clientId + tokenArray.get(i);
-            }
-
-        }
-
-        //do network call, send broadcast since can't return result from threaded method
-        RequestBody formBody = new FormBody.Builder()
-                .add("client_id", clientId)
-                .add("code", authorizationCode)
-                .add("grant_type", "authorization_code")
-                .add("redirect_uri", application.urlScheme + ":/oauth2callback")
-                .add("verifier", String.valueOf(Math.abs(state.nextInt())))
+    void loginWithStormpathToken(@NonNull String stormpathToken, StormpathCallback<Void> callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("grant_type", "stormpath_token")
+                .add("token", stormpathToken)
                 .build();
 
         Request request = new Request.Builder()
-                .url(codeUrl)
-                .post(formBody)
+                .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
+                .headers(buildStandardHeaders())
+                .post(body)
                 .build();
 
-        okHttpClient.newCall(request).enqueue(new OkHttpCallback<String>(callback) {
-            @Override
-            protected void onSuccess(Response response, StormpathCallback<String> callback) {
-                try {
-                    successCallback(response.body().string());
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
-            }
-
-        });
-
-    }
-
-    private String[] parseSessionTokens(Response response) {
-        List<String> cookies = response.headers("Set-Cookie");
-
-        String accessToken = null;
-        String refreshToken = null;
-
-        for (String cookieHeader : cookies) {
-            Matcher accessTokenMatcher = ACCESS_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
-            if (accessTokenMatcher.find()) {
-                accessToken = accessTokenMatcher.group(1);
-            }
-
-            Matcher refreshTokenMatcher = REFRESH_TOKEN_COOKIE_PATTERN.matcher(cookieHeader);
-            if (refreshTokenMatcher.find()) {
-                refreshToken = refreshTokenMatcher.group(1);
-            }
-        }
-
-        return new String[]{accessToken, refreshToken};
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     private Headers buildStandardHeaders() {
@@ -563,6 +400,41 @@ public class ApiManager {
         return builder.build();
     }
 
+    /**
+     * Callback specifically for OAuth Token
+     */
+    private class StormpathOAuthTokenCallback<T> extends OkHttpCallback {
+
+        public StormpathOAuthTokenCallback(StormpathCallback<T> stormpathCallback) {
+            super(stormpathCallback);
+        }
+
+        @Override
+        protected void onSuccess(Response response, StormpathCallback callback) {
+            try {
+                SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
+                if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
+                    failureCallback(new RuntimeException("access_token was not found in response. See debug logs for details."));
+                    return;
+                }
+
+                if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
+                    Stormpath.logger().e("There was no refresh_token in the login response!");
+                }
+
+                preferenceStore.setAccessToken(sessionTokens.getAccessToken());
+                preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
+                successCallback(null);
+            } catch (Throwable t) {
+                failureCallback(t);
+            }
+        }
+    }
+
+    /**
+     * The OkHttpCallback encapsulates a Stormpath callback provided by the
+     * end developer. This catches errors and converts them into a standard "StormpathError".
+     */
     private abstract class OkHttpCallback<T> implements Callback {
 
         private StormpathCallback<T> stormpathCallback;
@@ -648,29 +520,6 @@ public class ApiManager {
     private static class UserProfileResponse implements Serializable {
 
         @Json(name = "account")
-        private UserProfile userProfile;
-    }
-
-    private static class SocialLoginRequest implements Serializable {
-
-        @Json(name = "providerData")
-        private Map<String, String> providerData = new LinkedHashMap<>();
-
-        /**
-         * Instantiates a new Social login request.
-         *
-         * @param providerId  the provider id
-         * @param accessToken the access token
-         * @param code        the code
-         */
-        public SocialLoginRequest(String providerId, String accessToken, String code) {
-            providerData.put("providerId", providerId);
-            if (StringUtils.isNotBlank(accessToken)) {
-                providerData.put("accessToken", accessToken);
-            }
-            if (StringUtils.isNotBlank(code)) {
-                providerData.put("code", code);
-            }
-        }
+        private Account account;
     }
 }

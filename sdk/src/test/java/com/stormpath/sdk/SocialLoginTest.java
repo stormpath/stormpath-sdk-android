@@ -26,7 +26,7 @@ public class SocialLoginTest extends BaseTest {
 
     public void correctRequest(String providerId, String accessToken, String providerData) throws Exception {
         enqueueResponse("stormpath-login-response.json");
-        Stormpath.socialLogin(providerId, accessToken, mock(StormpathCallback.class));
+        Stormpath.loginWithProvider(providerId, accessToken, mock(StormpathCallback.class));
 
         RecordedRequest request = takeLastRequest();
 
@@ -74,7 +74,7 @@ public class SocialLoginTest extends BaseTest {
                 .addHeader("Set-Cookie: refresh_token=" + refreshToken + "; path=/; expires=Tue, 12 Apr 2016 17:03:56 GMT; httponly");
         enqueueResponse(mockResponse);
 
-        Stormpath.socialLogin("facebook", "1234", mock(StormpathCallback.class));
+        Stormpath.loginWithProvider("facebook", "1234", mock(StormpathCallback.class));
 
         verify(mockPlatform().preferenceStore()).setAccessToken(accessToken);
         verify(mockPlatform().preferenceStore()).setRefreshToken(refreshToken);
@@ -98,7 +98,7 @@ public class SocialLoginTest extends BaseTest {
         enqueueResponse(mockResponse);
 
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.socialLogin("facebook", "1234", callback);
+        Stormpath.loginWithProvider("facebook", "1234", callback);
 
         verify(callback).onSuccess(null);
     }
@@ -107,7 +107,7 @@ public class SocialLoginTest extends BaseTest {
     public void failedLoginCallsFailure() throws Exception {
         enqueueResponse("stormpath-login-400.json", HttpURLConnection.HTTP_BAD_REQUEST);
         StormpathTestCallback<Void> callback = new StormpathTestCallback<>();
-        Stormpath.socialLogin("facebook", "1234", callback);
+        Stormpath.loginWithProvider("facebook", "1234", callback);
 
         assertThat(callback.error.code()).isEqualTo(7100);
         assertThat(callback.error.status()).isEqualTo(400);
@@ -120,7 +120,7 @@ public class SocialLoginTest extends BaseTest {
     public void failedDeserializationCallsFailure() throws Exception {
         enqueueEmptyResponse(HttpURLConnection.HTTP_OK);
         StormpathTestCallback<Void> callback = new StormpathTestCallback<>();
-        Stormpath.socialLogin("facebook", "1234", callback);
+        Stormpath.loginWithProvider("facebook", "1234", callback);
 
         assertThat(callback.error.message()).isEqualTo("There was an unexpected error, please try again later.");
         assertThat(callback.error.throwable()).isNotNull();
@@ -130,7 +130,7 @@ public class SocialLoginTest extends BaseTest {
     public void missingAccessTokenCallsFailure() throws Exception {
         enqueueStringResponse("{}");
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.socialLogin("facebook", "1234", callback);
+        Stormpath.loginWithProvider("facebook", "1234", callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
