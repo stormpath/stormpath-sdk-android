@@ -118,27 +118,7 @@ class ApiManager {
         okHttpClient.newCall(request).enqueue(new OkHttpCallback<Void>(callback) {
             @Override
             protected void onSuccess(Response response, StormpathCallback<Void> callback) {
-                try {
-                    // TODO: what the hell, how do we know if registration is successful or not?
-                    // Does this code just always return success if the API call goes through?
-                    String sessionTokens[] = {"PLACEHOLDER"};
-                    String accessToken = sessionTokens[0];
-                    String refreshToken = sessionTokens[1];
-
-                    if (StringUtils.isNotBlank(accessToken)) {
-                        preferenceStore.setAccessToken(accessToken);
-
-                        if (StringUtils.isNotBlank(refreshToken)) {
-                            preferenceStore.setRefreshToken(refreshToken);
-                        }
-                    } else {
-                        Stormpath.logger().i("There was no access_token in the register cookies, if you want to skip the login after "
-                                + "registration, enable the autologin in your Stormpath server app.");
-                    }
-                    successCallback(null);
-                } catch (Throwable t) {
-                    failureCallback(t);
-                }
+                successCallback(null);
             }
         });
     }

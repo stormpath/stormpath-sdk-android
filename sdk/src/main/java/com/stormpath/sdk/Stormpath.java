@@ -114,7 +114,7 @@ public class Stormpath {
     }
 
     /**
-     * Refreshes the access token and stores the new value which you can access via {@link Stormpath#accessToken()}. By default it uses
+     * Refreshes the access token and stores the new value which you can access via {@link Stormpath#getAccessToken()}. By default it uses
      * path /oauth/token which can be overridden via {@link StormpathConfiguration}.
      */
     public static void refreshAccessToken(StormpathCallback<Void> callback) {

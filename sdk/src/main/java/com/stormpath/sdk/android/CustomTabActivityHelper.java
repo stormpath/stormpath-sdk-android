@@ -110,7 +110,6 @@ public class CustomTabActivityHelper implements ServiceConnectionCallback {
     }
 
     /**
-     * @see {@link CustomTabsSession#mayLaunchUrl(Uri, Bundle, List)}.
      * @return true if call to mayLaunchUrl was accepted.
      */
     public boolean mayLaunchUrl(Uri uri, Bundle extras, List<Bundle> otherLikelyBundles) {

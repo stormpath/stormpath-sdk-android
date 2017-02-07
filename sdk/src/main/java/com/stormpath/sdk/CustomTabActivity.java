@@ -3,7 +3,6 @@ package com.stormpath.sdk;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by edjiang on 1/5/17.

@@ -54,7 +54,7 @@ public class StormpathConfiguration {
         String apiUrl;
 
         /**
-         * @param the URL of your API, eg. "https://stormpath-notes.apps.stormpath.io/".
+         * @param baseUrl the URL of your API, eg. "https://stormpath-notes.apps.stormpath.io/".
          */
         public Builder baseUrl(String baseUrl) {
             this.apiUrl = baseUrl;
