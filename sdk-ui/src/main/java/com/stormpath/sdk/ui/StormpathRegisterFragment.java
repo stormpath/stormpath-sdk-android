@@ -123,8 +123,10 @@ public class StormpathRegisterFragment extends BaseFragment {
             }
         }
 
-        Stormpath.register(new RegistrationForm(firstNameEditText.getText().toString(), surnameEditText.getText().toString(),
-                emailEditText.getText().toString(), passwordEditText.getText().toString()), new StormpathCallback<Void>() {
+        RegistrationForm form = new RegistrationForm(emailEditText.getText().toString(), passwordEditText.getText().toString());
+        form.setGivenName(firstNameEditText.getText().toString());
+        form.setSurname(surnameEditText.getText().toString());
+        Stormpath.register(form, new StormpathCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 hideProgress();

@@ -1,6 +1,6 @@
 package com.stormpath.sdk;
 
-import com.stormpath.sdk.models.RegisterParams;
+import com.stormpath.sdk.models.RegistrationForm;
 import com.stormpath.sdk.models.StormpathError;
 import com.stormpath.sdk.utils.ResourceUtils;
 
@@ -27,7 +27,11 @@ public class RegisterTest extends BaseTest {
     @Test
     public void correctRequest() throws Exception {
         enqueueResponse("stormpath-register-response.json");
-        Stormpath.register(new RegisterParams("John", "Deere", "john.deere@example.com", "Test1234&"), mock(StormpathCallback.class));
+
+        RegistrationForm form = new RegistrationForm("john.deere@example.com", "Test1234&");
+        form.setGivenName("John");
+        form.setSurname("Deere");
+        Stormpath.register(form, mock(StormpathCallback.class));
 
         RecordedRequest request = takeLastRequest();
 
@@ -43,7 +47,11 @@ public class RegisterTest extends BaseTest {
     public void successfulRegistrationCallsSuccess() throws Exception {
         enqueueResponse("stormpath-register-response.json");
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.register(new RegisterParams("John", "Deere", "john.deere@example.com", "Test1234"), callback);
+
+        RegistrationForm form = new RegistrationForm("john.deere@example.com", "Test1234");
+        form.setGivenName("John");
+        form.setSurname("Deere");
+        Stormpath.register(form, callback);
 
         verify(callback).onSuccess(null);
     }
@@ -63,7 +71,11 @@ public class RegisterTest extends BaseTest {
                         + "ZyeTdEUzZ4IiwiZXhwIjoxNDYwNDgwNjM2fQ.zKjsFRsI2hoBu9vjeKvDFzAZy-0fq_C98w05TSXQ0Ns; path=/; expires=Tue, 12 Apr 20"
                         + "16 17:03:56 GMT; httponly");
         enqueueResponse(mockResponse);
-        Stormpath.register(new RegisterParams("John", "Deere", "john.deere@example.com", "Test1234"), mock(StormpathCallback.class));
+
+        RegistrationForm form = new RegistrationForm("john.deere@example.com", "Test1234");
+        form.setGivenName("John");
+        form.setSurname("Deere");
+        Stormpath.register(form, mock(StormpathCallback.class));
 
         verify(mockPlatform().preferenceStore()).setAccessToken("eyJraWQiOiI2WjA3NEJBQzhTM0tGWE5KOVhFTldEVUhGIiwiYWxnIjoiSFMyNTYifQ.eyJqdGk"
                 + "iOiI0aEtvNG5PWDBKNTJ0dnZ1cGJjNHBiIiwiaWF0IjoxNDU1Mjk2NjM2LCJpc3MiOiJodHRwczovL2FwaS5zdG9ybXBhdGguY29tL3YxL2FwcGxpY2F0aW9"
@@ -80,7 +92,11 @@ public class RegisterTest extends BaseTest {
     public void failedRegisterCallsFailure() throws Exception {
         enqueueResponse("stormpath-register-400.json", HttpURLConnection.HTTP_BAD_REQUEST);
         StormpathCallback<Void> callback = mock(StormpathCallback.class);
-        Stormpath.register(new RegisterParams("John", "Deere", "john.deere@example.com", "Test1234"), callback);
+
+        RegistrationForm form = new RegistrationForm("john.deere@example.com", "Test1234");
+        form.setGivenName("John");
+        form.setSurname("Deere");
+        Stormpath.register(form, callback);
 
         verify(callback).onFailure(any(StormpathError.class));
     }
