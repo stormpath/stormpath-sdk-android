@@ -142,18 +142,59 @@ class ApiManager {
             return;
         }
 
+        Request request = buildRefreshTokenRequest(refreshToken);
+
+        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
+    }
+
+    /**
+     * Refresh access token synchronously.
+     */
+    void refreshAccessToken() throws IOException {
+        String refreshToken = preferenceStore.getRefreshToken();
+
+        if (StringUtils.isBlank(refreshToken)) {
+            throw new IllegalStateException(
+                    "refresh_token was not found, did you forget to login? See debug logs for details.");
+        }
+
+        Request request = buildRefreshTokenRequest(refreshToken);
+        Response response = okHttpClient.newCall(request).execute();
+
+        if (!response.isSuccessful()) {
+            throw new IOException("refresh token call failed: " + response.code());
+        }
+
+        SessionTokens sessionTokens = moshi.adapter(SessionTokens.class).fromJson(response.body().source());
+        if (StringUtils.isBlank(sessionTokens.getAccessToken())) {
+            throw new IOException("access_token was not found in response. See debug logs for details.");
+        }
+
+        if (StringUtils.isBlank(sessionTokens.getRefreshToken())) {
+            Stormpath.logger().e("There was no refresh_token in the login response!");
+        }
+
+        preferenceStore.setAccessToken(sessionTokens.getAccessToken());
+        preferenceStore.setRefreshToken(sessionTokens.getRefreshToken());
+    }
+
+    /**
+     * Builds the request used to refresh the access token
+     *
+     * @param refreshToken
+     * @return
+     */
+    private Request buildRefreshTokenRequest(String refreshToken) {
         RequestBody formBody = new FormBody.Builder()
                 .add("refresh_token", refreshToken)
                 .add("grant_type", "refresh_token")
                 .build();
 
-        Request request = new Request.Builder()
+        return new Request.Builder()
                 .url(config.getBaseUrl() + Endpoints.OAUTH_TOKEN)
                 .headers(buildStandardHeaders())
                 .post(formBody)
                 .build();
-
-        okHttpClient.newCall(request).enqueue(new StormpathOAuthTokenCallback<Void>(callback));
     }
 
     /**

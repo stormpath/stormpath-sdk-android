@@ -6,8 +6,11 @@ import com.stormpath.sdk.models.RegistrationForm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import java.io.IOException;
 
 public class Stormpath {
 
@@ -123,6 +126,16 @@ public class Stormpath {
     }
 
     /**
+     * Refreshes the access token synchronously, and stores the new value which you can access via {@link Stormpath#getAccessToken()}. By default it uses
+     * path /oauth/token which can be overridden via {@link StormpathConfiguration}.
+     */
+    public static void refreshAccessToken() throws IOException {
+        ensureConfigured();
+        checkUIThread();
+        apiManager.refreshAccessToken();
+    }
+
+    /**
      * Fetches the user profile data and returns it via the provided callback. By default it uses path /me which can be overridden via
      * {@link StormpathConfiguration}.
      */
@@ -205,6 +218,13 @@ public class Stormpath {
         if (!isInitialized()) {
             throw new IllegalStateException(
                     "You need to initialize Stormpath before using it. To do that call Stormpath.init() with a valid configuration.");
+        }
+    }
+
+    static void checkUIThread() {
+        if (Looper.getMainLooper() != null && Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            throw new RuntimeException(
+                    "Do not make synchronous network calls from UI thread. Use the asynchronous operation.");
         }
     }
 }
