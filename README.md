@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/stormpath/stormpath-sdk-android.png?label=ready&title=Ready)](https://waffle.io/stormpath/stormpath-sdk-android)
 # Stormpath Android SDK
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
